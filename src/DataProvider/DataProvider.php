@@ -10,6 +10,9 @@ use FormRelay\Core\Service\RegistryInterface;
 
 abstract class DataProvider implements DataProviderInterface
 {
+    const KEY_ENABLED = 'enabled';
+    const DEFAULT_ENABLED = false;
+
     const KEY_MUST_EXIST = 'mustExist';
     const DEFAULT_MUST_EXIST = true;
 
@@ -47,7 +50,7 @@ abstract class DataProvider implements DataProviderInterface
         $context = new ConfigurationResolverContext($submission);
         $evaluation = $this->registry->getContentResolver(
             'general',
-            $this->getConfig('enabled', 0),
+            $this->getConfig(static::KEY_ENABLED, static::DEFAULT_ENABLED),
             $context
         );
         $result = $evaluation->resolve();
@@ -91,5 +94,14 @@ abstract class DataProvider implements DataProviderInterface
     public function getWeight(): int
     {
         return 10;
+    }
+
+    public static function getDefaultConfiguration(): array
+    {
+        return [
+            static::KEY_ENABLED => static::DEFAULT_ENABLED,
+            static::KEY_MUST_EXIST => static::DEFAULT_MUST_EXIST,
+            static::KEY_MUST_BE_EMPTY => static::DEFAULT_MUST_BE_EMPTY,
+        ];
     }
 }

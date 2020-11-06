@@ -11,4 +11,5 @@ interface DataProviderInterface extends RegisterableInterface
 {
     public function __construct(RegistryInterface $registry, LoggerInterface $logger);
     public function addData(SubmissionInterface $submission);
+    public static function getDefaultConfiguration(): array;
 }

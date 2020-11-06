@@ -43,7 +43,7 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\SwitchValueMapper;
 use FormRelay\Core\DataProvider\TimestampDataProvider;
 use FormRelay\Core\Service\RegistryInterface;
 
-class Initialization
+class Initialization extends InitializationBase
 {
     const DATA_PROVIDERS = [
         TimestampDataProvider::class,
@@ -94,31 +94,4 @@ class Initialization
         RawValueMapper::class,
         SwitchValueMapper::class,
     ];
-    const DATA_DISPATCHERS = [];
-    const ROUTES = [];
-
-    public static function initialize(RegistryInterface $registry)
-    {
-        foreach (static::DATA_PROVIDERS as $dataProvider) {
-            $registry->registerDataProvider($dataProvider);
-        }
-        foreach (static::EVALUATIONS as $evaluation) {
-            $registry->registerEvaluation($evaluation);
-        }
-        foreach (static::CONTENT_RESOLVERS as $contentResolver) {
-            $registry->registerContentResolver($contentResolver);
-        }
-        foreach (static::FIELD_MAPPERS as $fieldMapper) {
-            $registry->registerFieldMapper($fieldMapper);
-        }
-        foreach (static::VALUE_MAPPERS as $valueMapper) {
-            $registry->registerValueMapper($valueMapper);
-        }
-        foreach (static::ROUTES as $route) {
-            $registry->registerRoute($route);
-        }
-        foreach (static::DATA_DISPATCHERS as $dataDispatcher) {
-
-        }
-    }
 }

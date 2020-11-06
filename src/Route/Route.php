@@ -163,6 +163,7 @@ abstract class Route implements RouteInterface
             'url' => '',
             'gate' => [],
             'fields' => [
+                'ignore' => '',
                 'mapping' => [],
                 'unmapped' => null,
             ],
