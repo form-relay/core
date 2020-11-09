@@ -73,7 +73,7 @@ class GateEvaluation extends Evaluation
         } else {
             $keysEvaluated[$key][] = $pass;
             $settings = $this->context['config']->getRoutePassConfiguration($key, $pass);
-            if (!$settings['enabled']) {
+            if (!isset($settings['enabled']) || !$settings['enabled']) {
                 $result = false;
             } elseif (isset($settings['gate']) && !empty($settings['gate'])) {
                 /** @var EvaluationInterface $evaluation */

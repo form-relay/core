@@ -24,7 +24,7 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
                 if ($target[$key] === null) {
                     $target[$key] = $value;
                 } else {
-                    $target[$key] = $this->mergeConfiguration([static::KEY_CONTENT => $target[$key]], $value);
+                    $target[$key] = $this->mergeConfiguration([static::KEY_SELF => $target[$key]], $value);
                 }
             } elseif (is_array($target[$key])) {
                 if ($value === null) {
@@ -34,7 +34,7 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
                         $target[$key] = $value;
                     }
                 } else {
-                    $target[$key] = $this->mergeConfiguration($target[$key], [static::KEY_CONTENT => $value]);
+                    $target[$key] = $this->mergeConfiguration($target[$key], [static::KEY_SELF => $value]);
                 }
             } else {
                 if (!$resolveNull || $value === null) {
@@ -67,8 +67,8 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
     public function getDataProviderConfiguration(string $dataProviderName)
     {
         $configuration = $this->getMergedConfiguration();
-        if (isset($configuration['providers'][$dataProviderName])) {
-            return $configuration['providers'][$dataProviderName];
+        if (isset($configuration['dataProviders'][$dataProviderName])) {
+            return $configuration['dataProviders'][$dataProviderName];
         }
         return [];
     }

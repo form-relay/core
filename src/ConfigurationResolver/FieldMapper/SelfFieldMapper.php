@@ -2,7 +2,7 @@
 
 namespace FormRelay\Core\ConfigurationResolver\FieldMapper;
 
-class ContentFieldMapper extends FieldMapper
+class SelfFieldMapper extends FieldMapper
 {
     public function prepare(array &$result)
     {

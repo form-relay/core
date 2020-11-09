@@ -2,12 +2,14 @@
 
 namespace FormRelay\Core\Route;
 
+use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\ConfigurationResolver\FieldMapper\GeneralFieldMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
+use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Service\RegistryInterface;
 use FormRelay\Core\Utility\GeneralUtility;
 
@@ -19,6 +21,9 @@ abstract class Route implements RouteInterface
     /** @var LoggerInterface */
     protected $logger;
 
+    /** @var RequestInterface */
+    protected $request;
+
     /** @var SubmissionInterface */
     protected $submission;
 
@@ -28,15 +33,35 @@ abstract class Route implements RouteInterface
     /** @var array */
     protected $configuration;
 
-    public function __construct(RegistryInterface $registry, LoggerInterface $logger)
+    public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;
-        $this->logger = $logger;
+        $this->request = $registry->getRequest();
+        $this->logger = $registry->getLogger(static::class);
+    }
+
+    protected function getConfig(string $key, $default = null)
+    {
+        if (array_key_exists($key, $this->configuration)) {
+            return $this->configuration[$key];
+        }
+        return $default;
     }
 
     protected function buildDefaults()
     {
-        return $this->configuration['defaults'] ?? [];
+        $defaultsConfig = $this->configuration['defaults'] ?? [];
+        $defaults = [];
+        foreach ($defaultsConfig as $key => $value) {
+            $context = new ConfigurationResolverContext($this->submission);
+            /** @var GeneralContentResolver $contentResolver */
+            $contentResolver = $this->registry->getContentResolver('general', $value, $context);
+            $result = $contentResolver->resolve();
+            if ($result !== null) {
+                $defaults[$key] = $result;
+            }
+        }
+        return $defaults;
     }
 
     protected function ignoreField($key, $value)
@@ -123,7 +148,7 @@ abstract class Route implements RouteInterface
             return false;
         }
 
-        return $dataDispatcher->send($data, $this->configuration);
+        return $dataDispatcher->send($data);
     }
 
     public function process(SubmissionInterface $submission): bool
@@ -139,7 +164,10 @@ abstract class Route implements RouteInterface
         return $result;
     }
 
-    abstract protected function getDispatcher(): DataDispatcherInterface;
+    /**
+     * @return DataDispatcherInterface|null
+     */
+    abstract protected function getDispatcher();
 
     public function getWeight(): int
     {
@@ -160,9 +188,10 @@ abstract class Route implements RouteInterface
     {
         return [
             'enabled' => false,
-            'url' => '',
             'gate' => [],
+            'defaults' => [],
             'fields' => [
+                'ignore' => '',
                 'mapping' => [],
                 'unmapped' => null,
             ],

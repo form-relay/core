@@ -2,7 +2,7 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ValueMapper;
 
-class ContentValueMapper extends ValueMapper
+class SelfValueMapper extends ValueMapper
 {
     public function resolveValue($fieldValue): string
     {

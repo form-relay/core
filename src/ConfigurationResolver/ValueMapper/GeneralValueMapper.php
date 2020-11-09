@@ -15,7 +15,7 @@ class GeneralValueMapper extends ValueMapper implements GeneralConfigurationReso
     protected function resolveValue($fieldValue)
     {
         if (!is_array($this->config)) {
-            $this->config = [SubmissionConfigurationInterface::KEY_CONTENT => $this->config];
+            $this->config = [SubmissionConfigurationInterface::KEY_SELF => $this->config];
         }
 
         $valueMappers = [];

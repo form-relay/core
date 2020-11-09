@@ -22,7 +22,7 @@ class AndEvaluation extends Evaluation
     {
         $subEvaluations = [];
         if (!is_array($this->config)) {
-            $this->config = [SubmissionConfigurationInterface::KEY_CONTENT => $this->config];
+            $this->config = [SubmissionConfigurationInterface::KEY_SELF => $this->config];
         }
 
         foreach ($this->config as $key => $value) {

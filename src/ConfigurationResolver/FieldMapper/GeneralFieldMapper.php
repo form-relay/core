@@ -12,7 +12,7 @@ class GeneralFieldMapper extends FieldMapper implements GeneralConfigurationReso
     public function resolve(array $result = []): array
     {
         if (!is_array($this->config)) {
-            $this->config = [SubmissionConfigurationInterface::KEY_CONTENT => $this->config];
+            $this->config = [SubmissionConfigurationInterface::KEY_SELF => $this->config];
         }
 
         $this->fieldMappers = [];
