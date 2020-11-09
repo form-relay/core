@@ -99,22 +99,22 @@ class Registry implements RegistryInterface
         return null;
     }
 
-    public function getEvaluation(string $keyword, $config, ConfigurationResolverContextInterface $context): EvaluationInterface
+    public function getEvaluation(string $keyword, $config, ConfigurationResolverContextInterface $context)
     {
         return $this->getConfigurationResolver(EvaluationInterface::class, $keyword, $config, $context);
     }
 
-    public function getFieldMapper(string $keyword, $config, ConfigurationResolverContextInterface $context): FieldMapperInterface
+    public function getFieldMapper(string $keyword, $config, ConfigurationResolverContextInterface $context)
     {
         return $this->getConfigurationResolver(FieldMapperInterface::class, $keyword, $config, $context);
     }
 
-    public function getContentResolver(string $keyword, $config, ConfigurationResolverContextInterface $context): ContentResolverInterface
+    public function getContentResolver(string $keyword, $config, ConfigurationResolverContextInterface $context)
     {
         return $this->getConfigurationResolver(ContentResolverInterface::class, $keyword, $config, $context);
     }
 
-    public function getValueMapper(string $keyword, $config, ConfigurationResolverContextInterface $context): ValueMapperInterface
+    public function getValueMapper(string $keyword, $config, ConfigurationResolverContextInterface $context)
     {
         return $this->getConfigurationResolver(ValueMapperInterface::class, $keyword, $config, $context);
     }
@@ -187,13 +187,20 @@ class Registry implements RegistryInterface
         $this->dataDispatcherClasses[$class::getKeyword()] = $class;
     }
 
-    public function getDataDispatcher(string $keyword, ...$arguments): DataDispatcherInterface
+
+    /**
+     * @param string $keyword
+     * @param mixed ...$arguments
+     * @return DataDispatcherInterface|mixed|null
+     * @throws RegistryException
+     * @return DataDispatcherInterface|null
+     */
+    public function getDataDispatcher(string $keyword, ...$arguments)
     {
         $class = null;
         if (isset($this->dataDispatcherClasses[$keyword])) {
             $class = $this->dataDispatcherClasses[$keyword];
-        }
-        if (class_exists($keyword) && $this->classValidation($keyword, DataDispatcherInterface::class)) {
+        } elseif (class_exists($keyword) && $this->classValidation($keyword, DataDispatcherInterface::class)) {
             $class = $keyword;
         }
         if ($class !== null) {

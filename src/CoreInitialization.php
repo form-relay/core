@@ -41,7 +41,6 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\OriginalValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\RawValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SwitchValueMapper;
 use FormRelay\Core\DataProvider\TimestampDataProvider;
-use FormRelay\Core\Service\RegistryInterface;
 
 class CoreInitialization extends Initialization
 {

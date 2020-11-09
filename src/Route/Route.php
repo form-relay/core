@@ -164,7 +164,10 @@ abstract class Route implements RouteInterface
         return $result;
     }
 
-    abstract protected function getDispatcher(): DataDispatcherInterface;
+    /**
+     * @return DataDispatcherInterface|null
+     */
+    abstract protected function getDispatcher();
 
     public function getWeight(): int
     {

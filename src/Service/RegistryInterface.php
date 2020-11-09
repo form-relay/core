@@ -20,16 +20,44 @@ interface RegistryInterface
     public function getConfigurationResolver(string $resolverInterface, string $keyword, $config, ConfigurationResolverContextInterface $context);
 
     public function registerContentResolver(string $class);
-    public function getContentResolver(string $keyword, $config, ConfigurationResolverContextInterface $context): ContentResolverInterface;
+
+    /**
+     * @param string $keyword
+     * @param $config
+     * @param ConfigurationResolverContextInterface $context
+     * @return ContentResolverInterface|null
+     */
+    public function getContentResolver(string $keyword, $config, ConfigurationResolverContextInterface $context);
 
     public function registerEvaluation(string $class);
-    public function getEvaluation(string $keyword, $config, ConfigurationResolverContextInterface $context): EvaluationInterface;
+
+    /**
+     * @param string $keyword
+     * @param $config
+     * @param ConfigurationResolverContextInterface $context
+     * @return EvaluationInterface|null
+     */
+    public function getEvaluation(string $keyword, $config, ConfigurationResolverContextInterface $context);
 
     public function registerFieldMapper(string $class);
-    public function getFieldMapper(string $keyword, $config, ConfigurationResolverContextInterface $context): FieldMapperInterface;
+
+    /**
+     * @param string $keyword
+     * @param $config
+     * @param ConfigurationResolverContextInterface $context
+     * @return FieldMapperInterface|null
+     */
+    public function getFieldMapper(string $keyword, $config, ConfigurationResolverContextInterface $context);
 
     public function registerValueMapper(string $class);
-    public function getValueMapper(string $keyword, $config, ConfigurationResolverContextInterface $context): ValueMapperInterface;
+
+    /**
+     * @param string $keyword
+     * @param $config
+     * @param ConfigurationResolverContextInterface $context
+     * @return ValueMapperInterface|null
+     */
+    public function getValueMapper(string $keyword, $config, ConfigurationResolverContextInterface $context);
 
     public function registerDataProvider(string $class);
     public function getDataProviders(): array;
@@ -44,7 +72,13 @@ interface RegistryInterface
     public function getRouteDefaultConfigurations(): array;
 
     public function registerDataDispatcher(string $class);
-    public function getDataDispatcher(string $keyword, ...$arguments): DataDispatcherInterface;
+
+    /**
+     * @param string $keyword
+     * @param mixed ...$arguments
+     * @return DataDispatcherInterface|null
+     */
+    public function getDataDispatcher(string $keyword, ...$arguments);
     public function deleteDataDispatcher(string $class);
 
     public function getDefaultConfiguration(): array;
