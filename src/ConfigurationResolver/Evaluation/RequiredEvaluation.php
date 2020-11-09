@@ -2,7 +2,6 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
 use FormRelay\Core\Model\Form\MultiValueField;
 
 class RequiredEvaluation extends Evaluation
@@ -16,7 +15,7 @@ class RequiredEvaluation extends Evaluation
     {
         $result = true;
         foreach ($this->config as $requiredField) {
-            if (!isset($context['data'][$requiredField])) {
+            if (!isset($this->context['data'][$requiredField])) {
                 $result = false;
                 break;
             }
