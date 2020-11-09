@@ -2,7 +2,7 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
-class ContentContentResolver extends ContentResolver
+class SelfContentResolver extends ContentResolver
 {
     public function build(): string
     {

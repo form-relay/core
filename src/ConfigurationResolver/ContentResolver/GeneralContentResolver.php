@@ -27,7 +27,7 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
     public function build(): string
     {
         if (!is_array($this->config)) {
-            $this->config = [SubmissionConfigurationInterface::KEY_CONTENT => $this->config];
+            $this->config = [SubmissionConfigurationInterface::KEY_SELF => $this->config];
         }
 
         $contentResolvers = [];

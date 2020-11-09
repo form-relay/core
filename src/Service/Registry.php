@@ -11,7 +11,10 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
 use FormRelay\Core\DataProvider\DataProviderInterface;
 use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
 use FormRelay\Core\Exception\RegistryException;
+use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Log\NullLogger;
+use FormRelay\Core\Request\DefaultRequest;
+use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Route\RouteInterface;
 
 class Registry implements RegistryInterface
@@ -21,9 +24,14 @@ class Registry implements RegistryInterface
     protected $dataProviderClasses = [];
     protected $dataDispatcherClasses = [];
 
-    protected function getLogger(string $forClass)
+    public function getLogger(string $forClass): LoggerInterface
     {
         return new NullLogger();
+    }
+
+    public function getRequest(): RequestInterface
+    {
+        return new DefaultRequest();
     }
 
     protected function get(string $class, array $arguments = [])
@@ -34,7 +42,7 @@ class Registry implements RegistryInterface
     protected function classValidation($class, $interface)
     {
         if (!in_array($interface, class_implements($class))) {
-            throw new RegistryException('class "' . $class . '" has to imlpement interface "' . $interface . '".');
+            throw new RegistryException('class "' . $class . '" has to implement interface "' . $interface . '".');
         }
     }
 
@@ -115,7 +123,7 @@ class Registry implements RegistryInterface
     {
         $routes = [];
         foreach ($this->routeClasses as $routeClass) {
-            $routes[] = $this->get($routeClass, [$this, $this->getLogger($routeClass)]);
+            $routes[] = $this->get($routeClass, [$this]);
         }
         $this->sortRegisterables($routes);
         return $routes;
@@ -133,11 +141,20 @@ class Registry implements RegistryInterface
         unset($this->routeClasses[$class::getKeyword()]);
     }
 
+    public function getRouteDefaultConfigurations(): array
+    {
+        $result = [];
+        foreach ($this->routeClasses as $key => $class) {
+            $result[$key] = $class::getDefaultConfiguration();
+        }
+        return $result;
+    }
+
     public function getDataProviders(): array
     {
         $dataProviders = [];
         foreach ($this->dataProviderClasses as $dataProviderClass) {
-            $dataProviders[] = $this->get($dataProviderClass, [$this, $this->getLogger($dataProviderClass)]);
+            $dataProviders[] = $this->get($dataProviderClass, [$this]);
         }
         $this->sortRegisterables($dataProviders);
         return $dataProviders;
@@ -153,6 +170,15 @@ class Registry implements RegistryInterface
     {
         $this->classValidation($class, DataProviderInterface::class);
         unset($this->dataProviderClasses[$class::getKeyword()]);
+    }
+
+    public function getDataProviderDefaultConfigurations(): array
+    {
+        $result = [];
+        foreach ($this->dataProviderClasses as $key => $class) {
+            $result[$key] = $class::getDefaultConfiguration();
+        }
+        return $result;
     }
 
     public function registerDataDispatcher(string $class)
@@ -171,7 +197,7 @@ class Registry implements RegistryInterface
             $class = $keyword;
         }
         if ($class !== null) {
-            $args = [$this, $this->getLogger($class)];
+            $args = [$this];
             foreach ($arguments as $argument) {
                 $args[] = $argument;
             }
@@ -184,5 +210,13 @@ class Registry implements RegistryInterface
     {
         $this->classValidation($class, DataDispatcherInterface::class);
         unset($this->dataDispatcherClasses[$class::getKeyword()]);
+    }
+
+    public function getDefaultConfiguration(): array
+    {
+        return [
+            'dataProviders' => $this->getDataProviderDefaultConfigurations(),
+            'routes' => $this->getRouteDefaultConfigurations(),
+        ];
     }
 }

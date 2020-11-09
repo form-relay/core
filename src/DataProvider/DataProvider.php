@@ -6,6 +6,7 @@ use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
+use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Service\RegistryInterface;
 
 abstract class DataProvider implements DataProviderInterface
@@ -14,21 +15,22 @@ abstract class DataProvider implements DataProviderInterface
     const DEFAULT_ENABLED = false;
 
     const KEY_MUST_EXIST = 'mustExist';
-    const DEFAULT_MUST_EXIST = true;
+    const DEFAULT_MUST_EXIST = false;
 
     const KEY_MUST_BE_EMPTY= 'mustBeEmpty';
     const DEFAULT_MUST_BE_EMPTY = true;
 
     protected $registry;
-
+    protected $request;
     protected $logger;
 
     protected $configuration;
 
-    public function __construct(RegistryInterface $registry, LoggerInterface $logger)
+    public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;
-        $this->logger = $logger;
+        $this->request = $registry->getRequest();
+        $this->logger = $registry->getLogger(static::class);
     }
 
     public static function getKeyword(): string
@@ -57,7 +59,7 @@ abstract class DataProvider implements DataProviderInterface
         return !!$result;
     }
 
-    protected function getConfig($key, $default = null)
+    protected function getConfig(string $key, $default = null)
     {
         if (array_key_exists($key, $this->configuration)) {
             return $this->configuration[$key];
@@ -75,6 +77,7 @@ abstract class DataProvider implements DataProviderInterface
         }
         if (
             $this->getConfig(static::KEY_MUST_BE_EMPTY, static::DEFAULT_MUST_BE_EMPTY)
+            && $submission->getData()->keyExists($key)
             && !$submission->getData()->fieldEmpty($key)
         ) {
             return false;
