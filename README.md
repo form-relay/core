@@ -16,7 +16,7 @@ Often you want to process data from form submissions on your own website in diff
 ### Installation using Composer
 
 The recommended way to install FormRelay is by using [Composer](https://getcomposer.org).
-In your Composer based TYPO3 project root, just do `composer require form-relay/core`.
+In your Composer based project root, just do `composer require form-relay/core`.
 
 ## Extend
 
