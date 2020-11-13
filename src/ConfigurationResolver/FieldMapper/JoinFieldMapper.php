@@ -13,7 +13,7 @@ class JoinFieldMapper extends FieldMapper
     public function prepare(array &$result)
     {
         if ($this->context['value'] instanceof MultiValueField) {
-            $glue = GeneralUtility::parseSeparatorString($this->config[static::KEY_GLUE] ?: static::DEFAULT_GLUE);
+            $glue = GeneralUtility::parseSeparatorString($this->config[static::KEY_GLUE] ?? static::DEFAULT_GLUE);
             $this->context['value'] = $this->context['value']->__toString($glue);
         }
     }

@@ -73,7 +73,7 @@ abstract class Route implements RouteInterface
             }
         }
 
-        $ignoreIfEmpty = isset($this->configuration['values']['ignoreIfEmpty']) ? !!$this->configuration['values']['ignoreIfEmpty'] : false;
+        $ignoreIfEmpty = !!($this->configuration['values']['ignoreIfEmpty'] ?? false);
         if ($ignoreIfEmpty && trim($value) === '') {
             return true;
         }
@@ -83,10 +83,10 @@ abstract class Route implements RouteInterface
 
     protected function mapValue($key)
     {
-        $valueMapping = isset($this->configuration['values']['mapping']) ? $this->configuration['values']['mapping'] : '';
+        $valueMapping = $this->configuration['values']['mapping'] ?? '';
         $context = new ConfigurationResolverContext($this->submission, ['key' => $key]);
         /** @var GeneralValueMapper $valueMapper */
-        $valueMapper = $this->registry->getValueMapper('general', isset($valueMapping[$key]) ? $valueMapping[$key] : [], $context);
+        $valueMapper = $this->registry->getValueMapper('general', $valueMapping[$key] ?? [], $context);
         return $valueMapper->resolve();
     }
 
