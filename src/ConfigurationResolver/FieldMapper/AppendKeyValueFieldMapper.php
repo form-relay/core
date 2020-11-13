@@ -19,8 +19,8 @@ class AppendKeyValueFieldMapper extends FieldMapper
 
     public function finish(array &$result): bool
     {
-        $keyValueSeparator = GeneralUtility::parseSeparatorString($this->config[static::KEY_KEY_VALUE_SEPARATOR] ?: static::DEFAULT_KEY_VALUE_SEPARATOR);
-        $separator = GeneralUtility::parseSeparatorString($this->config[static::KEY_SEPARATOR] ?: static::DEFAULT_SEPARATOR);
+        $keyValueSeparator = GeneralUtility::parseSeparatorString($this->config[static::KEY_KEY_VALUE_SEPARATOR] ?? static::DEFAULT_KEY_VALUE_SEPARATOR);
+        $separator = GeneralUtility::parseSeparatorString($this->config[static::KEY_SEPARATOR] ?? static::DEFAULT_SEPARATOR);
         if (!isset($result[$this->context['mappedKey']])) {
             $result[$this->context['mappedKey']] = '';
         }

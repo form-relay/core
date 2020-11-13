@@ -31,7 +31,7 @@ class SplitFieldMapper extends FieldMapper
 
     public function finish(array &$result): bool
     {
-        $token = GeneralUtility::parseSeparatorString(isset($this->config[static::KEY_TOKEN]) ? $this->config[static::KEY_TOKEN] : static::DEFAULT_TOKEN);
+        $token = GeneralUtility::parseSeparatorString($this->config[static::KEY_TOKEN] ?? static::DEFAULT_TOKEN);
         $splitFields = is_array($this->config[static::KEY_FIELDS])
             ? $this->config[static::KEY_FIELDS]
             : explode(static::DELIMITER, $this->config[static::KEY_FIELDS]);
