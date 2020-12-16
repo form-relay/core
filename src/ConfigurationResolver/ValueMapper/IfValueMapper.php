@@ -13,15 +13,9 @@ class IfValueMapper extends ValueMapper
      */
     protected function resolveValue($fieldValue)
     {
-        /** @var GeneralEvaluation $evaluation */
-        $evaluation = $this->registry->getEvaluation('general', $this->config, $this->context->copy());
-        if ($evaluation) {
-            $result = $evaluation->resolve();
-            if ($result !== null) {
-                /** @var GeneralValueMapper $valueMapper */
-                $valueMapper = $this->resolveKeyword('general', $result);
-                return $valueMapper->resolve($fieldValue);
-            }
+        $result = $this->resolveEvaluation($this->config);
+        if ($result !== null) {
+            return $this->resolveValueMap($result);
         }
         return null;
     }

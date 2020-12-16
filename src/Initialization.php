@@ -9,7 +9,6 @@ abstract class Initialization
     const DATA_PROVIDERS = [];
     const EVALUATIONS = [];
     const CONTENT_RESOLVERS = [];
-    const FIELD_MAPPERS = [];
     const VALUE_MAPPERS = [];
     const DATA_DISPATCHERS = [];
     const ROUTES = [];
@@ -24,9 +23,6 @@ abstract class Initialization
         }
         foreach (static::CONTENT_RESOLVERS as $contentResolver) {
             $registry->registerContentResolver($contentResolver);
-        }
-        foreach (static::FIELD_MAPPERS as $fieldMapper) {
-            $registry->registerFieldMapper($fieldMapper);
         }
         foreach (static::VALUE_MAPPERS as $valueMapper) {
             $registry->registerValueMapper($valueMapper);

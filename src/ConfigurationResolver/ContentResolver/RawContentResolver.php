@@ -2,15 +2,10 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
-class SelfContentResolver extends FieldContentResolver
+class RawContentResolver extends ContentResolver
 {
     public function build()
     {
         return $this->config;
-    }
-
-    public function getWeight(): int
-    {
-        return 0;
     }
 }

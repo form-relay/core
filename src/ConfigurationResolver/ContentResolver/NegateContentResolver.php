@@ -1,8 +1,8 @@
 <?php
 
-namespace FormRelay\Core\ConfigurationResolver\FieldMapper;
+namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
-class NegateFieldMapper extends FieldMapper
+class NegateContentResolver extends ContentResolver
 {
     const KEY_TRUE = 'true';
     const DEFAULT_TRUE = '1';
@@ -15,10 +15,15 @@ class NegateFieldMapper extends FieldMapper
         return true;
     }
 
-    protected function prepareValue($fieldValue, array &$result)
+    public function finish(&$result): bool
     {
         $true = $this->config[static::KEY_TRUE] ?? static::DEFAULT_TRUE;
         $false = $this->config[static::KEY_FALSE] ?? static::DEFAULT_FALSE;
-        return !!$fieldValue ? $false : $true;
+        return !!$result ? $false : $true;
+    }
+
+    public function getWeight(): int
+    {
+        return 101;
     }
 }

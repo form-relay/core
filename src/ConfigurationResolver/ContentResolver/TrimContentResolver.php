@@ -4,9 +4,9 @@ namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
 class TrimContentResolver extends ContentResolver
 {
-    public function finish(string &$result): bool
+    public function finish(&$result): bool
     {
-        if ($this->config) {
+        if ($this->config && $result !== null) {
             $result = trim($result);
         }
         return false;

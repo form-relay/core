@@ -48,72 +48,21 @@ abstract class Route implements RouteInterface
         return $default;
     }
 
-    protected function buildDefaults()
+    protected function buildRouteData(): array
     {
-        $defaultsConfig = $this->configuration['defaults'] ?? [];
-        $defaults = [];
-        foreach ($defaultsConfig as $key => $value) {
-            $context = new ConfigurationResolverContext($this->submission);
+        $fieldConfigList = $this->getConfig('fields', []);
+        $fields = [];
+        $baseContext = new ConfigurationResolverContext($this->submission);
+        foreach ($fieldConfigList as $key => $value) {
+            $context = $baseContext->copy();
             /** @var GeneralContentResolver $contentResolver */
             $contentResolver = $this->registry->getContentResolver('general', $value, $context);
             $result = $contentResolver->resolve();
             if ($result !== null) {
-                $defaults[$key] = $result;
+                $fields[$key] = $result;
             }
         }
-        return $defaults;
-    }
-
-    protected function ignoreField($key, $value)
-    {
-        if (isset($this->configuration['fields']['ignore'])) {
-            $ignoreKeys = explode(',', $this->configuration['fields']['ignore']);
-            if (in_array($key, $ignoreKeys)) {
-                return true;
-            }
-        }
-
-        $ignoreIfEmpty = !!($this->configuration['values']['ignoreIfEmpty'] ?? false);
-        if ($ignoreIfEmpty && trim($value) === '') {
-            return true;
-        }
-
-        return false;
-    }
-
-    protected function mapValue($key)
-    {
-        $valueMapping = $this->configuration['values']['mapping'] ?? '';
-        $context = new ConfigurationResolverContext($this->submission, ['key' => $key]);
-        /** @var GeneralValueMapper $valueMapper */
-        $valueMapper = $this->registry->getValueMapper('general', $valueMapping[$key] ?? [], $context);
-        return $valueMapper->resolve();
-    }
-
-    protected function mapField($key, $value, &$result)
-    {
-        $fieldMapping = isset($this->configuration['fields']['mapping'][$key])
-            ? $this->configuration['fields']['mapping'][$key]
-            : $this->configuration['fields']['unmapped'];
-        $context = new ConfigurationResolverContext($this->submission, ['key' => $key, 'value' => $value]);
-        /** @var GeneralFieldMapper $fieldMapper */
-        $fieldMapper = $this->registry->getFieldMapper('general', $fieldMapping, $context);
-        $result = $fieldMapper->resolve($result);
-        return $result;
-    }
-
-    protected function buildRouteData(): array
-    {
-        $result = $this->buildDefaults();
-        foreach ($this->submission->getData() as $key => $value) {
-            if ($this->ignoreField($key, $value)) {
-                continue;
-            }
-
-            $mappedValue = $this->mapValue($key);
-            $result = $this->mapField($key, $mappedValue, $result);
-        }
-        return $result;
+        return $fields;
     }
 
     protected function processGate(): bool

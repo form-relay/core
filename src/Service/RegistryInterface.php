@@ -5,7 +5,6 @@ namespace FormRelay\Core\Service;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\ContentResolverInterface;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EvaluationInterface;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\FieldMapperInterface;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
 use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
 use FormRelay\Core\Log\LoggerInterface;
@@ -38,16 +37,6 @@ interface RegistryInterface
      * @return EvaluationInterface|null
      */
     public function getEvaluation(string $keyword, $config, ConfigurationResolverContextInterface $context);
-
-    public function registerFieldMapper(string $class);
-
-    /**
-     * @param string $keyword
-     * @param $config
-     * @param ConfigurationResolverContextInterface $context
-     * @return FieldMapperInterface|null
-     */
-    public function getFieldMapper(string $keyword, $config, ConfigurationResolverContextInterface $context);
 
     public function registerValueMapper(string $class);
 

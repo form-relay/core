@@ -14,23 +14,12 @@ abstract class ContentResolver extends ConfigurationResolver implements ContentR
         return ContentResolverInterface::class;
     }
 
-    protected function getFieldValue($key)
+    public function build()
     {
-        $fieldValue = isset($this->context['data'][$key])
-            ? $this->context['data'][$key]
-            : '';
-        if ($fieldValue instanceof MultiValueField && isset($this->context[static::KEYWORD_GLUE])) {
-            $fieldValue = $fieldValue->__toString(static::KEYWORD_GLUE);
-        }
-        return $fieldValue;
+        return null;
     }
 
-    public function build(): string
-    {
-        return '';
-    }
-
-    public function finish(string &$result): bool
+    public function finish(&$result): bool
     {
         return false;
     }
