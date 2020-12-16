@@ -2,13 +2,24 @@
 
 namespace FormRelay\Core;
 
+use FormRelay\Core\ConfigurationResolver\ContentResolver\DefaultContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfEmptyContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\JoinContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\LoopDataContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\MapContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\NegateContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\RawContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SelfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\InsertDataContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\SplitContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\ProcessedEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\RegexpEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\SelfEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EmptyEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EqualsEvaluation;
@@ -58,31 +69,26 @@ class CoreInitialization extends Initialization
         InEvaluation::class,
         NotEvaluation::class,
         OrEvaluation::class,
+        ProcessedEvaluation::class,
+        RegexpEvaluation::class,
         RequiredEvaluation::class,
     ];
     const CONTENT_RESOLVERS = [
         SelfContentResolver::class,
+        DefaultContentResolver::class,
         FieldContentResolver::class,
         GeneralContentResolver::class,
         IfContentResolver::class,
+        IgnoreIfEmptyContentResolver::class,
+        IgnoreIfContentResolver::class,
         InsertDataContentResolver::class,
+        JoinContentResolver::class,
+        LoopDataContentResolver::class,
+        MapContentResolver::class,
+        NegateContentResolver::class,
+        RawContentResolver::class,
+        SplitContentResolver::class,
         TrimContentResolver::class,
-    ];
-    const FIELD_MAPPERS = [
-        AppendKeyValueFieldMapper::class,
-        AppendValueFieldMapper::class,
-        SelfFieldMapper::class,
-        DiscreteFieldFieldMapper::class,
-        DistributeFieldMapper::class,
-        GeneralFieldMapper::class,
-        IfEmptyFieldMapper::class,
-        IfFieldMapper::class,
-        IgnoreFieldMapper::class,
-        JoinFieldMapper::class,
-        NegateFieldMapper::class,
-        PassthroughFieldMapper::class,
-        SplitFieldMapper::class,
-        ValueMapFieldMapper::class,
     ];
     const VALUE_MAPPERS = [
         SelfValueMapper::class,

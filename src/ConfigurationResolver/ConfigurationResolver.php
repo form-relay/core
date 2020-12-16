@@ -2,7 +2,13 @@
 
 namespace FormRelay\Core\ConfigurationResolver;
 
+use FormRelay\Core\ConfigurationResolver\ContentResolver\ContentResolverInterface;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
+use FormRelay\Core\ConfigurationResolver\Evaluation\EvaluationInterface;
+use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
+use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
+use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
 use FormRelay\Core\Service\RegistryInterface;
 
 abstract class ConfigurationResolver implements ConfigurationResolverInterface
@@ -33,6 +39,14 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
             $this->config = $config;
         }
     }
+    
+    protected function resolveForeignKeyword(string $resolverInterface, string $keyword, $config, ConfigurationResolverContextInterface $context = null)
+    {
+        if ($context === null) {
+            $context = $this->context->copy();
+        }
+        return $this->registry->getConfigurationResolver($resolverInterface, $keyword, $config, $context);
+    }
 
     /**
      * @param string $keyword
@@ -42,10 +56,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
      */
     protected function resolveKeyword(string $keyword, $config, ConfigurationResolverContextInterface $context = null)
     {
-        if ($context === null) {
-            $context = $this->context->copy();
-        }
-        return $this->registry->getConfigurationResolver(static::getResolverInterface(), $keyword, $config, $context);
+        return $this->resolveForeignKeyword(static::getResolverInterface(), $keyword, $config, $context);
     }
 
     abstract protected static function getResolverInterface(): string;
@@ -112,5 +123,48 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
     protected function convertScalarConfigToArray()
     {
         return false;
+    }
+
+    protected function fieldExists($key, bool $markAsProcessed = true): bool
+    {
+        if ($markAsProcessed) {
+            $this->context['tracker']->markAsProcessed($key);
+        }
+        return array_key_exists($key, $this->context['data']);
+    }
+
+    protected function getFieldValue($key, bool $markAsProcessed = true)
+    {
+        $fieldValue = $this->fieldExists($key)
+            ? $this->context['data'][$key]
+            : null;
+        return $fieldValue;
+    }
+    
+    protected function resolveContent($config, ConfigurationResolverContextInterface $context = null)
+    {
+        /** @var GeneralContentResolver $contentResolver */
+        $contentResolver = $this->resolveForeignKeyword(ContentResolverInterface::class, 'general', $config, $context);
+        return $contentResolver->resolve();
+    }
+
+    protected function resolveValueMap($config, $value, ConfigurationResolverContextInterface $context = null)
+    {
+        /** @var GeneralValueMapper $valueMapper */
+        $valueMapper = $this->resolveForeignKeyword(ValueMapperInterface::class, 'general', $config, $context);
+        return $valueMapper->resolve($value);
+    }
+
+    protected function resolveEvaluation($config, ConfigurationResolverContextInterface $context = null)
+    {
+        /** @var GeneralEvaluation $evaluation */
+        $evaluation = $this->resolveForeignKeyword(EvaluationInterface::class, 'general', $config, $context);
+        return $evaluation->resolve();
+    }
+
+    protected function evaluate($config, ConfigurationResolverContextInterface $context = null)
+    {
+        $evaluation = $this->resolveForeignKeyword(EvaluationInterface::class, 'general', $config, $context);
+        return $evaluation->eval();
     }
 }

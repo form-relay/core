@@ -3,6 +3,8 @@
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
+use FormRelay\Core\Model\Form\FieldInterface;
+use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Utility\GeneralUtility;
 
@@ -10,21 +12,39 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
 {
     protected $glue = '';
 
-    protected function add($result, $content): string
+    /**
+     * @param string|FieldInterface|null $result
+     * @param string|FieldInterface|null $content
+     * @return string|FieldInterface|null
+     */
+    protected function add($result, $content)
     {
-        return $result
-            . ($content && $result && $this->glue ? $this->glue : '')
-            . $content;
+        if ($content !== null) {
+            if ($result === null || $result === '') {
+                $result = $content;
+            } elseif ($content !== '') {
+                $result .= $this->glue ?: '';
+                if ($content instanceof MultiValueField && $this->glue) {
+                    $result .= $content->__toString($this->glue);
+                } else {
+                    $result .= $content;
+                }
+            }
+        }
+        return $result;
     }
 
-    public function resolve(): string
+    /**
+     * @return FieldInterface|string|null
+     */
+    public function resolve()
     {
         $result = $this->build();
         $this->finish($result);
         return $result;
     }
 
-    public function build(): string
+    public function build()
     {
         if (!is_array($this->config)) {
             $this->config = [SubmissionConfigurationInterface::KEY_SELF => $this->config];
@@ -44,7 +64,7 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
 
         $this->sortSubResolvers($contentResolvers);
 
-        $result = '';
+        $result = null;
         foreach ($contentResolvers as $contentResolver) {
             $content = $contentResolver->build();
             $result = $this->add($result, $content);

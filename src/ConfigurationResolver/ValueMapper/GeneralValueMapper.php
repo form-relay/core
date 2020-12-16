@@ -24,7 +24,7 @@ class GeneralValueMapper extends ValueMapper implements GeneralConfigurationReso
             $valueMapper = $this->resolveKeyword($key, $value);
 
             // if not successful, create a general mapper as sub-mapper if the config key is the data value
-            if (!$valueMapper && $key === $fieldValue) {
+            if (!$valueMapper && (string)$key === (string)$fieldValue) {
                 $valueMapper = $this->resolveKeyword('general', $value);
             }
 

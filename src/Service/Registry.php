@@ -6,7 +6,6 @@ use FormRelay\Core\ConfigurationResolver\ConfigurationResolverInterface;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\ContentResolverInterface;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EvaluationInterface;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\FieldMapperInterface;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
 use FormRelay\Core\DataProvider\DataProviderInterface;
 use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
@@ -74,12 +73,6 @@ class Registry implements RegistryInterface
         $this->configurationResolverClasses[ContentResolverInterface::RESOLVER_TYPE][$class::getKeyword()] = $class;
     }
 
-    public function registerFieldMapper(string $class)
-    {
-        $this->classValidation($class, FieldMapperInterface::class);
-        $this->configurationResolverClasses[FieldMapperInterface::RESOLVER_TYPE][$class::getKeyword()] = $class;
-    }
-
     public function registerValueMapper(string $class)
     {
         $this->classValidation($class, ValueMapperInterface::class);
@@ -102,11 +95,6 @@ class Registry implements RegistryInterface
     public function getEvaluation(string $keyword, $config, ConfigurationResolverContextInterface $context)
     {
         return $this->getConfigurationResolver(EvaluationInterface::class, $keyword, $config, $context);
-    }
-
-    public function getFieldMapper(string $keyword, $config, ConfigurationResolverContextInterface $context)
-    {
-        return $this->getConfigurationResolver(FieldMapperInterface::class, $keyword, $config, $context);
     }
 
     public function getContentResolver(string $keyword, $config, ConfigurationResolverContextInterface $context)

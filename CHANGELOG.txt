@@ -1,4 +1,8 @@
 
+1.1.0
+
+[FEATURE] refactored field mappers and defaults, now using only content resolvers
+
 1.0.2
 
 [BUGFIX] fixed behaviour for falling back to default configurations

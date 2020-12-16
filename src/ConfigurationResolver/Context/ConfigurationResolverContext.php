@@ -4,14 +4,21 @@ namespace FormRelay\Core\ConfigurationResolver\Context;
 
 use ArrayObject;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
+use FormRelay\Core\ConfigurationResolver\ProcessedFieldsTracker;
+use FormRelay\Core\ConfigurationResolver\ProcessedFieldsTrackerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 
 class ConfigurationResolverContext extends ArrayObject implements ConfigurationResolverContextInterface
 {
+    protected $fieldsTracker;
     protected $submission;
 
-    public function __construct(SubmissionInterface $submission, array $context = [])
+    public function __construct(SubmissionInterface $submission, array $context = [], ProcessedFieldsTrackerInterface $fieldsTracker = null)
     {
+        if ($fieldsTracker === null) {
+            $fieldsTracker = new ProcessedFieldsTracker();
+        }
+        $this->fieldsTracker = $fieldsTracker;
         $this->submission = $submission;
         parent::__construct($context);
     }
@@ -25,6 +32,8 @@ class ConfigurationResolverContext extends ArrayObject implements ConfigurationR
                 return $this->submission->getData();
             case 'config':
                 return $this->submission->getConfiguration();
+            case 'tracker':
+                return $this->fieldsTracker;
             default:
                 return parent::offsetGet($index);
         }
@@ -39,6 +48,8 @@ class ConfigurationResolverContext extends ArrayObject implements ConfigurationR
                 return true;
             case 'config':
                 return true;
+            case 'tracker':
+                return true;
             default:
                 return parent::offsetExists($index);
         }
@@ -46,6 +57,6 @@ class ConfigurationResolverContext extends ArrayObject implements ConfigurationR
 
     public function copy(): ConfigurationResolverContextInterface
     {
-        return new ConfigurationResolverContext($this->submission, iterator_to_array($this));
+        return new ConfigurationResolverContext($this->submission, iterator_to_array($this), $this->fieldsTracker);
     }
 }

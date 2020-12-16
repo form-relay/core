@@ -1,20 +1,21 @@
 <?php
 
-namespace FormRelay\Core\ConfigurationResolver\FieldMapper;
+namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Utility\GeneralUtility;
 
-class JoinFieldMapper extends FieldMapper
+class JoinContentResolver extends ContentResolver
 {
     const KEY_GLUE = 'glue';
     const DEFAULT_GLUE = '\\n';
 
-    public function prepare(array &$result)
+    public function finish(&$result): bool
     {
-        if ($this->context['value'] instanceof MultiValueField) {
+        if ($result instanceof MultiValueField) {
             $glue = GeneralUtility::parseSeparatorString($this->config[static::KEY_GLUE] ?? static::DEFAULT_GLUE);
-            $this->context['value'] = $this->context['value']->__toString($glue);
+            $result = $result->__toString($glue);
         }
+        return false;
     }
 }

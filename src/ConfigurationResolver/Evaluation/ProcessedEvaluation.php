@@ -2,18 +2,19 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
-class ExistsEvaluation extends Evaluation
+class ProcessedEvaluation extends Evaluation
 {
     public function eval(array $keysEvaluated = []): bool
     {
-        // exists
-        $exists = $this->fieldExists($this->context['key']);
+        // processed
+        $result = $this->context['tracker']->hasBeenProcessed($this->context['key']);
 
-        // does not exist
+        // not processed
         if (!$this->config) {
             $result = !$result;
         }
 
         return $result;
     }
+
 }

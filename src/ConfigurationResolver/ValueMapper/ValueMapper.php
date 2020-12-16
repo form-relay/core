@@ -25,9 +25,7 @@ abstract class ValueMapper extends ConfigurationResolver implements ValueMapperI
     public function resolve($fieldValue = null)
     {
         if ($fieldValue === null) {
-            $fieldValue = isset($this->context['data'][$this->context['key']])
-                ? $this->context['data'][$this->context['key']]
-                : null;
+            $fieldValue = $this->getFieldValue($this->context['key']);
         }
 
         if ($fieldValue instanceof MultiValueField) {

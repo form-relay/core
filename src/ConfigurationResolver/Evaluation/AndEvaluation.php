@@ -2,6 +2,7 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
+use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
 class AndEvaluation extends Evaluation
@@ -26,8 +27,11 @@ class AndEvaluation extends Evaluation
         }
 
         foreach ($this->config as $key => $value) {
-            if ($key === static::KEY_FIELD && !is_array($value)) {
-                $context['key'] = $value;
+            if ($key === static::KEY_FIELD) {
+                $resolvedKey = $this->resolveContent($value);
+                if ($resolvedKey !== null && $resolvedKey !== '') {
+                    $this->context['key'] = $resolvedKey;
+                }
                 continue;
             }
 

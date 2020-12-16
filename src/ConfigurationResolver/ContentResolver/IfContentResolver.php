@@ -6,11 +6,9 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 
 class IfContentResolver extends ContentResolver
 {
-    public function finish(string &$result): bool
+    public function finish(&$result): bool
     {
-        /** @var GeneralEvaluation $evaluation */
-        $evaluation = $this->registry->getEvaluation('general', $this->config, $this->context->copy());
-        $evalResult = $evaluation->resolve();
+        $evalResult = $this->resolveEvaluation($this->config);
         if ($evalResult !== null) {
             /** @var GeneralContentResolver $contentResolver */
             $contentResolver = $this->resolveKeyword('general', $evalResult);

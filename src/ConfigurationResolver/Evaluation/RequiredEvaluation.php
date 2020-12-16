@@ -15,17 +15,18 @@ class RequiredEvaluation extends Evaluation
     {
         $result = true;
         foreach ($this->config as $requiredField) {
-            if (!isset($this->context['data'][$requiredField])) {
+            if (!$this->fieldExists($requiredField)) {
                 $result = false;
                 break;
             }
-            if (!$this->context['data'][$requiredField]) {
+            $value = $this->getFieldValue($requiredField);
+            if (!$value) {
                 $result = false;
                 break;
             }
             if (
-                $this->context['data'][$requiredField] instanceof MultiValueField
-                && count($this->context['data'][$requiredField]) === 0
+                $value instanceof MultiValueField
+                && count($value) === 0
             ) {
                 $result = false;
                 break;
