@@ -49,21 +49,23 @@ class LoopDataContentResolver extends ContentResolver
             $result[static::KEYWORD_GLUE] = $glue;
         }
         foreach ($this->context['data'] as $key => $value) {
-            $context = $this->context->copy();
-            $context['data'][$varKey] = $key;
-            $context['data'][$varValue] = $value;
-            $context['key'] = $key;
+
             if ($condition) {
+                $context = $this->context->copy();
+                $context['key'] = $key;
                 if (!$this->evaluate($condition, $context)) {
                     continue;
                 }
             }
+
+            $context = $this->context->copy();
+            $context['data'][$varKey] = $key;
+            $context['data'][$varValue] = $value;
             /** @var GeneralContentResolver $contentResolver */
             $contentResolver = $this->resolveKeyword('general', $template, $context);
             $result[] = $contentResolver->resolve();
             unset($context['data'][$varKey]);
             unset($context['data'][$varValue]);
-            unset($context['key']);
         }
         $contentResolver = $this->resolveKeyword('general', $result);
         return $contentResolver->resolve();

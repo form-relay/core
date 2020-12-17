@@ -3,6 +3,7 @@
 namespace FormRelay\Core;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\DefaultContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldCollectorContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfEmptyContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\JoinContentResolver;
@@ -18,6 +19,7 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\InsertDataContentResolv
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SplitContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\KeyEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\ProcessedEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\RegexpEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\SelfEvaluation;
@@ -67,6 +69,7 @@ class CoreInitialization extends Initialization
         GateEvaluation::class,
         GeneralEvaluation::class,
         InEvaluation::class,
+        KeyEvaluation::class,
         NotEvaluation::class,
         OrEvaluation::class,
         ProcessedEvaluation::class,
@@ -76,6 +79,7 @@ class CoreInitialization extends Initialization
     const CONTENT_RESOLVERS = [
         SelfContentResolver::class,
         DefaultContentResolver::class,
+        FieldCollectorContentResolver::class,
         FieldContentResolver::class,
         GeneralContentResolver::class,
         IfContentResolver::class,
