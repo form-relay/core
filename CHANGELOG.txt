@@ -1,4 +1,10 @@
 
+1.2.0
+
+[FEATURE] new evaluation "key" to evaluate field names instead of field values
+
+[FEATURE] new content resolver "field collector"
+
 1.1.0
 
 [FEATURE] refactored field mappers and defaults, now using only content resolvers
