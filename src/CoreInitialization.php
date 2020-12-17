@@ -19,6 +19,7 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\InsertDataContentResolv
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SplitContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\KeyEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\ProcessedEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\RegexpEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\SelfEvaluation;
@@ -68,6 +69,7 @@ class CoreInitialization extends Initialization
         GateEvaluation::class,
         GeneralEvaluation::class,
         InEvaluation::class,
+        KeyEvaluation::class,
         NotEvaluation::class,
         OrEvaluation::class,
         ProcessedEvaluation::class,

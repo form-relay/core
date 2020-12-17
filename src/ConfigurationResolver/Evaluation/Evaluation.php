@@ -47,7 +47,14 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
      */
     public function eval(array $keysEvaluated = []): bool
     {
-        $fieldValue = $this->getFieldValue($this->context['key']);
+        $fieldValue = null;
+        if (isset($this->context['key'])) {
+            if ($this->context['useKey'] ?? false) {
+                $fieldValue = $this->context['key'];
+            } else {
+                $fieldValue = $this->getFieldValue($this->context['key']);
+            }
+        }
 
         if ($fieldValue instanceof MultiValueField) {
             if ($this->multiValueIsDisjunctive()) {
