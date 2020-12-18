@@ -1,4 +1,8 @@
 
+1.2.1
+
+[BUGFIX] fixed content resolver for non-existent and ignored fields
+
 1.2.0
 
 [FEATURE] new evaluation "key" to evaluate field names instead of field values
