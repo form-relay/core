@@ -138,15 +138,7 @@ abstract class Route implements RouteInterface
         return [
             'enabled' => false,
             'gate' => [],
-            'defaults' => [],
             'fields' => [
-                'ignore' => '',
-                'mapping' => [],
-                'unmapped' => null,
-            ],
-            'values' => [
-                'ignoreIfEmpty' => true,
-                'mapping' => [],
             ],
         ];
     }

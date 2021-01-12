@@ -14,17 +14,17 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
     protected function mergeConfiguration(array $target, array $source, bool $resolveNull = true)
     {
         foreach ($source as $key => $value) {
-            if (!isset($target[$key])) {
+            if (!array_key_exists($key, $target)) {
                 if (!$resolveNull || $value !== null) {
                     $target[$key] = $value;
                 }
             } elseif (is_array($value) && is_array($target[$key])) {
-                $target[$key] = $this->mergeConfiguration($target[$key], $value);
+                $target[$key] = $this->mergeConfiguration($target[$key], $value, $resolveNull);
             } elseif (is_array($value)) {
                 if ($target[$key] === null) {
                     $target[$key] = $value;
                 } else {
-                    $target[$key] = $this->mergeConfiguration([static::KEY_SELF => $target[$key]], $value);
+                    $target[$key] = $this->mergeConfiguration([static::KEY_SELF => $target[$key]], $value, $resolveNull);
                 }
             } elseif (is_array($target[$key])) {
                 if ($value === null) {
@@ -34,10 +34,10 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
                         $target[$key] = $value;
                     }
                 } else {
-                    $target[$key] = $this->mergeConfiguration($target[$key], [static::KEY_SELF => $value]);
+                    $target[$key] = $this->mergeConfiguration($target[$key], [static::KEY_SELF => $value], $resolveNull);
                 }
             } else {
-                if (!$resolveNull || $value === null) {
+                if ($resolveNull && $value === null) {
                     unset($target[$key]);
                 } else {
                     $target[$key] = $value;
