@@ -11,6 +11,11 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
         $this->configurationList = $configurationList;
     }
 
+    public function addConfigurationOverride(array $configuration)
+    {
+        $this->configurationList[] = $configuration;
+    }
+
     public function toArray(): array
     {
         return $this->configurationList;

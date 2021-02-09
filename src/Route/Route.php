@@ -4,8 +4,6 @@ namespace FormRelay\Core\Route;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\GeneralFieldMapper;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\Exception\FormRelayException;
 use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
@@ -25,6 +23,12 @@ abstract class Route implements RouteInterface
     /** @var RequestInterface */
     protected $request;
 
+    /** @var SubmissionInterface */
+    protected $submission;
+
+    /** @var int */
+    protected $pass;
+
     /** @var array */
     protected $configuration;
 
@@ -43,11 +47,11 @@ abstract class Route implements RouteInterface
         return $default;
     }
 
-    protected function buildRouteData(SubmissionInterface $submission, int $pass): array
+    protected function buildRouteData(): array
     {
         $fieldConfigList = $this->getConfig('fields', []);
         $fields = [];
-        $baseContext = new ConfigurationResolverContext($submission);
+        $baseContext = new ConfigurationResolverContext($this->submission);
         foreach ($fieldConfigList as $key => $value) {
             $context = $baseContext->copy();
             /** @var GeneralContentResolver $contentResolver */
@@ -60,14 +64,14 @@ abstract class Route implements RouteInterface
         return $fields;
     }
 
-    protected function processGate(SubmissionInterface $submission, int $pass): bool
+    protected function processGate(): bool
     {
-        $context = new ConfigurationResolverContext($submission);
+        $context = new ConfigurationResolverContext($this->submission);
         $evaluation = $this->registry->getEvaluation(
             'gate',
             [
                 'key' => static::getKeyword(),
-                'pass' => $pass
+                'pass' => $this->pass
             ],
             $context
         );
@@ -76,11 +80,15 @@ abstract class Route implements RouteInterface
 
     public function processPass(SubmissionInterface $submission, int $pass): bool
     {
-        if (!$this->processGate($submission, $pass)) {
+        $this->submission = $submission;
+        $this->pass = $pass;
+        $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration(static::getKeyword(), $pass);
+
+        if (!$this->processGate()) {
             $this->logger->debug('gate not passed for route "' . static::getKeyword() . '" in pass ' . $pass . '.');
             return false;
         }
-        $data = $this->buildRouteData($submission, $pass);
+        $data = $this->buildRouteData();
         if (!$data) {
             throw new FormRelayException('no data generated for route "' . static::getKeyword() . '" in pass ' . $pass . '.');
         }
