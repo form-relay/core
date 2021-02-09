@@ -20,8 +20,13 @@ abstract class DataProvider implements DataProviderInterface
     const KEY_MUST_BE_EMPTY= 'mustBeEmpty';
     const DEFAULT_MUST_BE_EMPTY = true;
 
+    /** @var RegistryInterface */
     protected $registry;
+
+    /** @var RequestInterface */
     protected $request;
+
+    /** @var LoggerInterface */
     protected $logger;
 
     protected $configuration;
@@ -44,6 +49,7 @@ abstract class DataProvider implements DataProviderInterface
         return '';
     }
 
+    abstract protected function processContext(SubmissionInterface $submission);
     abstract protected function process(SubmissionInterface $submission);
 
     protected function proceed(SubmissionInterface $submission): bool
@@ -67,23 +73,79 @@ abstract class DataProvider implements DataProviderInterface
         return $default;
     }
 
-    protected function setField(SubmissionInterface $submission, $key, $value): bool
+    protected function appendToField(SubmissionInterface $submission, $key, $value, $glue = "\n"): bool
     {
+        $data = $submission->getData();
         if (
             $this->getConfig(static::KEY_MUST_EXIST, static::DEFAULT_MUST_EXIST)
-            && !$submission->getData()->keyExists($key)
+            && !$data->fieldExists($key)
+        ) {
+            return false;
+        }
+
+        if ($data->fieldEmpty($key)) {
+            $data[$key] = $value;
+        } else {
+            $data[$key] .= $glue . $value;
+        }
+
+        return true;
+    }
+
+    protected function setField(SubmissionInterface $submission, $key, $value): bool
+    {
+        $data = $submission->getData();
+        if (
+            $this->getConfig(static::KEY_MUST_EXIST, static::DEFAULT_MUST_EXIST)
+            && !$data->fieldExists($key)
         ) {
             return false;
         }
         if (
             $this->getConfig(static::KEY_MUST_BE_EMPTY, static::DEFAULT_MUST_BE_EMPTY)
-            && $submission->getData()->keyExists($key)
-            && !$submission->getData()->fieldEmpty($key)
+            && $data->fieldExists($key)
+            && !$data->fieldEmpty($key)
         ) {
             return false;
         }
-        $submission->getData()[$key] = $value;
+        $data[$key] = $value;
         return true;
+    }
+
+    protected function appendToFieldFromContext(SubmissionInterface $submission, $key, $field = null, $glue = "\n"): bool
+    {
+        $value = $submission->getContext()[$key] ?? null;
+        if ($value !== null) {
+            return $this->appendToField($submission, $field ?: $key, $value, $glue);
+        }
+        return false;
+    }
+
+    protected function setFieldFromContext(SubmissionInterface $submission, $key, $field = null): bool
+    {
+        $value = $submission->getContext()[$key] ?? null;
+        if ($value !== null) {
+            return $this->setField($submission, $field ?: $key, $value);
+        }
+        return false;
+    }
+
+    protected function appendToFieldFromCookie(SubmissionInterface $submission, $cookieName, $field = null, $glue = "\n"): bool
+    {
+        $value = $submission->getContext()['cookies'][$cookieName] ?? null;
+        if ($value !== null) {
+            return $this->appendToField($submission, $field ?: $cookieName, $value, $glue);
+        }
+        return false;
+    }
+
+    protected function setFieldFromCookie(SubmissionInterface $submission, $cookieName, $field = null): bool
+    {
+        $value = $submission->getContext()['cookies'][$cookieName] ?? null;
+        if ($value !== null) {
+            return $this->setField($submission, $field ?: $cookieName, $value);
+        }
+        return false;
     }
 
     public function addData(SubmissionInterface $submission)
@@ -91,6 +153,29 @@ abstract class DataProvider implements DataProviderInterface
         $this->configuration = $submission->getConfiguration()->getDataProviderConfiguration(static::getKeyword());
         if ($this->proceed($submission)) {
             $this->process($submission);
+        }
+    }
+
+    protected function addCookieToContext(SubmissionInterface $submission, string $cookieName, $default = null): bool
+    {
+        $cookieValue = $this->request->getCookies()[$cookieName] ?? $default;
+        if ($cookieValue !== null) {
+            $submission->getContext()['cookies'][$cookieName] = $cookieValue;
+            return true;
+        }
+        return false;
+    }
+
+    protected function addToContext(SubmissionInterface $submission, $key, $value)
+    {
+        $submission->getContext()[$key] = $value;
+    }
+
+    public function addContext(SubmissionInterface $submission)
+    {
+        $this->configuration = $submission->getConfiguration()->getDataProviderConfiguration(static::getKeyword());
+        if ($this->proceed($submission)) {
+            $this->processContext($submission);
         }
     }
 

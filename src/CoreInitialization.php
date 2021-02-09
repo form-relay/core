@@ -53,11 +53,13 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\NegateValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\OriginalValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\RawValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SwitchValueMapper;
+use FormRelay\Core\DataProvider\IpAddressDataProvider;
 use FormRelay\Core\DataProvider\TimestampDataProvider;
 
 class CoreInitialization extends Initialization
 {
     const DATA_PROVIDERS = [
+        IpAddressDataProvider::class,
         TimestampDataProvider::class,
     ];
     const EVALUATIONS = [

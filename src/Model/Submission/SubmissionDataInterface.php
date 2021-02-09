@@ -6,6 +6,8 @@ use ArrayAccess;
 
 interface SubmissionDataInterface extends ArrayAccess
 {
-    public function keyExists($key): bool;
+    public function toArray(): array;
+
+    public function fieldExists($key): bool;
     public function fieldEmpty($key): bool;
 }

@@ -4,25 +4,21 @@ namespace FormRelay\Core\DataProvider;
 
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 
-class TimestampDataProvider extends DataProvider
+class IpAddressDataProvider extends DataProvider
 {
-    const KEY_FIELD = 'field';
-    const DEFAULT_FIELD = 'timestamp';
-
-    const KEY_FORMAT = 'format';
-    const DEFAULT_FORMAT = 'c';
+    const KEY_FIELD = 'ip_address';
+    const DEFAULT_FIELD = 'ip_address';
 
     protected function processContext(SubmissionInterface $submission)
     {
-        $format = $this->getConfig(static::KEY_FORMAT, static::DEFAULT_FORMAT);
-        $this->addToContext($submission, 'timestamp', date($format));
+        $this->addToContext($submission, 'ip_address', $this->request->getIpAddress());
     }
 
     protected function process(SubmissionInterface $submission)
     {
         $this->setFieldFromContext(
             $submission,
-            'timestamp',
+            'ip_address',
             $this->getConfig(static::KEY_FIELD, static::DEFAULT_FIELD)
         );
     }
@@ -31,7 +27,6 @@ class TimestampDataProvider extends DataProvider
     {
         return parent::getDefaultConfiguration() + [
             static::KEY_FIELD => static::DEFAULT_FIELD,
-            static::KEY_FORMAT => static::DEFAULT_FORMAT,
         ];
     }
 }

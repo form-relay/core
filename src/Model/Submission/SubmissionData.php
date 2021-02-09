@@ -6,20 +6,18 @@ use ArrayObject;
 
 class SubmissionData extends ArrayObject implements SubmissionDataInterface
 {
-    public function __construct($input = array(), $flags = 0, $iterator_class = "ArrayIterator")
+    public function toArray(): array
     {
-        parent::__construct($input, $flags, $iterator_class);
+        return iterator_to_array($this);
     }
 
-    public function keyExists($key): bool
+    public function fieldExists($key): bool
     {
         return array_key_exists($key, iterator_to_array($this));
     }
 
     public function fieldEmpty($key): bool
     {
-        return !$this->keyExists($key) || empty($this[$key]);
+        return !$this->fieldExists($key) || empty($this[$key]);
     }
-
-
 }

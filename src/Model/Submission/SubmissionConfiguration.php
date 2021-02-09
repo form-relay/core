@@ -11,6 +11,11 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
         $this->configurationList = $configurationList;
     }
 
+    public function toArray(): array
+    {
+        return $this->configurationList;
+    }
+
     protected function mergeConfiguration(array $target, array $source, bool $resolveNull = true)
     {
         foreach ($source as $key => $value) {
@@ -64,13 +69,18 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
         return $result;
     }
 
-    public function getDataProviderConfiguration(string $dataProviderName)
+    public function get(string $key, $default = null)
     {
         $configuration = $this->getMergedConfiguration();
-        if (isset($configuration['dataProviders'][$dataProviderName])) {
-            return $configuration['dataProviders'][$dataProviderName];
+        if (isset($configuration[$key])) {
+            return $configuration[$key];
         }
-        return [];
+        return $default;
+    }
+
+    public function getDataProviderConfiguration(string $dataProviderName)
+    {
+        return $this->get('dataProviders', [])[$dataProviderName] ?? [];
     }
 
     protected function getRouteConfiguration(string $routeName): array
@@ -94,15 +104,15 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
         return $configuration;
     }
 
-    public function getRoutePassCount(string $keyword): int
+    public function getRoutePassCount(string $routeName): int
     {
-        $configuration = $this->getRouteConfiguration($keyword);
+        $configuration = $this->getRouteConfiguration($routeName);
         return count($configuration);
     }
 
-    public function getRoutePassConfiguration(string $keyword, int $pass): array
+    public function getRoutePassConfiguration(string $routeName, int $pass): array
     {
-        $configuration = $this->getRouteConfiguration($keyword);
+        $configuration = $this->getRouteConfiguration($routeName);
         return $configuration[$pass];
     }
 }

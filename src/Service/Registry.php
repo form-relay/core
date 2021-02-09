@@ -10,10 +10,17 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
 use FormRelay\Core\DataProvider\DataProviderInterface;
 use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
 use FormRelay\Core\Exception\RegistryException;
+use FormRelay\Core\Factory\LoggerFactoryInterface;
+use FormRelay\Core\Factory\NullLoggerFactory;
+use FormRelay\Core\Factory\QueueDataFactory;
+use FormRelay\Core\Factory\QueueDataFactoryInterface;
 use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Log\NullLogger;
+use FormRelay\Core\Queue\NonPersistentQueue;
+use FormRelay\Core\Queue\QueueInterface;
 use FormRelay\Core\Request\DefaultRequest;
 use FormRelay\Core\Request\RequestInterface;
+use FormRelay\Core\Route\QueueRoute;
 use FormRelay\Core\Route\RouteInterface;
 
 class Registry implements RegistryInterface
@@ -23,18 +30,59 @@ class Registry implements RegistryInterface
     protected $dataProviderClasses = [];
     protected $dataDispatcherClasses = [];
 
+    protected $additionalArgumentsPerClass = [];
+
+    protected $request;
+    protected $loggerFactory;
+    protected $queue;
+    protected $queueDataFactory;
+    protected $asyncRouteClassName;
+
+    public function __construct(
+        RequestInterface $request = null,
+        LoggerFactoryInterface $loggerFactory = null,
+        QueueInterface $queue = null,
+        QueueDataFactoryInterface $queueDataFactory = null,
+        string $asyncRouteClassName = QueueRoute::class
+    ) {
+        $this->request = $request ?? new DefaultRequest();
+        $this->loggerFactory = $loggerFactory ?? new NullLoggerFactory();
+        $this->queue = $queue ?? new NonPersistentQueue();
+        $this->queueDataFactory = $queueDataFactory ?? new QueueDataFactory();
+        $this->asyncRouteClassName = $asyncRouteClassName;
+    }
+
     public function getLogger(string $forClass): LoggerInterface
     {
-        return new NullLogger();
+        return $this->loggerFactory->getLogger($forClass);
     }
 
     public function getRequest(): RequestInterface
     {
-        return new DefaultRequest();
+        return $this->request;
+    }
+
+    public function getQueue(): QueueInterface
+    {
+        return $this->queue;
+    }
+
+    public function getQueueDataFactory(): QueueDataFactoryInterface
+    {
+        return $this->queueDataFactory;
+    }
+
+    protected function getAsyncRoute(RouteInterface $route) {
+        return $this->get($this->asyncRouteClassName, [$this, $route]);
     }
 
     protected function get(string $class, array $arguments = [])
     {
+        if (isset($this->additionalArgumentsPerClass[$class])) {
+            foreach ($this->additionalArgumentsPerClass[$class] as $argument) {
+                $arguments[] = $argument;
+            }
+        }
         return new $class(...$arguments);
     }
 
@@ -47,7 +95,7 @@ class Registry implements RegistryInterface
 
     protected function sortRegisterables(array &$registerables)
     {
-        usort($registerables, function (RegisterableInterface $a, RegisterableInterface $b) {
+        uasort($registerables, function (RegisterableInterface $a, RegisterableInterface $b) {
             if ($a->getWeight() === $b->getWeight()) {
                 return 0;
             }
@@ -55,28 +103,28 @@ class Registry implements RegistryInterface
         });
     }
 
-    public function registerConfigurationResolver(string $class)
+    public function registerConfigurationResolver(string $class, string $interface = '', array $additionalArguments = [])
     {
-        $this->classValidation($class, ConfigurationResolverInterface::class);
+        $this->classValidation($class, $interface ?: ConfigurationResolverInterface::class);
         $this->configurationResolverClasses[$class::getResolverType()][$class::getKeyword()] = $class;
+        if (!empty($additionalArguments)) {
+            $this->additionalArgumentsPerClass[$class] = $additionalArguments;
+        }
     }
 
-    public function registerEvaluation(string $class)
+    public function registerEvaluation(string $class, array $additionalArguments = [])
     {
-        $this->classValidation($class, EvaluationInterface::class);
-        $this->configurationResolverClasses[EvaluationInterface::RESOLVER_TYPE][$class::getKeyword()] = $class;
+        $this->registerConfigurationResolver($class, EvaluationInterface::class, $additionalArguments);
     }
 
-    public function registerContentResolver(string $class)
+    public function registerContentResolver(string $class, array $additionalArguments = [])
     {
-        $this->classValidation($class, ContentResolverInterface::class);
-        $this->configurationResolverClasses[ContentResolverInterface::RESOLVER_TYPE][$class::getKeyword()] = $class;
+        $this->registerConfigurationResolver($class, ContentResolverInterface::class, $additionalArguments);
     }
 
-    public function registerValueMapper(string $class)
+    public function registerValueMapper(string $class, array $additionalArguments = [])
     {
-        $this->classValidation($class, ValueMapperInterface::class);
-        $this->configurationResolverClasses[ValueMapperInterface::RESOLVER_TYPE][$class::getKeyword()] = $class;
+        $this->registerConfigurationResolver($class, ValueMapperInterface::class, $additionalArguments);
     }
 
     public function getConfigurationResolver(string $resolverInterface, string $keyword, $config, ConfigurationResolverContextInterface $context)
@@ -107,20 +155,30 @@ class Registry implements RegistryInterface
         return $this->getConfigurationResolver(ValueMapperInterface::class, $keyword, $config, $context);
     }
 
-    public function getRoutes(): array
+    public function getRoutes(bool $async = false): array
     {
         $routes = [];
         foreach ($this->routeClasses as $routeClass) {
-            $routes[] = $this->get($routeClass, [$this]);
+            $routes[$routeClass::getKeyword()] = $this->get($routeClass, [$this]);
         }
         $this->sortRegisterables($routes);
+        if ($async) {
+            /** @var RouteInterface $route */
+            foreach ($routes as $key => $route) {
+                $routes[$key] = $this->getAsyncRoute($route);
+            }
+        }
+
         return $routes;
     }
 
-    public function registerRoute(string $class)
+    public function registerRoute(string $class, array $additionalArguments = [])
     {
         $this->classValidation($class, RouteInterface::class);
         $this->routeClasses[$class::getKeyword()] = $class;
+        if (!empty($additionalArguments)) {
+            $this->additionalArgumentsPerClass[$class] = $additionalArguments;
+        }
     }
 
     public function deleteRoute(string $class)
@@ -142,16 +200,19 @@ class Registry implements RegistryInterface
     {
         $dataProviders = [];
         foreach ($this->dataProviderClasses as $dataProviderClass) {
-            $dataProviders[] = $this->get($dataProviderClass, [$this]);
+            $dataProviders[$dataProviderClass::getKeyword()] = $this->get($dataProviderClass, [$this]);
         }
         $this->sortRegisterables($dataProviders);
         return $dataProviders;
     }
 
-    public function registerDataProvider(string $class)
+    public function registerDataProvider(string $class, array $additionalArguments = [])
     {
         $this->classValidation($class, DataProviderInterface::class);
         $this->dataProviderClasses[$class::getKeyword()] = $class;
+        if (!empty($additionalArguments)) {
+            $this->additionalArgumentsPerClass[$class] = $additionalArguments;
+        }
     }
 
     public function deleteDataProvider(string $class)
@@ -169,12 +230,14 @@ class Registry implements RegistryInterface
         return $result;
     }
 
-    public function registerDataDispatcher(string $class)
+    public function registerDataDispatcher(string $class, array $additionalArguments = [])
     {
         $this->classValidation($class, DataDispatcherInterface::class);
         $this->dataDispatcherClasses[$class::getKeyword()] = $class;
+        if (!empty($additionalArguments)) {
+            $this->additionalArgumentsPerClass[$class] = $additionalArguments;
+        }
     }
-
 
     /**
      * @param string $keyword
@@ -207,11 +270,18 @@ class Registry implements RegistryInterface
         unset($this->dataDispatcherClasses[$class::getKeyword()]);
     }
 
-    public function getDefaultConfiguration(): array
+    public function getGlobalDefaultConfiguration(): array
     {
         return [
-            'dataProviders' => $this->getDataProviderDefaultConfigurations(),
-            'routes' => $this->getRouteDefaultConfigurations(),
+            'async' => false,
         ];
+    }
+
+    public function getDefaultConfiguration(): array
+    {
+        $defaultConfig = $this->getGlobalDefaultConfiguration();
+        $defaultConfig['dataProviders'] = $this->getDataProviderDefaultConfigurations();
+        $defaultConfig['routes'] = $this->getRouteDefaultConfigurations();
+        return $defaultConfig;
     }
 }

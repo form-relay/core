@@ -6,6 +6,7 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\ConfigurationResolver\FieldMapper\GeneralFieldMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
+use FormRelay\Core\Exception\FormRelayException;
 use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
@@ -23,12 +24,6 @@ abstract class Route implements RouteInterface
 
     /** @var RequestInterface */
     protected $request;
-
-    /** @var SubmissionInterface */
-    protected $submission;
-
-    /** @var int */
-    protected $currentPass;
 
     /** @var array */
     protected $configuration;
@@ -48,11 +43,11 @@ abstract class Route implements RouteInterface
         return $default;
     }
 
-    protected function buildRouteData(): array
+    protected function buildRouteData(SubmissionInterface $submission, int $pass): array
     {
         $fieldConfigList = $this->getConfig('fields', []);
         $fields = [];
-        $baseContext = new ConfigurationResolverContext($this->submission);
+        $baseContext = new ConfigurationResolverContext($submission);
         foreach ($fieldConfigList as $key => $value) {
             $context = $baseContext->copy();
             /** @var GeneralContentResolver $contentResolver */
@@ -65,52 +60,42 @@ abstract class Route implements RouteInterface
         return $fields;
     }
 
-    protected function processGate(): bool
+    protected function processGate(SubmissionInterface $submission, int $pass): bool
     {
-        $context = new ConfigurationResolverContext($this->submission);
+        $context = new ConfigurationResolverContext($submission);
         $evaluation = $this->registry->getEvaluation(
             'gate',
             [
                 'key' => static::getKeyword(),
-                'pass' => $this->currentPass
+                'pass' => $pass
             ],
             $context
         );
         return $evaluation->eval();
     }
 
-    protected function processPass(): bool
+    public function processPass(SubmissionInterface $submission, int $pass): bool
     {
-        if (!$this->processGate()) {
-            $this->logger->debug('gate not passed for route "' . static::getKeyword() . '" in pass ' . $this->currentPass . '.');
+        if (!$this->processGate($submission, $pass)) {
+            $this->logger->debug('gate not passed for route "' . static::getKeyword() . '" in pass ' . $pass . '.');
             return false;
         }
-        $data = $this->buildRouteData();
+        $data = $this->buildRouteData($submission, $pass);
         if (!$data) {
-            $this->logger->debug('no data generated for route "' . static::getKeyword() . '" in pass ' . $this->currentPass . '.');
-            return false;
+            throw new FormRelayException('no data generated for route "' . static::getKeyword() . '" in pass ' . $pass . '.');
         }
 
         $dataDispatcher = $this->getDispatcher();
         if (!$dataDispatcher) {
-            $this->logger->debug('no dispatcher found for route "' . static::getKeyword() . '" in pass ' . $this->currentPass . '.');
-            return false;
+            throw new FormRelayException('no dispatcher found for route "' . static::getKeyword() . '" in pass ' . $pass . '.');
         }
 
         return $dataDispatcher->send($data);
     }
 
-    public function process(SubmissionInterface $submission): bool
+    public function getPassCount(SubmissionInterface $submission): int
     {
-        $this->submission = $submission;
-        $result = false;
-        $passCount = $submission->getConfiguration()->getRoutePassCount(static::getKeyword());
-        for ($pass = 0; $pass < $passCount; $pass++) {
-            $this->currentPass = $pass;
-            $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration(static::getKeyword(), $pass);
-            $result = $this->processPass() || $result;
-        }
-        return $result;
+        return $submission->getConfiguration()->getRoutePassCount(static::getKeyword());
     }
 
     /**
@@ -138,8 +123,7 @@ abstract class Route implements RouteInterface
         return [
             'enabled' => false,
             'gate' => [],
-            'fields' => [
-            ],
+            'fields' => [],
         ];
     }
 }
