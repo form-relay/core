@@ -12,16 +12,15 @@ class QueueWorker extends AbstractRelay implements WorkerInterface
 {
     public function doJob(JobInterface $job)
     {
-        $submission = $this->registry->getQueueDataFactory()->unpack($job->getData());
-        $this->processDataProviders($submission);
+        $submission = $this->convertJobToSubmission($job);
+        $routeName = $this->getJobRouteName($job);
+        $pass = $this->getJobRoutePass($job);
 
-        $context = $submission->getContext();
-        $routeName = $context['job']['route'];
-        $pass = $context['job']['pass'];
+        $this->processDataProviders($submission);
 
         try {
             /** @var RouteInterface $route */
-            $route = $this->registry->getRoutes()[$routeName] ?? null;
+            $route = $this->registry->getRoute($routeName);
             if (!$route) {
                 throw new FormRelayException('route "' . $routeName . '" not found');
             }

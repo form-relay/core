@@ -15,12 +15,10 @@ use FormRelay\Core\Factory\NullLoggerFactory;
 use FormRelay\Core\Factory\QueueDataFactory;
 use FormRelay\Core\Factory\QueueDataFactoryInterface;
 use FormRelay\Core\Log\LoggerInterface;
-use FormRelay\Core\Log\NullLogger;
 use FormRelay\Core\Queue\NonPersistentQueue;
 use FormRelay\Core\Queue\QueueInterface;
 use FormRelay\Core\Request\DefaultRequest;
 use FormRelay\Core\Request\RequestInterface;
-use FormRelay\Core\Route\QueueRoute;
 use FormRelay\Core\Route\RouteInterface;
 
 class Registry implements RegistryInterface
@@ -36,20 +34,17 @@ class Registry implements RegistryInterface
     protected $loggerFactory;
     protected $queue;
     protected $queueDataFactory;
-    protected $asyncRouteClassName;
 
     public function __construct(
         RequestInterface $request = null,
         LoggerFactoryInterface $loggerFactory = null,
         QueueInterface $queue = null,
-        QueueDataFactoryInterface $queueDataFactory = null,
-        string $asyncRouteClassName = QueueRoute::class
+        QueueDataFactoryInterface $queueDataFactory = null
     ) {
         $this->request = $request ?? new DefaultRequest();
         $this->loggerFactory = $loggerFactory ?? new NullLoggerFactory();
         $this->queue = $queue ?? new NonPersistentQueue();
         $this->queueDataFactory = $queueDataFactory ?? new QueueDataFactory();
-        $this->asyncRouteClassName = $asyncRouteClassName;
     }
 
     public function getLogger(string $forClass): LoggerInterface
@@ -70,10 +65,6 @@ class Registry implements RegistryInterface
     public function getQueueDataFactory(): QueueDataFactoryInterface
     {
         return $this->queueDataFactory;
-    }
-
-    protected function getAsyncRoute(RouteInterface $route) {
-        return $this->get($this->asyncRouteClassName, [$this, $route]);
     }
 
     protected function get(string $class, array $arguments = [])
@@ -155,21 +146,26 @@ class Registry implements RegistryInterface
         return $this->getConfigurationResolver(ValueMapperInterface::class, $keyword, $config, $context);
     }
 
-    public function getRoutes(bool $async = false): array
+    public function getRoutes(): array
     {
         $routes = [];
         foreach ($this->routeClasses as $routeClass) {
             $routes[$routeClass::getKeyword()] = $this->get($routeClass, [$this]);
         }
         $this->sortRegisterables($routes);
-        if ($async) {
-            /** @var RouteInterface $route */
-            foreach ($routes as $key => $route) {
-                $routes[$key] = $this->getAsyncRoute($route);
+        return $routes;
+    }
+
+    public function getRoute(string $routeName)
+    {
+        $route = null;
+        foreach ($this->routeClasses as $routeClass) {
+            if ($routeClass::getKeyword() === $routeName) {
+                $route = $this->get($routeClass, [$this]);
+                break;
             }
         }
-
-        return $routes;
+        return $route;
     }
 
     public function registerRoute(string $class, array $additionalArguments = [])

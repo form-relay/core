@@ -11,6 +11,7 @@ use FormRelay\Core\Factory\QueueDataFactoryInterface;
 use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Queue\QueueInterface;
 use FormRelay\Core\Request\RequestInterface;
+use FormRelay\Core\Route\RouteInterface;
 
 interface RegistryInterface
 {
@@ -59,7 +60,13 @@ interface RegistryInterface
     public function getDataProviderDefaultConfigurations(): array;
 
     public function registerRoute(string $class, array $additionalArguments = []);
-    public function getRoutes(bool $async = false): array;
+    public function getRoutes(): array;
+
+    /**
+     * @param string $routeName
+     * @return RouteInterface|null
+     */
+    public function getRoute(string $routeName);
     public function deleteRoute(string $class);
 
     public function getRouteDefaultConfigurations(): array;

@@ -24,7 +24,7 @@ class Relay extends AbstractRelay
             $this->processDataProviders($submission);
         }
 
-        $routes = $this->registry->getRoutes($async);
+        $routes = $this->registry->getRoutes();
         /**
          * @var string $routeName
          * @var RouteInterface $route
@@ -32,10 +32,14 @@ class Relay extends AbstractRelay
         foreach ($routes as $routeName => $route) {
             $passCount = $route->getPassCount($submission);
             for ($pass = 0; $pass < $passCount; $pass++) {
-                try {
-                    $route->processPass($submission, $pass);
-                } catch (FormRelayException $e) {
-                    $this->logger->error($e->getMessage());
+                if ($async) {
+                    $this->addJobToQueue($submission, $route::getKeyword(), $pass);
+                } else {
+                    try {
+                        $route->processPass($submission, $pass);
+                    } catch (FormRelayException $e) {
+                        $this->logger->error($e->getMessage());
+                    }
                 }
             }
         }
