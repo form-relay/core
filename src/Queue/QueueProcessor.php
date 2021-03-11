@@ -16,15 +16,17 @@ class QueueProcessor
     public function processBatch(int $batchSize = 1): bool
     {
         $result = true;
-        $batch = $this->queue->fetchPending(0, $batchSize);
-        $this->queue->markListAsRunning($batch);
-        foreach ($batch as $job) {
-            try {
-                $this->worker->doJob($job);
-                $this->queue->markAsDone($job);
-            } catch (QueueException $e) {
-                $result = false;
-                $this->queue->markAsFailed($job, $e->getMessage());
+        $batch = $this->queue->fetchPending($batchSize);
+        if (!empty($batch)) {
+            $this->queue->markListAsRunning($batch);
+            foreach ($batch as $job) {
+                try {
+                    $this->worker->doJob($job);
+                    $this->queue->markAsDone($job);
+                } catch (QueueException $e) {
+                    $result = false;
+                    $this->queue->markAsFailed($job, $e->getMessage());
+                }
             }
         }
         return $result;

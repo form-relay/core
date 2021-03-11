@@ -19,7 +19,14 @@ class NegateContentResolver extends ContentResolver
     {
         $true = $this->config[static::KEY_TRUE] ?? static::DEFAULT_TRUE;
         $false = $this->config[static::KEY_FALSE] ?? static::DEFAULT_FALSE;
-        return !!$result ? $false : $true;
+        if ($result === $true) {
+            $result = $false;
+        } elseif ($result === $false) {
+            $result = $true;
+        } else {
+            $result = !!$result ? $false : $true;
+        }
+        return false;
     }
 
     public function getWeight(): int

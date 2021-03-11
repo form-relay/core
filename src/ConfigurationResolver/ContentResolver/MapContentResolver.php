@@ -2,8 +2,6 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
-
 class MapContentResolver extends ContentResolver
 {
     public function finish(&$result): bool

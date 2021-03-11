@@ -67,10 +67,36 @@ abstract class DataProvider implements DataProviderInterface
 
     protected function getConfig(string $key, $default = null)
     {
+        if ($default === null) {
+            $defaults = static::getDefaultConfiguration();
+            if (array_key_exists($key, $defaults)) {
+                $default = $defaults[$key];
+            }
+        }
         if (array_key_exists($key, $this->configuration)) {
             return $this->configuration[$key];
         }
         return $default;
+    }
+
+    protected function addCookieToContext(SubmissionInterface $submission, string $cookieName, $default = null): bool
+    {
+        $cookieValue = $this->request->getCookies()[$cookieName] ?? $default;
+        if ($cookieValue !== null) {
+            $submission->getContext()['cookies'][$cookieName] = $cookieValue;
+            return true;
+        }
+        return false;
+    }
+
+    protected function getCookiesFromContext(SubmissionInterface $submission)
+    {
+        return $submission->getContext()['cookies'] ?? [];
+    }
+
+    protected function getCookieFromContext(SubmissionInterface $submission, string $cookieName, $default = null)
+    {
+        return $this->getCookiesFromContext($submission)[$cookieName] ?? $default;
     }
 
     protected function appendToField(SubmissionInterface $submission, $key, $value, $glue = "\n"): bool
@@ -132,7 +158,7 @@ abstract class DataProvider implements DataProviderInterface
 
     protected function appendToFieldFromCookie(SubmissionInterface $submission, $cookieName, $field = null, $glue = "\n"): bool
     {
-        $value = $submission->getContext()['cookies'][$cookieName] ?? null;
+        $value = $this->getCookieFromContext($submission, $cookieName);
         if ($value !== null) {
             return $this->appendToField($submission, $field ?: $cookieName, $value, $glue);
         }
@@ -141,7 +167,7 @@ abstract class DataProvider implements DataProviderInterface
 
     protected function setFieldFromCookie(SubmissionInterface $submission, $cookieName, $field = null): bool
     {
-        $value = $submission->getContext()['cookies'][$cookieName] ?? null;
+        $value = $this->getCookieFromContext($submission, $cookieName);
         if ($value !== null) {
             return $this->setField($submission, $field ?: $cookieName, $value);
         }
@@ -154,16 +180,6 @@ abstract class DataProvider implements DataProviderInterface
         if ($this->proceed($submission)) {
             $this->process($submission);
         }
-    }
-
-    protected function addCookieToContext(SubmissionInterface $submission, string $cookieName, $default = null): bool
-    {
-        $cookieValue = $this->request->getCookies()[$cookieName] ?? $default;
-        if ($cookieValue !== null) {
-            $submission->getContext()['cookies'][$cookieName] = $cookieValue;
-            return true;
-        }
-        return false;
     }
 
     protected function addToContext(SubmissionInterface $submission, $key, $value)
