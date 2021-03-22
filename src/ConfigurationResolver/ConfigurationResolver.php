@@ -9,10 +9,13 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\EvaluationInterface;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
+use FormRelay\Core\Service\RegisterableTrait;
 use FormRelay\Core\Service\RegistryInterface;
 
 abstract class ConfigurationResolver implements ConfigurationResolverInterface
 {
+    use RegisterableTrait;
+
     /** @var RegistryInterface */
     protected $registry;
 
@@ -61,25 +64,12 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
 
     abstract protected static function getResolverInterface(): string;
 
-    public static function getResolverType(): string
+    public static function getClassType(): string
     {
         if (defined(static::class . '::RESOLVER_TYPE')) {
             return static::RESOLVER_TYPE;
         }
         return '';
-    }
-
-    public static function getKeyword(): string
-    {
-        $resolverType = static::getResolverType();
-        if ($resolverType && preg_match('/([^\\\\]+)' . $resolverType . '$/', static::class, $matches)) {
-            return lcfirst($matches[1]);
-        }
-        return '';
-    }
-
-    public function getWeight(): int {
-        return 10;
     }
 
     protected function sortSubResolvers(array &$subResolvers)
@@ -135,7 +125,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
 
     protected function getFieldValue($key, bool $markAsProcessed = true)
     {
-        $fieldValue = $this->fieldExists($key)
+        $fieldValue = $this->fieldExists($key, $markAsProcessed)
             ? $this->context['data'][$key]
             : null;
         return $fieldValue;

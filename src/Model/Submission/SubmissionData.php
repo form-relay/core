@@ -3,6 +3,7 @@
 namespace FormRelay\Core\Model\Submission;
 
 use ArrayObject;
+use FormRelay\Core\Utility\GeneralUtility;
 
 class SubmissionData extends ArrayObject implements SubmissionDataInterface
 {
@@ -18,6 +19,6 @@ class SubmissionData extends ArrayObject implements SubmissionDataInterface
 
     public function fieldEmpty($key): bool
     {
-        return !$this->fieldExists($key) || empty($this[$key]);
+        return !$this->fieldExists($key) || GeneralUtility::isEmpty($this[$key]);
     }
 }

@@ -2,14 +2,14 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
-class ExistsEvaluation extends Evaluation
+abstract class AbstractIsEvaluation extends Evaluation
 {
     public function eval(array $keysEvaluated = []): bool
     {
-        // exists
-        $result = $this->fieldExists($this->context['key']);
+        // positive evaluation
+        $result = parent::eval($keysEvaluated);
 
-        // does not exist
+        // negative evaluation
         if (!$this->config) {
             $result = !$result;
         }

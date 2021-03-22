@@ -84,6 +84,20 @@ class Registry implements RegistryInterface
         }
     }
 
+    protected function checkKeywordAsClass(string $keyword, string $interface): bool
+    {
+        $result = false;
+        if (class_exists($keyword)) {
+            try {
+                $this->classValidation($keyword, $interface);
+                $result = true;
+            } catch (RegistryException $e) {
+                // keyword is not a class (or it is not implementing the desired interface)
+            }
+        }
+        return $result;
+    }
+
     protected function sortRegisterables(array &$registerables)
     {
         uasort($registerables, function (RegisterableInterface $a, RegisterableInterface $b) {
@@ -97,9 +111,11 @@ class Registry implements RegistryInterface
     public function registerConfigurationResolver(string $class, string $interface = '', array $additionalArguments = [])
     {
         $this->classValidation($class, $interface ?: ConfigurationResolverInterface::class);
-        $this->configurationResolverClasses[$class::getResolverType()][$class::getKeyword()] = $class;
+        $this->configurationResolverClasses[$class::getClassType()][$class::getKeyword()] = $class;
         if (!empty($additionalArguments)) {
             $this->additionalArgumentsPerClass[$class] = $additionalArguments;
+        } else {
+            unset($this->additionalArgumentsPerClass[$class]);
         }
     }
 
@@ -125,7 +141,7 @@ class Registry implements RegistryInterface
         if (isset($this->configurationResolverClasses[$resolverType][$keyword])) {
             return $this->get($this->configurationResolverClasses[$resolverType][$keyword], [$this, $config, $context]);
         }
-        if (class_exists($keyword) && $this->classValidation($keyword, $resolverInterface)) {
+        if ($this->checkKeywordAsClass($keyword, $resolverInterface)) {
             return $this->get($keyword, [$this, $config, $context]);
         }
         return null;
@@ -174,6 +190,8 @@ class Registry implements RegistryInterface
         $this->routeClasses[$class::getKeyword()] = $class;
         if (!empty($additionalArguments)) {
             $this->additionalArgumentsPerClass[$class] = $additionalArguments;
+        } else {
+            unset($this->additionalArgumentsPerClass[$class]);
         }
     }
 
@@ -208,6 +226,8 @@ class Registry implements RegistryInterface
         $this->dataProviderClasses[$class::getKeyword()] = $class;
         if (!empty($additionalArguments)) {
             $this->additionalArgumentsPerClass[$class] = $additionalArguments;
+        } else {
+            unset($this->additionalArgumentsPerClass[$class]);
         }
     }
 
@@ -232,30 +252,23 @@ class Registry implements RegistryInterface
         $this->dataDispatcherClasses[$class::getKeyword()] = $class;
         if (!empty($additionalArguments)) {
             $this->additionalArgumentsPerClass[$class] = $additionalArguments;
+        } else {
+            unset($this->additionalArgumentsPerClass[$class]);
         }
     }
 
     /**
      * @param string $keyword
-     * @param mixed ...$arguments
-     * @return DataDispatcherInterface|mixed|null
-     * @throws RegistryException
      * @return DataDispatcherInterface|null
      */
-    public function getDataDispatcher(string $keyword, ...$arguments)
+    public function getDataDispatcher(string $keyword)
     {
         $class = null;
         if (isset($this->dataDispatcherClasses[$keyword])) {
             $class = $this->dataDispatcherClasses[$keyword];
-        } elseif (class_exists($keyword) && $this->classValidation($keyword, DataDispatcherInterface::class)) {
-            $class = $keyword;
         }
         if ($class !== null) {
-            $args = [$this];
-            foreach ($arguments as $argument) {
-                $args[] = $argument;
-            }
-            return $this->get($class, $args);
+            return $this->get($class, [$this]);
         }
         return null;
     }

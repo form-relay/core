@@ -16,5 +16,4 @@ class ProcessedEvaluation extends Evaluation
 
         return $result;
     }
-
 }

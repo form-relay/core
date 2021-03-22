@@ -42,7 +42,7 @@ class FieldCollectorContentResolver extends ContentResolver
             if (in_array($key, $excludedFields)) {
                 continue;
             }
-            if ($ignoreIfEmpty && !$value) {
+            if ($ignoreIfEmpty && GeneralUtility::isEmpty($value)) {
                 continue;
             }
             if ($unprocessedOnly && $this->context['tracker']->hasBeenProcessed($key)) {

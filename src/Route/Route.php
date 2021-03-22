@@ -9,11 +9,14 @@ use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
 use FormRelay\Core\Request\RequestInterface;
+use FormRelay\Core\Service\RegisterableTrait;
 use FormRelay\Core\Service\RegistryInterface;
 use FormRelay\Core\Utility\GeneralUtility;
 
 abstract class Route implements RouteInterface
 {
+    use RegisterableTrait;
+
     const KEY_ENABLED = 'enabled';
     const DEFAULT_ENABLED = false;
 
@@ -54,6 +57,11 @@ abstract class Route implements RouteInterface
         $this->logger = $registry->getLogger(static::class);
     }
 
+    public static function getClassType(): string
+    {
+        return 'Route';
+    }
+
     protected function getConfig(string $key, $default = null)
     {
         if ($default === null) {
@@ -66,6 +74,16 @@ abstract class Route implements RouteInterface
             return $this->configuration[$key];
         }
         return $default;
+    }
+
+    protected function resolveContent($config, $context = null)
+    {
+        if ($context === null) {
+            $context = new ConfigurationResolverContext($this->submission);
+        }
+        /** @var GeneralContentResolver $contentResolver */
+        $contentResolver = $this->registry->getContentResolver('general', $config, $context);
+        return $contentResolver->resolve();
     }
 
     protected function buildRouteData(): array
@@ -81,17 +99,14 @@ abstract class Route implements RouteInterface
             $fieldConfigList = $this->getConfig(static::KEY_FIELDS);
             $baseContext = new ConfigurationResolverContext($this->submission);
             foreach ($fieldConfigList as $key => $value) {
-                $context = $baseContext->copy();
-                /** @var GeneralContentResolver $contentResolver */
-                $contentResolver = $this->registry->getContentResolver('general', $value, $context);
-                $result = $contentResolver->resolve();
+                $result = $this->resolveContent($value, $baseContext->copy());
                 if ($result !== null) {
                     $fields[$key] = $result;
                 }
             }
         }
         if ($this->getConfig(static::KEY_IGNORE_EMPTY_FIELDS)) {
-            $fields = array_filter($fields, function($a) { return strlen((string)$a) > 0; });
+            $fields = array_filter($fields, function($a) { return !GeneralUtility::isEmpty($a); });
         }
         return $fields;
     }
@@ -142,20 +157,6 @@ abstract class Route implements RouteInterface
      * @return DataDispatcherInterface|null
      */
     abstract protected function getDispatcher();
-
-    public function getWeight(): int
-    {
-        return 10;
-    }
-
-    public static function getKeyword(): string
-    {
-        $namespaceParts = explode('\\', static::class);
-        if (count($namespaceParts) > 1 && $namespaceParts[0] === 'FormRelay') {
-            return GeneralUtility::camel2dashed($namespaceParts[1]);
-        }
-        return '';
-    }
 
 
     public static function getDefaultConfiguration(): array

@@ -3,12 +3,14 @@
 namespace FormRelay\Core;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\DefaultContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\DiscreteMultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldCollectorContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfEmptyContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\JoinContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\LoopDataContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MapContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\NegateContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\RawContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SelfContentResolver;
@@ -19,6 +21,8 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\InsertDataContentResolv
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SplitContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\IsFalseEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\IsTrueEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\KeyEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\ProcessedEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\RegexpEvaluation;
@@ -71,6 +75,8 @@ class CoreInitialization extends Initialization
         GateEvaluation::class,
         GeneralEvaluation::class,
         InEvaluation::class,
+        IsFalseEvaluation::class,
+        IsTrueEvaluation::class,
         KeyEvaluation::class,
         NotEvaluation::class,
         OrEvaluation::class,
@@ -81,6 +87,7 @@ class CoreInitialization extends Initialization
     const CONTENT_RESOLVERS = [
         SelfContentResolver::class,
         DefaultContentResolver::class,
+        DiscreteMultiValueContentResolver::class,
         FieldCollectorContentResolver::class,
         FieldContentResolver::class,
         GeneralContentResolver::class,
@@ -91,6 +98,7 @@ class CoreInitialization extends Initialization
         JoinContentResolver::class,
         LoopDataContentResolver::class,
         MapContentResolver::class,
+        MultiValueContentResolver::class,
         NegateContentResolver::class,
         RawContentResolver::class,
         SplitContentResolver::class,

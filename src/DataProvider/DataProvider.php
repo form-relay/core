@@ -8,9 +8,12 @@ use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Service\RegistryInterface;
+use FormRelay\Core\Service\RegisterableTrait;
 
 abstract class DataProvider implements DataProviderInterface
 {
+    use RegisterableTrait;
+
     const KEY_ENABLED = 'enabled';
     const DEFAULT_ENABLED = false;
 
@@ -31,22 +34,16 @@ abstract class DataProvider implements DataProviderInterface
 
     protected $configuration;
 
+    public static function getClassType(): string
+    {
+        return 'DataProvider';
+    }
+
     public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;
         $this->request = $registry->getRequest();
         $this->logger = $registry->getLogger(static::class);
-    }
-
-    public static function getKeyword(): string
-    {
-        $namespaceParts = explode('\\', static::class);
-        $class = array_pop($namespaceParts);
-        $matches = [];
-        if (preg_match('/^(.*)DataProvider$/', $class, $matches)) {
-            return lcfirst($matches[1]);
-        }
-        return '';
     }
 
     abstract protected function processContext(SubmissionInterface $submission);
@@ -193,11 +190,6 @@ abstract class DataProvider implements DataProviderInterface
         if ($this->proceed($submission)) {
             $this->processContext($submission);
         }
-    }
-
-    public function getWeight(): int
-    {
-        return 10;
     }
 
     public static function getDefaultConfiguration(): array

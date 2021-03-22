@@ -2,12 +2,13 @@
 
 namespace FormRelay\Core\DataDispatcher;
 
-use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Service\RegistryInterface;
-use FormRelay\Core\Utility\GeneralUtility;
+use FormRelay\Core\Service\RegisterableTrait;
 
 abstract class DataDispatcher implements DataDispatcherInterface
 {
+    use RegisterableTrait;
+
     protected $registry;
     protected $logger;
 
@@ -17,19 +18,8 @@ abstract class DataDispatcher implements DataDispatcherInterface
         $this->logger = $registry->getLogger(static::class);
     }
 
-    public static function getKeyword(): string
+    public static function getClassType(): string
     {
-        $namespaceParts = explode('\\', static::class);
-        $class = array_pop($namespaceParts);
-        $matches = [];
-        if (preg_match('/^(.*)DataDispatcher$/', $class, $matches)) {
-            return GeneralUtility::camel2dashed($matches[1]);
-        }
-        return '';
-    }
-
-    public function getWeight(): int
-    {
-        return 10;
+        return 'DataDispatcher';
     }
 }

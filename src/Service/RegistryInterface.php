@@ -75,10 +75,9 @@ interface RegistryInterface
 
     /**
      * @param string $keyword
-     * @param mixed ...$arguments
      * @return DataDispatcherInterface|null
      */
-    public function getDataDispatcher(string $keyword, ...$arguments);
+    public function getDataDispatcher(string $keyword);
     public function deleteDataDispatcher(string $class);
 
     public function getDefaultConfiguration(): array;
