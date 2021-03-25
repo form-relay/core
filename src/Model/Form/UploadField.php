@@ -4,7 +4,7 @@ namespace FormRelay\Core\Model\Form;
 
 use FormRelay\Core\Model\File\FileInterface;
 
-class UploadFormField implements FieldInterface
+class UploadField implements FieldInterface
 {
     /** @var FileInterface */
     protected $file;
