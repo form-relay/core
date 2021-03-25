@@ -13,9 +13,8 @@ class QueueProcessor
         $this->worker = $worker;
     }
 
-    public function processBatch(int $batchSize = 1): bool
+    public function processBatch(int $batchSize = 1)
     {
-        $result = true;
         $batch = $this->queue->fetchPending($batchSize);
         if (!empty($batch)) {
             $this->queue->markListAsRunning($batch);
@@ -24,11 +23,9 @@ class QueueProcessor
                     $this->worker->doJob($job);
                     $this->queue->markAsDone($job);
                 } catch (QueueException $e) {
-                    $result = false;
                     $this->queue->markAsFailed($job, $e->getMessage());
                 }
             }
         }
-        return $result;
     }
 }

@@ -26,6 +26,7 @@ class QueueWorker extends AbstractRelay implements WorkerInterface
             }
             $route->processPass($submission, $pass);
         } catch (FormRelayException $e) {
+            $this->logger->error($e->getMessage());
             throw new QueueException($e->getMessage());
         }
     }
