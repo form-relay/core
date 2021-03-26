@@ -33,8 +33,4 @@ final class GeneralUtility
         }
         return $str;
     }
-
-    public static function camel2dashed(string $className) {
-        return strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $className));
-    }
 }
