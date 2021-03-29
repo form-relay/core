@@ -2,17 +2,11 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
-
-class IgnoreIfContentResolver extends ContentResolver
+class IgnoreIfContentResolver extends IgnoreContentResolver
 {
-    public function finish(&$result): bool
+    protected function ignore($result): bool
     {
-        if ($this->evaluate($this->config)) {
-            $result = null;
-            return true;
-        }
-        return false;
+        return $this->evaluate($this->config);
     }
 
     public function getWeight(): int

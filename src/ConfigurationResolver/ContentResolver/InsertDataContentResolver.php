@@ -14,7 +14,7 @@ class InsertDataContentResolver extends ContentResolver
             if (preg_match('/^\\{([^\\}]+)\\}$/', $result, $matches)) {
                 $result = $this->getFieldValue($matches[1]);
             } else {
-                foreach (array_keys(iterator_to_array($this->context['data'])) as $key) {
+                foreach (array_keys($this->context['data']->toArray()) as $key) {
                     if (strpos($result, '{' . $key . '}') !== false) {
                         $result = str_replace('{' . $key . '}', $this->getFieldValue($key), $result);
                     }

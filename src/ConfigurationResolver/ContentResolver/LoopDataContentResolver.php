@@ -2,8 +2,6 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
-
 class LoopDataContentResolver extends ContentResolver
 {
     const KEY_GLUE = 'glue';
@@ -61,13 +59,10 @@ class LoopDataContentResolver extends ContentResolver
             $context = $this->context->copy();
             $context['data'][$varKey] = $key;
             $context['data'][$varValue] = $value;
-            /** @var GeneralContentResolver $contentResolver */
-            $contentResolver = $this->resolveKeyword('general', $template, $context);
-            $result[] = $contentResolver->resolve();
+            $result[] = $this->resolveContent($template, $context);
             unset($context['data'][$varKey]);
             unset($context['data'][$varValue]);
         }
-        $contentResolver = $this->resolveKeyword('general', $result);
-        return $contentResolver->resolve();
+        return $this->resolveContent($result);
     }
 }

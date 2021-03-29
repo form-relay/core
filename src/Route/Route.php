@@ -26,6 +26,9 @@ abstract class Route implements RouteInterface
     const KEY_PASSTHROUGH_FIELDS = 'passthroughFields';
     const DEFAULT_PASSTHROUGH_FIELDS = false;
 
+    const KEY_EXCLUDE_FIELDS = 'excludeFields';
+    const DEFAULT_EXCLUDE_FIELDS = [];
+
     const KEY_GATE = 'gate';
     const DEFAULT_GATE = [];
 
@@ -105,9 +108,23 @@ abstract class Route implements RouteInterface
                 }
             }
         }
+
+        // ignore empty fields
         if ($this->getConfig(static::KEY_IGNORE_EMPTY_FIELDS)) {
             $fields = array_filter($fields, function($a) { return !GeneralUtility::isEmpty($a); });
         }
+
+        // exclude specific fields directly
+        $excludeFields = $this->getConfig(static::KEY_EXCLUDE_FIELDS);
+        if (!is_array($excludeFields)) {
+            $excludeFields = explode(',', $excludeFields);
+        }
+        foreach ($excludeFields as $excludeField) {
+            if (array_key_exists($excludeField, $fields)) {
+                unset($fields[$excludeField]);
+            }
+        }
+
         return $fields;
     }
 
@@ -165,6 +182,7 @@ abstract class Route implements RouteInterface
             static::KEY_ENABLED => static::DEFAULT_ENABLED,
             static::KEY_IGNORE_EMPTY_FIELDS => static::DEFAULT_IGNORE_EMPTY_FIELDS,
             static::KEY_PASSTHROUGH_FIELDS => static::DEFAULT_PASSTHROUGH_FIELDS,
+            static::KEY_EXCLUDE_FIELDS => static::DEFAULT_EXCLUDE_FIELDS,
             static::KEY_GATE => static::DEFAULT_GATE,
             static::KEY_FIELDS => static::DEFAULT_FIELDS,
         ];

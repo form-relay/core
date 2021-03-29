@@ -6,9 +6,7 @@ class FieldContentResolver extends ContentResolver
 {
     public function build()
     {
-        /** @var GeneralContentResolver $contentResolver */
-        $contentResolver = $this->resolveKeyword('general', $this->config);
-        $fieldName = $contentResolver->resolve();
+        $fieldName = $this->resolveContent($this->config);
         if ($fieldName) {
             return $this->getFieldValue($fieldName);
         }

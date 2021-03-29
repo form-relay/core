@@ -7,9 +7,7 @@ class DefaultContentResolver extends ContentResolver
     public function finish(&$result): bool
     {
         if ($result === '' || $result === null) {
-            /** @var GeneralContentResolver $contentResolver */
-            $contentResolver = $this->resolveKeyword('general', $this->config, $this->context);
-            $result = $contentResolver->resolve();
+            $result = $this->resolveContent($this->config, $this->context);
         }
         return false;
     }

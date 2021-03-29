@@ -5,6 +5,7 @@ namespace FormRelay\Core;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\DefaultContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\DiscreteMultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldCollectorContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfEmptyContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\JoinContentResolver;
@@ -92,6 +93,7 @@ class CoreInitialization extends Initialization
         FieldContentResolver::class,
         GeneralContentResolver::class,
         IfContentResolver::class,
+        IgnoreContentResolver::class,
         IgnoreIfEmptyContentResolver::class,
         IgnoreIfContentResolver::class,
         InsertDataContentResolver::class,
