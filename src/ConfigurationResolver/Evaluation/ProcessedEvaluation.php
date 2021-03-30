@@ -10,7 +10,7 @@ class ProcessedEvaluation extends Evaluation
         $result = $this->context['tracker']->hasBeenProcessed($this->context['key']);
 
         // not processed
-        if (!$this->config) {
+        if (!$this->configuration) {
             $result = !$result;
         }
 

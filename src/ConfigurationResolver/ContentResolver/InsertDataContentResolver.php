@@ -8,7 +8,7 @@ class InsertDataContentResolver extends ContentResolver
 {
     public function finish(&$result): bool
     {
-        if ($this->config && $result !== null) {
+        if ($this->configuration && $result !== null) {
             $result = GeneralUtility::parseSeparatorString($result);
             $matches = [];
             if (preg_match('/^\\{([^\\}]+)\\}$/', $result, $matches)) {

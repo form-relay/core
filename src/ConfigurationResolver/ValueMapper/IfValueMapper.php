@@ -13,7 +13,7 @@ class IfValueMapper extends ValueMapper
      */
     protected function resolveValue($fieldValue)
     {
-        $result = $this->resolveEvaluation($this->config);
+        $result = $this->resolveEvaluation($this->configuration);
         if ($result !== null) {
             return $this->resolveValueMap($result);
         }

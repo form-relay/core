@@ -8,11 +8,13 @@ use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Service\RegistryInterface;
-use FormRelay\Core\Service\RegisterableTrait;
+use FormRelay\Core\Helper\RegisterableTrait;
+use FormRelay\Core\Helper\ConfigurationTrait;
 
 abstract class DataProvider implements DataProviderInterface
 {
     use RegisterableTrait;
+    use ConfigurationTrait;
 
     const KEY_ENABLED = 'enabled';
     const DEFAULT_ENABLED = false;
@@ -60,20 +62,6 @@ abstract class DataProvider implements DataProviderInterface
         );
         $result = $evaluation->resolve();
         return !!$result;
-    }
-
-    protected function getConfig(string $key, $default = null)
-    {
-        if ($default === null) {
-            $defaults = static::getDefaultConfiguration();
-            if (array_key_exists($key, $defaults)) {
-                $default = $defaults[$key];
-            }
-        }
-        if (array_key_exists($key, $this->configuration)) {
-            return $this->configuration[$key];
-        }
-        return $default;
     }
 
     protected function addCookieToContext(SubmissionInterface $submission, string $cookieName, $default = null): bool

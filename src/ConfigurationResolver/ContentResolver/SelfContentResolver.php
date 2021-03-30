@@ -6,7 +6,7 @@ class SelfContentResolver extends FieldContentResolver
 {
     public function build()
     {
-        return $this->config;
+        return $this->configuration;
     }
 
     public function getWeight(): int

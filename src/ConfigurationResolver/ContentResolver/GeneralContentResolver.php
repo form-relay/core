@@ -12,6 +12,11 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
 {
     protected $glue = '';
 
+    protected function getConfigurationBehaviour(): int
+    {
+        return static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE;
+    }
+
     /**
      * @param string|FieldInterface|null $result
      * @param string|FieldInterface|null $content
@@ -46,12 +51,8 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
 
     public function build()
     {
-        if (!is_array($this->config)) {
-            $this->config = [SubmissionConfigurationInterface::KEY_SELF => $this->config];
-        }
-
         $contentResolvers = [];
-        foreach ($this->config as $key => $value) {
+        foreach ($this->configuration as $key => $value) {
             if ($key === static::KEYWORD_GLUE) {
                 $this->glue = GeneralUtility::parseSeparatorString($value);
                 continue;

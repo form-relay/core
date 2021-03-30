@@ -6,7 +6,7 @@ class IfContentResolver extends ContentResolver
 {
     public function finish(&$result): bool
     {
-        $evalResult = $this->resolveEvaluation($this->config);
+        $evalResult = $this->resolveEvaluation($this->configuration);
         if ($evalResult !== null) {
             $result = $this->resolveContent($evalResult);
             return true;

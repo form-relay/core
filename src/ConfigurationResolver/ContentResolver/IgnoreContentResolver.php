@@ -6,7 +6,7 @@ class IgnoreContentResolver extends ContentResolver
 {
     protected function ignore($result): bool
     {
-        return !!$this->config;
+        return !!$this->configuration;
     }
 
     public function finish(&$result): bool

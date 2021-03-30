@@ -14,7 +14,7 @@ class MultiValueContentResolver extends ContentResolver
     public function build()
     {
         $result = $this->getMultiValueField();
-        foreach ($this->config as $key => $valueConfiguration) {
+        foreach ($this->configuration as $key => $valueConfiguration) {
             $value = $this->resolveContent($valueConfiguration);
             if ($value !== null) {
                 $result[$key] = $value;

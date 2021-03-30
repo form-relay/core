@@ -6,6 +6,7 @@ class RegexpEvaluation extends Evaluation
 {
     protected function evalValue($fieldValue, array $keysEvaluated = [])
     {
-        return preg_match('/' . $this->config . '/', $fieldValue);
+        $regExp = $this->resolveContent($this->configuration);
+        return preg_match('/' . $regExp . '/', $fieldValue);
     }
 }

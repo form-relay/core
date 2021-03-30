@@ -6,15 +6,15 @@ use FormRelay\Core\Model\Form\MultiValueField;
 
 class RequiredEvaluation extends Evaluation
 {
-    protected function convertScalarConfigToArray()
+    protected function getConfigurationBehaviour(): int
     {
-        return true;
+        return static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_EXPLODE;
     }
 
     public function eval(array $keysEvaluated = []): bool
     {
         $result = true;
-        foreach ($this->config as $requiredField) {
+        foreach ($this->configuration as $requiredField) {
             if (!$this->fieldExists($requiredField)) {
                 $result = false;
                 break;

@@ -7,7 +7,7 @@ class MapContentResolver extends ContentResolver
     public function finish(&$result): bool
     {
         if ($result !== null) {
-            $result = $this->resolveValueMap($this->config, $result);
+            $result = $this->resolveValueMap($this->configuration, $result);
         }
         return false;
     }

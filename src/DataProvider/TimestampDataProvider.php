@@ -14,7 +14,7 @@ class TimestampDataProvider extends DataProvider
 
     protected function processContext(SubmissionInterface $submission)
     {
-        $format = $this->getConfig(static::KEY_FORMAT, static::DEFAULT_FORMAT);
+        $format = $this->getConfig(static::KEY_FORMAT);
         $this->addToContext($submission, 'timestamp', date($format));
     }
 
@@ -23,7 +23,7 @@ class TimestampDataProvider extends DataProvider
         $this->setFieldFromContext(
             $submission,
             'timestamp',
-            $this->getConfig(static::KEY_FIELD, static::DEFAULT_FIELD)
+            $this->getConfig(static::KEY_FIELD)
         );
     }
 

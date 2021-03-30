@@ -6,7 +6,7 @@ class IgnoreIfContentResolver extends IgnoreContentResolver
 {
     protected function ignore($result): bool
     {
-        return $this->evaluate($this->config);
+        return $this->evaluate($this->configuration);
     }
 
     public function getWeight(): int

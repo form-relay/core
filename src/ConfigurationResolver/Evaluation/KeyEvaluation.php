@@ -8,7 +8,7 @@ class KeyEvaluation extends Evaluation
     {
         $this->context['useKey'] = true;
         /** @var GeneralEvaluation $evaluation */
-        $evaluation = $this->resolveKeyword('general', $this->config);
+        $evaluation = $this->resolveKeyword('general', $this->configuration);
         return $evaluation->eval($keysEvaluated);
     }
 }

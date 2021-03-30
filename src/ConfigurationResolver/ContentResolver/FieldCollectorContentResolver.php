@@ -18,17 +18,17 @@ class FieldCollectorContentResolver extends ContentResolver
     const KEY_TEMPLATE = 'template';
     const DEFAULT_TEMPLATE = '{key}\s=\s{value}\n';
 
-    protected function ignoreScalarConfig()
+    protected function getConfigurationBehaviour(): int
     {
-        return true;
+        return static::CONFIGURATION_BEHAVIOUR_IGNORE_SCALAR;
     }
 
     public function build()
     {
-        $exclude = $this->resolveContent($this->config[static::KEY_EXCLUDE] ?? static::DEFAULT_EXCLUDE);
-        $ignoreIfEmpty = $this->evaluate($this->config[static::KEY_IGNORE_IF_EMPTY] ?? static::DEFAULT_IGNORE_IF_EMPTY);
-        $unprocessedOnly = $this->evaluate($this->config[static::KEY_UNPROCESSED_ONLY] ?? static::DEFAULT_UNPROCESSED_ONLY);
-        $template = $this->resolveContent($this->config[static::KEY_TEMPLATE] ?? static::DEFAULT_TEMPLATE);
+        $exclude = $this->resolveContent($this->getConfig(static::KEY_EXCLUDE));
+        $ignoreIfEmpty = $this->evaluate($this->getConfig(static::KEY_IGNORE_IF_EMPTY));
+        $unprocessedOnly = $this->evaluate($this->getConfig(static::KEY_UNPROCESSED_ONLY));
+        $template = $this->resolveContent($this->getConfig(static::KEY_TEMPLATE));
 
         $excludedFields = GeneralUtility::castValueToArray($exclude);
         $template = GeneralUtility::parseSeparatorString($template);
@@ -50,5 +50,15 @@ class FieldCollectorContentResolver extends ContentResolver
             $result .= $part;
         }
         return $result;
+    }
+
+    public static function getDefaultConfiguration(): array
+    {
+        return parent::getDefaultConfiguration() + [
+            static::KEY_EXCLUDE => static::DEFAULT_EXCLUDE,
+            static::KEY_IGNORE_IF_EMPTY => static::DEFAULT_IGNORE_IF_EMPTY,
+            static::KEY_UNPROCESSED_ONLY => static::DEFAULT_UNPROCESSED_ONLY,
+            static::KEY_TEMPLATE => static::DEFAULT_TEMPLATE,
+        ];
     }
 }

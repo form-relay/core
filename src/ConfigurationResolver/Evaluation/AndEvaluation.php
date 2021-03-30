@@ -2,12 +2,14 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
-use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
-
 class AndEvaluation extends Evaluation
 {
     const KEY_FIELD = 'field';
+
+    protected function getConfigurationBehaviour(): int
+    {
+        return static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE;
+    }
 
     protected function initialValue(): bool
     {
@@ -22,11 +24,8 @@ class AndEvaluation extends Evaluation
     public function eval(array $keysEvaluated = []): bool
     {
         $subEvaluations = [];
-        if (!is_array($this->config)) {
-            $this->config = [SubmissionConfigurationInterface::KEY_SELF => $this->config];
-        }
 
-        foreach ($this->config as $key => $value) {
+        foreach ($this->configuration as $key => $value) {
             if ($key === static::KEY_FIELD) {
                 $resolvedKey = $this->resolveContent($value);
                 if ($resolvedKey !== null && $resolvedKey !== '') {

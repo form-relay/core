@@ -10,14 +10,14 @@ class NegateValueMapper extends ValueMapper
     const KEY_FALSE = 'false';
     const DEFAULT_FALSE = '0';
 
-    protected function ignoreScalarConfig()
+    protected function getConfigurationBehaviour(): int
     {
-        return true;
+        return static::CONFIGURATION_BEHAVIOUR_IGNORE_SCALAR;
     }
 
     public function resolveValue($fieldValue): string
     {
-        $config = $this->config;
+        $config = $this->configuration;
 
         $true = static::DEFAULT_TRUE;
         if (isset($config[static::KEY_TRUE])) {

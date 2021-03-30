@@ -10,7 +10,7 @@ abstract class AbstractIsEvaluation extends Evaluation
         $result = parent::eval($keysEvaluated);
 
         // negative evaluation
-        if (!$this->config) {
+        if (!$this->configuration) {
             $result = !$result;
         }
 

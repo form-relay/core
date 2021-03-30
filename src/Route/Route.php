@@ -9,13 +9,15 @@ use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
 use FormRelay\Core\Request\RequestInterface;
-use FormRelay\Core\Service\RegisterableTrait;
+use FormRelay\Core\Helper\RegisterableTrait;
 use FormRelay\Core\Service\RegistryInterface;
+use FormRelay\Core\Helper\ConfigurationTrait;
 use FormRelay\Core\Utility\GeneralUtility;
 
 abstract class Route implements RouteInterface
 {
     use RegisterableTrait;
+    use ConfigurationTrait;
 
     const KEY_ENABLED = 'enabled';
     const DEFAULT_ENABLED = false;
@@ -63,20 +65,6 @@ abstract class Route implements RouteInterface
     public static function getClassType(): string
     {
         return 'Route';
-    }
-
-    protected function getConfig(string $key, $default = null)
-    {
-        if ($default === null) {
-            $defaults = static::getDefaultConfiguration();
-            if (array_key_exists($key, $defaults)) {
-                $default = $defaults[$key];
-            }
-        }
-        if (array_key_exists($key, $this->configuration)) {
-            return $this->configuration[$key];
-        }
-        return $default;
     }
 
     protected function resolveContent($config, $context = null)

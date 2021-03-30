@@ -2,11 +2,15 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
+use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
+
 class LoopDataContentResolver extends ContentResolver
 {
     const KEY_GLUE = 'glue';
+    const DEFAULT_GLUE = false;
 
     const KEY_TEMPLATE = 'template';
+    const DEFAULT_TEMPLATE = '';
 
     const KEY_VAR_KEY = 'asKey';
     const DEFAULT_VAR_KEY = 'key';
@@ -19,23 +23,23 @@ class LoopDataContentResolver extends ContentResolver
 
     public function build()
     {
-        if (!is_array($this->config)) {
-            $this->config = is_string($this->config) ? [static::KEY_TEMPLATE => $this->config] : [];
+        if (!is_array($this->configuration)) {
+            $this->configuration = is_string($this->configuration) ? [static::KEY_TEMPLATE => $this->configuration] : [];
         }
-        $glue = $this->config[static::KEY_GLUE] ?? false;
 
-        $varKey = $this->config[static::KEY_VAR_KEY] ?? static::DEFAULT_VAR_KEY;
-        $varValue = $this->config[static::KEY_VAR_VALUE] ?? static::DEFAULT_VAR_VALUE;
+        $glue = $this->getConfig(static::KEY_GLUE);
+        $varKey = $this->getConfig(static::KEY_VAR_KEY);
+        $varValue = $this->getConfig(static::KEY_VAR_VALUE);
 
-        $template = $this->config[static::KEY_TEMPLATE] ?? false;
+        $template = $this->getConfig(static::KEY_TEMPLATE);
         if (empty($template) || $template === true) {
             $template = [
-                'self' => '{' . $varKey . '}\s=\s{' . $varValue . '}\n',
+                SubmissionConfigurationInterface::KEY_SELF => '{' . $varKey . '}\s=\s{' . $varValue . '}\n',
                 'insertData' => true
             ];
         }
 
-        $condition = $this->config[static::KEY_CONDITION] ?? static::DEFAULT_CONDITION;
+        $condition = $this->getConfig(static::KEY_CONDITION);
 
         // don't allow overrides of form data
         if ($this->fieldExists($varKey) || $this->fieldExists($varValue)) {
@@ -65,4 +69,17 @@ class LoopDataContentResolver extends ContentResolver
         }
         return $this->resolveContent($result);
     }
+
+    public static function getDefaultConfiguration(): array
+    {
+        return parent::getDefaultConfiguration() + [
+            static::KEY_GLUE => static::DEFAULT_GLUE,
+            static::KEY_TEMPLATE => static::DEFAULT_TEMPLATE,
+            static::KEY_VAR_KEY => static::DEFAULT_VAR_KEY,
+            static::KEY_VAR_VALUE => static::DEFAULT_VAR_VALUE,
+            static::KEY_CONDITION => static::DEFAULT_CONDITION,
+        ];
+    }
+
+
 }

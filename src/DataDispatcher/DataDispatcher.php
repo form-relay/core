@@ -3,7 +3,7 @@
 namespace FormRelay\Core\DataDispatcher;
 
 use FormRelay\Core\Service\RegistryInterface;
-use FormRelay\Core\Service\RegisterableTrait;
+use FormRelay\Core\Helper\RegisterableTrait;
 
 abstract class DataDispatcher implements DataDispatcherInterface
 {

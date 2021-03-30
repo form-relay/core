@@ -22,9 +22,9 @@ class GateEvaluation extends Evaluation
      *     }
      * }
      */
-    protected function evaluateMultipleExtensions($keysEvaluated)
+    protected function evaluateMultipleRoutes($keysEvaluated)
     {
-        $keys = GeneralUtility::castValueToArray($this->config);
+        $keys = GeneralUtility::castValueToArray($this->configuration);
         $gateConfig = ['or' => []];
         foreach ($keys as $key) {
             $gateConfig['or'][] = ['gate' => ['key' => $key, 'pass' => 'any']];
@@ -48,14 +48,14 @@ class GateEvaluation extends Evaluation
      */
     protected function evaluateMultiplePasses($keysEvaluated)
     {
-        $key = $this->config['key'];
+        $key = $this->configuration['key'];
         $gateConfigs = [];
         $count = $this->context['config']->getRoutePassCount($key);
         for ($i = 0; $i < $count; $i++) {
             $gateConfigs[] = ['gate' => ['key' => $key, 'pass' => $i]];
         }
         /** @var EvaluationInterface $evaluation */
-        $evaluation = $this->resolveKeyword('general', [$this->config['pass'] === 'any' ? 'or' : 'and' => $gateConfigs]);
+        $evaluation = $this->resolveKeyword('general', [$this->configuration['pass'] === 'any' ? 'or' : 'and' => $gateConfigs]);
         return $evaluation->eval($keysEvaluated);
     }
 
@@ -68,8 +68,8 @@ class GateEvaluation extends Evaluation
     protected function evaluateSinglePass($keysEvaluated)
     {
         $result = true;
-        $key = $this->config['key'];
-        $pass = $this->config['pass'];
+        $key = $this->configuration['key'];
+        $pass = $this->configuration['pass'];
         if (isset($keysEvaluated[$key]) && in_array($pass, $keysEvaluated[$key])) {
             $result = false;
         } else {
@@ -91,11 +91,11 @@ class GateEvaluation extends Evaluation
 
     public function eval(array $keysEvaluated = []): bool
     {
-        if (!is_array($this->config)) {
-            return $this->evaluateMultipleExtensions($keysEvaluated);
+        if (!is_array($this->configuration)) {
+            return $this->evaluateMultipleRoutes($keysEvaluated);
         }
 
-        if ($this->config['pass'] === 'any' || $this->config['pass'] === 'all') {
+        if ($this->configuration['pass'] === 'any' || $this->configuration['pass'] === 'all') {
             return $this->evaluateMultiplePasses($keysEvaluated);
         }
 

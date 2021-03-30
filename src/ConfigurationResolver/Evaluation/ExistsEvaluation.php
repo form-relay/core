@@ -10,7 +10,7 @@ class ExistsEvaluation extends Evaluation
         $result = $this->fieldExists($this->context['key']);
 
         // does not exist
-        if (!$this->config) {
+        if (!$this->configuration) {
             $result = !$result;
         }
 

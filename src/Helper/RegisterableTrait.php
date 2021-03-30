@@ -1,6 +1,6 @@
 <?php
 
-namespace FormRelay\Core\Service;
+namespace FormRelay\Core\Helper;
 
 trait RegisterableTrait
 {

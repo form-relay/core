@@ -13,9 +13,16 @@ class JoinContentResolver extends ContentResolver
     public function finish(&$result): bool
     {
         if ($result instanceof MultiValueField) {
-            $glue = GeneralUtility::parseSeparatorString($this->config[static::KEY_GLUE] ?? static::DEFAULT_GLUE);
+            $glue = GeneralUtility::parseSeparatorString($this->getConfig(static::KEY_GLUE));
             $result = $result->__toString($glue);
         }
         return false;
+    }
+
+    public static function getDefaultConfiguration(): array
+    {
+        return parent::getDefaultConfiguration() + [
+            static::KEYWORD_GLUE => static::DEFAULT_GLUE,
+        ];
     }
 }
