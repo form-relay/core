@@ -2,6 +2,8 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
+use FormRelay\Core\Utility\GeneralUtility;
+
 class GateEvaluation extends Evaluation
 {
     /*
@@ -22,7 +24,7 @@ class GateEvaluation extends Evaluation
      */
     protected function evaluateMultipleExtensions($keysEvaluated)
     {
-        $keys = explode(',', $this->config);
+        $keys = GeneralUtility::castValueToArray($this->config);
         $gateConfig = ['or' => []];
         foreach ($keys as $key) {
             $gateConfig['or'][] = ['gate' => ['key' => $key, 'pass' => 'any']];

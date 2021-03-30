@@ -2,6 +2,8 @@
 
 namespace FormRelay\Core\Utility;
 
+use FormRelay\Core\Model\Form\MultiValueField;
+
 final class GeneralUtility
 {
     const CHARACTER_MAP = [
@@ -32,5 +34,25 @@ final class GeneralUtility
             $str = str_replace($key, $value, $str);
         }
         return $str;
+    }
+
+    public static function castValueToArray($value, $token = ',', $trim = true)
+    {
+        if (is_array($value)) {
+            return $value;
+        }
+
+        if ($value instanceof MultiValueField) {
+            return $value->toArray();
+        }
+
+        $value = (string)$value;
+        $array = !static::isEmpty($value) ? explode($token, $value) : [];
+
+        if ($trim) {
+            $array = array_map('trim', $array);
+        }
+
+        return $array;
     }
 }

@@ -11,6 +11,7 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
 use FormRelay\Core\Service\RegisterableTrait;
 use FormRelay\Core\Service\RegistryInterface;
+use FormRelay\Core\Utility\GeneralUtility;
 
 abstract class ConfigurationResolver implements ConfigurationResolverInterface
 {
@@ -37,7 +38,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
         if ($this->ignoreScalarConfig() && !is_array($config)) {
             $this->config = [];
         } elseif ($this->convertScalarConfigToArray() && !is_array($config)) {
-            $this->config = $config ? explode(',', $config) : [];
+            $this->config = GeneralUtility::castValueToArray($config);
         } else {
             $this->config = $config;
         }

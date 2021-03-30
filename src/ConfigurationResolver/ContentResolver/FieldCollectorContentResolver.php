@@ -30,11 +30,7 @@ class FieldCollectorContentResolver extends ContentResolver
         $unprocessedOnly = $this->evaluate($this->config[static::KEY_UNPROCESSED_ONLY] ?? static::DEFAULT_UNPROCESSED_ONLY);
         $template = $this->resolveContent($this->config[static::KEY_TEMPLATE] ?? static::DEFAULT_TEMPLATE);
 
-        $excludedFields = [];
-        if ($exclude) {
-            $excludedFields = is_array($exclude) ? $exclude : explode(',', $exclude);
-        }
-
+        $excludedFields = GeneralUtility::castValueToArray($exclude);
         $template = GeneralUtility::parseSeparatorString($template);
 
         $result = '';

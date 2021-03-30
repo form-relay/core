@@ -9,6 +9,7 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfEmptyContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\JoinContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\LoopDataContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MapContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
@@ -98,6 +99,7 @@ class CoreInitialization extends Initialization
         IgnoreIfContentResolver::class,
         InsertDataContentResolver::class,
         JoinContentResolver::class,
+        ListContentResolver::class,
         LoopDataContentResolver::class,
         MapContentResolver::class,
         MultiValueContentResolver::class,
