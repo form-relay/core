@@ -10,7 +10,7 @@ class NonPersistentQueue implements QueueInterface
     protected $queue = [];
     protected $index = 1;
 
-    public function fetchWhere(array $status = [], int $limit = 0, int $offset = 0, int $minAgeInSeconds = 0)
+    public function fetchWhere(array $status = [], int $limit = 0, int $offset = 0, int $minTimeSinceChangedInSeconds = 0, int $minAgeInSeconds = 0)
     {
         $result = [];
         $now = new DateTime();
@@ -20,7 +20,10 @@ class NonPersistentQueue implements QueueInterface
             if (!empty($status) && !in_array($job->getStatus(), $status)) {
                 continue;
             }
-            if ($minAgeInSeconds > 0 && $now->getTimestamp() - $job->getChanged()->getTimestamp() < $minAgeInSeconds) {
+            if ($minTimeSinceChangedInSeconds > 0 && $now->getTimestamp() - $job->getChanged()->getTimestamp() < $minTimeSinceChangedInSeconds) {
+                continue;
+            }
+            if ($minAgeInSeconds > 0 && $now->getTimestamp() - $job->getCreated()->getTimestamp() < $minAgeInSeconds) {
                 continue;
             }
             $count++;
@@ -39,15 +42,14 @@ class NonPersistentQueue implements QueueInterface
         return $this->fetchWhere($status, $limit, $offset);
     }
 
-
     public function fetchPending(int $limit = 0, int $offset = 0)
     {
         return $this->fetchWhere([QueueInterface::STATUS_PENDING], $limit, $offset);
     }
 
-    public function fetchRunning(int $minAgeInSeconds = 0, int $limit = 0, int $offset = 0)
+    public function fetchRunning(int $limit = 0, int $offset = 0, int $minTimeSinceChangedInSeconds = 0)
     {
-        return $this->fetchWhere([QueueInterface::STATUS_RUNNING], $limit, $offset, $minAgeInSeconds);
+        return $this->fetchWhere([QueueInterface::STATUS_RUNNING], $limit, $offset, $minTimeSinceChangedInSeconds);
     }
 
     public function fetchDone(int $limit = 0, int $offset = 0)
@@ -123,5 +125,13 @@ class NonPersistentQueue implements QueueInterface
             $this->queue,
             function($a) use ($job) { return $a !== $job; }
         );
+    }
+
+    public function removeOldJobs(int $minAgeInSeconds, array $status = [])
+    {
+        $jobs = $this->fetchWhere($status, 0, 0, 0, $minAgeInSeconds);
+        foreach ($jobs as $job) {
+            $this->removeJob($job);
+        }
     }
 }

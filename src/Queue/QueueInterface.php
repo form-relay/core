@@ -11,7 +11,7 @@ interface QueueInterface
 
     public function fetch(array $status = [], int $limit = 0, int $offset = 0);
     public function fetchPending(int $limit = 0, int $offset = 0);
-    public function fetchRunning(int $limit = 0, int $offset = 0, int $minAgeInSeconds = 0);
+    public function fetchRunning(int $limit = 0, int $offset = 0, int $minTimeSinceChangedInSeconds = 0);
     public function fetchDone(int $limit = 0, int $offset = 0);
     public function fetchFailed(int $limit = 0, int $offset = 0);
 
@@ -26,4 +26,6 @@ interface QueueInterface
 
     public function addJob(array $data, $status = self::STATUS_PENDING);
     public function removeJob(JobInterface $job);
+
+    public function removeOldJobs(int $minAgeInSeconds, array $status = []);
 }
