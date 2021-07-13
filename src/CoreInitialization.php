@@ -38,20 +38,6 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\NotEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\OrEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\RequiredEvaluation;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\AppendKeyValueFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\AppendValueFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\SelfFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\DiscreteFieldFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\DistributeFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\GeneralFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\IfEmptyFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\IfFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\IgnoreFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\JoinFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\NegateFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\PassthroughFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\SplitFieldMapper;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\ValueMapFieldMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\IfValueMapper;
@@ -59,15 +45,18 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\NegateValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\OriginalValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\RawValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SwitchValueMapper;
+use FormRelay\Core\DataProvider\CookieDataProvider;
 use FormRelay\Core\DataProvider\IpAddressDataProvider;
 use FormRelay\Core\DataProvider\TimestampDataProvider;
 
 class CoreInitialization extends Initialization
 {
     const DATA_PROVIDERS = [
+        CookieDataProvider::class,
         IpAddressDataProvider::class,
         TimestampDataProvider::class,
     ];
+
     const EVALUATIONS = [
         AndEvaluation::class,
         SelfEvaluation::class,
@@ -86,6 +75,7 @@ class CoreInitialization extends Initialization
         RegexpEvaluation::class,
         RequiredEvaluation::class,
     ];
+
     const CONTENT_RESOLVERS = [
         SelfContentResolver::class,
         DefaultContentResolver::class,
@@ -108,6 +98,7 @@ class CoreInitialization extends Initialization
         SplitContentResolver::class,
         TrimContentResolver::class,
     ];
+
     const VALUE_MAPPERS = [
         SelfValueMapper::class,
         GeneralValueMapper::class,

@@ -6,7 +6,7 @@ use FormRelay\Core\Model\Submission\SubmissionInterface;
 
 class IpAddressDataProvider extends DataProvider
 {
-    const KEY_FIELD = 'ip_address';
+    const KEY_FIELD = 'field';
     const DEFAULT_FIELD = 'ip_address';
 
     protected function processContext(SubmissionInterface $submission)
