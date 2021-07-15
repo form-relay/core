@@ -11,7 +11,7 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Helper\RegisterableTrait;
-use FormRelay\Core\Service\RegistryInterface;
+use FormRelay\Core\Service\ClassRegistryInterface;
 use FormRelay\Core\Helper\ConfigurationTrait;
 use FormRelay\Core\Utility\GeneralUtility;
 
@@ -58,7 +58,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
      */
     const CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE = 3;
 
-    /** @var RegistryInterface */
+    /** @var ClassRegistryInterface */
     protected $registry;
 
     /** @var array|string */
@@ -68,11 +68,11 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
 
     /**
      * ConfigurationResolver constructor.
-     * @param RegistryInterface $registry
+     * @param ClassRegistryInterface $registry
      * @param array|string $config
      * @param ConfigurationResolverContextInterface $context
      */
-    public function __construct(RegistryInterface $registry, $config, ConfigurationResolverContextInterface $context)
+    public function __construct(ClassRegistryInterface $registry, $config, ConfigurationResolverContextInterface $context)
     {
         $this->registry = $registry;
         $this->context = $context;

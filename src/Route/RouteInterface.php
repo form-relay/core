@@ -4,6 +4,7 @@ namespace FormRelay\Core\Route;
 
 use FormRelay\Core\Exception\FormRelayException;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
+use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Service\RegisterableInterface;
 
 interface RouteInterface extends RegisterableInterface
@@ -17,6 +18,8 @@ interface RouteInterface extends RegisterableInterface
      * @throws FormRelayException
      */
     public function processPass(SubmissionInterface $submission, int $pass): bool;
+
+    public function addContext(SubmissionInterface $submission, RequestInterface $request);
 
     public static function getDefaultConfiguration(): array;
 }

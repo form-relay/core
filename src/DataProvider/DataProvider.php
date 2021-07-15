@@ -7,7 +7,7 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\Request\RequestInterface;
-use FormRelay\Core\Service\RegistryInterface;
+use FormRelay\Core\Service\ClassRegistryInterface;
 use FormRelay\Core\Helper\RegisterableTrait;
 use FormRelay\Core\Helper\ConfigurationTrait;
 
@@ -25,11 +25,8 @@ abstract class DataProvider implements DataProviderInterface
     const KEY_MUST_BE_EMPTY= 'mustBeEmpty';
     const DEFAULT_MUST_BE_EMPTY = true;
 
-    /** @var RegistryInterface */
+    /** @var ClassRegistryInterface */
     protected $registry;
-
-    /** @var RequestInterface */
-    protected $request;
 
     /** @var LoggerInterface */
     protected $logger;
@@ -41,14 +38,13 @@ abstract class DataProvider implements DataProviderInterface
         return 'DataProvider';
     }
 
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ClassRegistryInterface $registry, LoggerInterface $logger)
     {
         $this->registry = $registry;
-        $this->request = $registry->getRequest();
-        $this->logger = $registry->getLogger(static::class);
+        $this->logger = $logger;
     }
 
-    abstract protected function processContext(SubmissionInterface $submission);
+    abstract protected function processContext(SubmissionInterface $submission, RequestInterface $request);
     abstract protected function process(SubmissionInterface $submission);
 
     protected function proceed(SubmissionInterface $submission): bool
@@ -64,24 +60,19 @@ abstract class DataProvider implements DataProviderInterface
         return !!$result;
     }
 
-    protected function addCookieToContext(SubmissionInterface $submission, string $cookieName, $default = null): bool
+    protected function addCookieToContext(SubmissionInterface $submission, RequestInterface $request, string $cookieName, $default = null): bool
     {
-        $cookieValue = $this->request->getCookies()[$cookieName] ?? $default;
+        $cookieValue = $request->getCookies()[$cookieName] ?? $default;
         if ($cookieValue !== null) {
-            $submission->getContext()['cookies'][$cookieName] = $cookieValue;
+            $submission->getContext()->setCookie($cookieName, $cookieValue);
             return true;
         }
         return false;
     }
 
-    protected function getCookiesFromContext(SubmissionInterface $submission)
-    {
-        return $submission->getContext()['cookies'] ?? [];
-    }
-
     protected function getCookieFromContext(SubmissionInterface $submission, string $cookieName, $default = null)
     {
-        return $this->getCookiesFromContext($submission)[$cookieName] ?? $default;
+        return $submission->getContext()->getCookie($cookieName, $default);
     }
 
     protected function appendToField(SubmissionInterface $submission, $key, $value, $glue = "\n"): bool
@@ -172,11 +163,11 @@ abstract class DataProvider implements DataProviderInterface
         $submission->getContext()[$key] = $value;
     }
 
-    public function addContext(SubmissionInterface $submission)
+    public function addContext(SubmissionInterface $submission, RequestInterface $request)
     {
         $this->configuration = $submission->getConfiguration()->getDataProviderConfiguration(static::getKeyword());
         if ($this->proceed($submission)) {
-            $this->processContext($submission);
+            $this->processContext($submission, $request);
         }
     }
 

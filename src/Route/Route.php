@@ -10,7 +10,7 @@ use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
 use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Helper\RegisterableTrait;
-use FormRelay\Core\Service\RegistryInterface;
+use FormRelay\Core\Service\ClassRegistryInterface;
 use FormRelay\Core\Helper\ConfigurationTrait;
 use FormRelay\Core\Utility\GeneralUtility;
 
@@ -37,14 +37,11 @@ abstract class Route implements RouteInterface
     const KEY_FIELDS = 'fields';
     const DEFAULT_FIELDS = [];
 
-    /** @var RegistryInterface */
+    /** @var ClassRegistryInterface */
     protected $registry;
 
     /** @var LoggerInterface */
     protected $logger;
-
-    /** @var RequestInterface */
-    protected $request;
 
     /** @var SubmissionInterface */
     protected $submission;
@@ -55,11 +52,10 @@ abstract class Route implements RouteInterface
     /** @var array */
     protected $configuration;
 
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ClassRegistryInterface $registry, LoggerInterface $logger)
     {
         $this->registry = $registry;
-        $this->request = $registry->getRequest();
-        $this->logger = $registry->getLogger(static::class);
+        $this->logger = $logger;
     }
 
     public static function getClassType(): string
@@ -154,6 +150,10 @@ abstract class Route implements RouteInterface
     public function getPassCount(SubmissionInterface $submission): int
     {
         return $submission->getConfiguration()->getRoutePassCount(static::getKeyword());
+    }
+
+    public function addContext(SubmissionInterface $submission, RequestInterface $request)
+    {
     }
 
     /**

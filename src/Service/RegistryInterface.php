@@ -13,72 +13,14 @@ use FormRelay\Core\Queue\QueueInterface;
 use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Route\RouteInterface;
 
-interface RegistryInterface
+interface RegistryInterface extends ClassRegistryInterface
 {
     public function getLogger(string $forClass): LoggerInterface;
     public function getRequest(): RequestInterface;
     public function getQueue(): QueueInterface;
     public function getQueueDataFactory(): QueueDataFactoryInterface;
 
-    public function registerConfigurationResolver(string $class, string $interface = '', array $additionalArguments = []);
-    public function getConfigurationResolver(string $resolverInterface, string $keyword, $config, ConfigurationResolverContextInterface $context);
-
-    public function registerContentResolver(string $class, array $additionalArguments = []);
-
-    /**
-     * @param string $keyword
-     * @param mixed $config
-     * @param ConfigurationResolverContextInterface $context
-     * @return ContentResolverInterface|null
-     */
-    public function getContentResolver(string $keyword, $config, ConfigurationResolverContextInterface $context);
-
-    public function registerEvaluation(string $class, array $additionalArguments = []);
-
-    /**
-     * @param string $keyword
-     * @param mixed $config
-     * @param ConfigurationResolverContextInterface $context
-     * @return EvaluationInterface|null
-     */
-    public function getEvaluation(string $keyword, $config, ConfigurationResolverContextInterface $context);
-
-    public function registerValueMapper(string $class, array $additionalArguments = []);
-
-    /**
-     * @param string $keyword
-     * @param mixed $config
-     * @param ConfigurationResolverContextInterface $context
-     * @return ValueMapperInterface|null
-     */
-    public function getValueMapper(string $keyword, $config, ConfigurationResolverContextInterface $context);
-
-    public function registerDataProvider(string $class, array $additionalArguments = []);
-    public function getDataProviders(): array;
-    public function deleteDataProvider(string $class);
-
     public function getDataProviderDefaultConfigurations(): array;
-
-    public function registerRoute(string $class, array $additionalArguments = []);
-    public function getRoutes(): array;
-
-    /**
-     * @param string $routeName
-     * @return RouteInterface|null
-     */
-    public function getRoute(string $routeName);
-    public function deleteRoute(string $class);
-
     public function getRouteDefaultConfigurations(): array;
-
-    public function registerDataDispatcher(string $class, array $additionalArguments = []);
-
-    /**
-     * @param string $keyword
-     * @return DataDispatcherInterface|null
-     */
-    public function getDataDispatcher(string $keyword);
-    public function deleteDataDispatcher(string $class);
-
     public function getDefaultConfiguration(): array;
 }

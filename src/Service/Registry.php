@@ -166,7 +166,7 @@ class Registry implements RegistryInterface
     {
         $routes = [];
         foreach ($this->routeClasses as $routeClass) {
-            $routes[$routeClass::getKeyword()] = $this->get($routeClass, [$this]);
+            $routes[$routeClass::getKeyword()] = $this->get($routeClass, [$this, $this->getLogger($routeClass)]);
         }
         $this->sortRegisterables($routes);
         return $routes;
@@ -214,7 +214,7 @@ class Registry implements RegistryInterface
     {
         $dataProviders = [];
         foreach ($this->dataProviderClasses as $dataProviderClass) {
-            $dataProviders[$dataProviderClass::getKeyword()] = $this->get($dataProviderClass, [$this]);
+            $dataProviders[$dataProviderClass::getKeyword()] = $this->get($dataProviderClass, [$this, $this->getLogger($dataProviderClass)]);
         }
         $this->sortRegisterables($dataProviders);
         return $dataProviders;
@@ -268,7 +268,7 @@ class Registry implements RegistryInterface
             $class = $this->dataDispatcherClasses[$keyword];
         }
         if ($class !== null) {
-            return $this->get($class, [$this]);
+            return $this->get($class, [$this->getLogger($class)]);
         }
         return null;
     }

@@ -2,20 +2,18 @@
 
 namespace FormRelay\Core\DataDispatcher;
 
-use FormRelay\Core\Service\RegistryInterface;
+use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Helper\RegisterableTrait;
 
 abstract class DataDispatcher implements DataDispatcherInterface
 {
     use RegisterableTrait;
 
-    protected $registry;
     protected $logger;
 
-    public function __construct(RegistryInterface $registry)
+    public function __construct(LoggerInterface $logger)
     {
-        $this->registry = $registry;
-        $this->logger = $registry->getLogger(static::class);
+        $this->logger = $logger;
     }
 
     public static function getClassType(): string

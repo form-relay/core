@@ -5,6 +5,7 @@ namespace FormRelay\Core\Service;
 use FormRelay\Core\DataProvider\DataProviderInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\Queue\JobInterface;
+use FormRelay\Core\Route\RouteInterface;
 
 abstract class AbstractRelay
 {
@@ -19,10 +20,16 @@ abstract class AbstractRelay
 
     protected function addContext(SubmissionInterface $submission)
     {
+        $request = $this->registry->getRequest();
         $dataProviders = $this->registry->getDataProviders();
         /** @var DataProviderInterface $dataProvider */
         foreach ($dataProviders as $dataProvider) {
-            $dataProvider->addContext($submission);
+            $dataProvider->addContext($submission, $request);
+        }
+        $routes = $this->registry->getRoutes();
+        /** @var RouteInterface $route */
+        foreach ($routes as $route) {
+            $route->addContext($submission, $request);
         }
     }
 

@@ -3,15 +3,16 @@
 namespace FormRelay\Core\DataProvider;
 
 use FormRelay\Core\Model\Submission\SubmissionInterface;
+use FormRelay\Core\Request\RequestInterface;
 
 class IpAddressDataProvider extends DataProvider
 {
     const KEY_FIELD = 'field';
     const DEFAULT_FIELD = 'ip_address';
 
-    protected function processContext(SubmissionInterface $submission)
+    protected function processContext(SubmissionInterface $submission, RequestInterface $request)
     {
-        $this->addToContext($submission, 'ip_address', $this->request->getIpAddress());
+        $this->addToContext($submission, 'ip_address', $request->getIpAddress());
     }
 
     protected function process(SubmissionInterface $submission)

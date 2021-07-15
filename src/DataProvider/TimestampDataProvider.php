@@ -3,6 +3,7 @@
 namespace FormRelay\Core\DataProvider;
 
 use FormRelay\Core\Model\Submission\SubmissionInterface;
+use FormRelay\Core\Request\RequestInterface;
 
 class TimestampDataProvider extends DataProvider
 {
@@ -12,7 +13,7 @@ class TimestampDataProvider extends DataProvider
     const KEY_FORMAT = 'format';
     const DEFAULT_FORMAT = 'c';
 
-    protected function processContext(SubmissionInterface $submission)
+    protected function processContext(SubmissionInterface $submission, RequestInterface $request)
     {
         $format = $this->getConfig(static::KEY_FORMAT);
         $this->addToContext($submission, 'timestamp', date($format));
