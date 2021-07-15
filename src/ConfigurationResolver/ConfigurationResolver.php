@@ -144,7 +144,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
         if ($markAsProcessed) {
             $this->context['tracker']->markAsProcessed($key);
         }
-        return array_key_exists($key, $this->context['data']);
+        return $this->context['data']->fieldExists($key);
     }
 
     protected function getFieldValue($key, bool $markAsProcessed = true)
