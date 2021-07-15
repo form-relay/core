@@ -177,7 +177,7 @@ class Registry implements RegistryInterface
         $route = null;
         foreach ($this->routeClasses as $routeClass) {
             if ($routeClass::getKeyword() === $routeName) {
-                $route = $this->get($routeClass, [$this]);
+                $route = $this->get($routeClass, [$this, $this->getLogger($routeClass)]);
                 break;
             }
         }
