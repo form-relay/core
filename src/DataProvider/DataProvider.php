@@ -10,6 +10,7 @@ use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Service\ClassRegistryInterface;
 use FormRelay\Core\Helper\RegisterableTrait;
 use FormRelay\Core\Helper\ConfigurationTrait;
+use FormRelay\Core\Utility\GeneralUtility;
 
 abstract class DataProvider implements DataProviderInterface
 {
@@ -60,6 +61,21 @@ abstract class DataProvider implements DataProviderInterface
         return !!$result;
     }
 
+    protected function addRequestVariableToContext(SubmissionInterface $submission, RequestInterface $request, string $variableName): bool
+    {
+        $variableValue = $request->getRequestVariable($variableName);
+        if (!GeneralUtility::isEmpty($variableValue)) {
+            $submission->getContext()->setRequestVariable($variableName, $variableValue);
+            return true;
+        }
+        return false;
+    }
+
+    protected function getRequestVariableFromContext(SubmissionInterface $submission, string $variableName)
+    {
+        return $submission->getContext()->getRequestVariable($variableName);
+    }
+
     protected function addCookieToContext(SubmissionInterface $submission, RequestInterface $request, string $cookieName, $default = null): bool
     {
         $cookieValue = $request->getCookies()[$cookieName] ?? $default;
@@ -79,7 +95,7 @@ abstract class DataProvider implements DataProviderInterface
     {
         $data = $submission->getData();
         if (
-            $this->getConfig(static::KEY_MUST_EXIST, static::DEFAULT_MUST_EXIST)
+            $this->getConfig(static::KEY_MUST_EXIST)
             && !$data->fieldExists($key)
         ) {
             return false;
@@ -98,13 +114,13 @@ abstract class DataProvider implements DataProviderInterface
     {
         $data = $submission->getData();
         if (
-            $this->getConfig(static::KEY_MUST_EXIST, static::DEFAULT_MUST_EXIST)
+            $this->getConfig(static::KEY_MUST_EXIST)
             && !$data->fieldExists($key)
         ) {
             return false;
         }
         if (
-            $this->getConfig(static::KEY_MUST_BE_EMPTY, static::DEFAULT_MUST_BE_EMPTY)
+            $this->getConfig(static::KEY_MUST_BE_EMPTY)
             && $data->fieldExists($key)
             && !$data->fieldEmpty($key)
         ) {
@@ -146,6 +162,24 @@ abstract class DataProvider implements DataProviderInterface
         $value = $this->getCookieFromContext($submission, $cookieName);
         if ($value !== null) {
             return $this->setField($submission, $field ?: $cookieName, $value);
+        }
+        return false;
+    }
+
+    protected function appendToFieldFromRequestVariable(SubmissionInterface $submission, $variableName, $field = null, $glue = "\n"): bool
+    {
+        $value = $this->getRequestVariableFromContext($submission, $variableName);
+        if ($value !== null) {
+            return $this->appendToField($submission, $field ?: $variableName, $value, $glue);
+        }
+        return false;
+    }
+
+    protected function setFieldFromRequestVariable(SubmissionInterface $submission, $variableName, $field = null): bool
+    {
+        $value = $this->getRequestVariableFromContext($submission, $variableName);
+        if ($value !== null) {
+            return $this->setField($submission, $field ?: $variableName, $value);
         }
         return false;
     }

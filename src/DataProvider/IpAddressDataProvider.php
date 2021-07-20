@@ -20,7 +20,7 @@ class IpAddressDataProvider extends DataProvider
         $this->setFieldFromContext(
             $submission,
             'ip_address',
-            $this->getConfig(static::KEY_FIELD, static::DEFAULT_FIELD)
+            $this->getConfig(static::KEY_FIELD)
         );
     }
 

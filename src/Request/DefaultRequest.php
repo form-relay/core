@@ -22,4 +22,9 @@ class DefaultRequest implements RequestInterface
         }
         return $ip;
     }
+
+    public function getRequestVariable(string $name): string
+    {
+        return $_SERVER[$name] ?? '';
+    }
 }

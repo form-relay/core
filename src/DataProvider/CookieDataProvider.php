@@ -12,7 +12,7 @@ class CookieDataProvider extends DataProvider
 
     protected function processContext(SubmissionInterface $submission, RequestInterface $request)
     {
-        $cookies = array_keys($this->getConfig(static::KEY_COOKIE_FIELD_MAP, []));
+        $cookies = array_keys($this->getConfig(static::KEY_COOKIE_FIELD_MAP));
         foreach ($cookies as $cookie) {
             $this->addCookieToContext($submission, $request, $cookie);
         }
@@ -20,7 +20,7 @@ class CookieDataProvider extends DataProvider
 
     protected function process(SubmissionInterface $submission)
     {
-        $cookieFieldMap = $this->getConfig(static::KEY_COOKIE_FIELD_MAP, []);
+        $cookieFieldMap = $this->getConfig(static::KEY_COOKIE_FIELD_MAP);
         foreach ($cookieFieldMap as $cookie => $field) {
             $this->setFieldFromCookie($submission, $cookie, $field);
         }
