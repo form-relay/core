@@ -52,13 +52,12 @@ abstract class DataProvider implements DataProviderInterface
     {
         /** @var GeneralEvaluation $evaluation */
         $context = new ConfigurationResolverContext($submission);
-        $evaluation = $this->registry->getContentResolver(
+        $evaluation = $this->registry->getEvaluation(
             'general',
-            $this->getConfig(static::KEY_ENABLED, static::DEFAULT_ENABLED),
+            $this->getConfig(static::KEY_ENABLED),
             $context
         );
-        $result = $evaluation->resolve();
-        return !!$result;
+        return $evaluation->eval();
     }
 
     protected function addRequestVariableToContext(SubmissionInterface $submission, RequestInterface $request, string $variableName): bool
