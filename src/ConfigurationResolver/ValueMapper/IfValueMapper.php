@@ -15,7 +15,7 @@ class IfValueMapper extends ValueMapper
     {
         $result = $this->resolveEvaluation($this->configuration);
         if ($result !== null) {
-            return $this->resolveValueMap($result);
+            return $this->resolveValueMap($result, $fieldValue);
         }
         return null;
     }
