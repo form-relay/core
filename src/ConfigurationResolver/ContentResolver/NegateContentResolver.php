@@ -17,14 +17,16 @@ class NegateContentResolver extends ContentResolver
 
     public function finish(&$result): bool
     {
-        $true = $this->resolveContent($this->getConfig(static::KEY_TRUE));
-        $false = $this->resolveContent($this->getConfig(static::KEY_FALSE));
-        if ($result === $true) {
-            $result = $false;
-        } elseif ($result === $false) {
-            $result = $true;
-        } else {
-            $result = !!$result ? $false : $true;
+        if ($result !== null) {
+            $true = $this->resolveContent($this->getConfig(static::KEY_TRUE));
+            $false = $this->resolveContent($this->getConfig(static::KEY_FALSE));
+            if ($result === $true) {
+                $result = $false;
+            } elseif ($result === $false) {
+                $result = $true;
+            } else {
+                $result = !!$result ? $false : $true;
+            }
         }
         return false;
     }
