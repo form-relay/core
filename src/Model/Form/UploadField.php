@@ -50,7 +50,7 @@ class UploadField implements FieldInterface
 
     public function setRelativePath(string $relativePath)
     {
-        return $this->relativePath = $relativePath;
+        $this->relativePath = $relativePath;
     }
 
     public function getRelativePath(): string
@@ -60,7 +60,7 @@ class UploadField implements FieldInterface
 
     public function setMimeType(string $mimeType)
     {
-        return $this->mimeType = $mimeType;
+        $this->mimeType = $mimeType;
     }
 
     public function getMimeType(): string
