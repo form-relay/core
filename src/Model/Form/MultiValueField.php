@@ -15,4 +15,14 @@ class MultiValueField extends ArrayObject implements FieldInterface
     {
         return implode($glue, $this->toArray());
     }
+
+    public function pack(): array
+    {
+        return $this->toArray();
+    }
+
+    public static function unpack(array $packed): FieldInterface
+    {
+        return new static($packed);
+    }
 }

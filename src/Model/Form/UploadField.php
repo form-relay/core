@@ -6,27 +6,25 @@ use FormRelay\Core\Model\File\FileInterface;
 
 class UploadField implements FieldInterface
 {
-    /** @var FileInterface */
-    protected $file;
+    /** @var string */
+    protected $fileName = '';
 
     /** @var string */
-    protected $fileName;
+    protected $publicUrl = '';
 
-    public function __construct(FileInterface $file)
-    {
-        $this->file = $file;
-        $this->fileName = $file->getName();
-    }
+    /** @var string */
+    protected $relativePath = '';
 
-    public function getFile(): FileInterface
-    {
-        return $this->file;
-    }
+    /** @var string */
+    protected $mimeType = '';
 
-    public function __call($name, $arguments)
+    public function __construct(FileInterface $file = null)
     {
-        if (method_exists($this->file, $name)) {
-            return $this->file->$name(...$arguments);
+        if ($file) {
+            $this->fileName = $file->getName();
+            $this->publicUrl = $file->getPublicUrl();
+            $this->relativePath = $file->getRelativePath();
+            $this->mimeType = $file->getMimeType();
         }
     }
 
@@ -40,23 +38,58 @@ class UploadField implements FieldInterface
         return $this->fileName;
     }
 
+    public function setPublicUrl(string $publicUrl)
+    {
+        $this->publicUrl = $publicUrl;
+    }
+
     public function getPublicUrl(): string
     {
-        $this->file->getPublicUrl();
+        return $this->publicUrl;
+    }
+
+    public function setRelativePath(string $relativePath)
+    {
+        return $this->relativePath = $relativePath;
     }
 
     public function getRelativePath(): string
     {
-        return $this->file->getRelativePath();
+        return $this->relativePath;
+    }
+
+    public function setMimeType(string $mimeType)
+    {
+        return $this->mimeType = $mimeType;
     }
 
     public function getMimeType(): string
     {
-        return $this->file->getMimeType();
+        return $this->mimeType;
     }
 
     public function __toString(): string
     {
         return $this->getPublicUrl();
+    }
+
+    public function pack(): array
+    {
+        return [
+            'fileName' => $this->getFileName(),
+            'publicUrl' => $this->getPublicUrl(),
+            'relativePath' => $this->getRelativePath(),
+            'mimeType' => $this->getMimeType(),
+        ];
+    }
+
+    public static function unpack(array $packed): FieldInterface
+    {
+        $field = new static();
+        $field->setFileName($packed['fileName']);
+        $field->setPublicUrl($packed['publicUrl']);
+        $field->setRelativePath($packed['relativePath']);
+        $field->setMimeType($packed['mimeType']);
+        return $field;
     }
 }
