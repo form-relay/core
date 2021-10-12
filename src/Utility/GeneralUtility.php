@@ -36,7 +36,12 @@ final class GeneralUtility
         return $str;
     }
 
-    public static function castValueToArray($value, $token = ',', $trim = true)
+    public static function isList($value): bool
+    {
+        return is_array($value) || $value instanceof MultiValueField;
+    }
+
+    public static function castValueToArray($value, $token = ',', $trim = true): array
     {
         if (is_array($value)) {
             return $value;

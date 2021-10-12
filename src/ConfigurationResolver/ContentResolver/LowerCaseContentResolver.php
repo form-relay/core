@@ -2,10 +2,10 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
-class TrimContentResolver extends AbstractModifierContentResolver
+class LowerCaseContentResolver extends AbstractModifierContentResolver
 {
     protected function modify(&$result)
     {
-        $result = trim($result);
+        $result = strtolower($result);
     }
 }

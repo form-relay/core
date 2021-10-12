@@ -2,7 +2,7 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
-class InEvaluation extends Evaluation
+class InEvaluation extends AbstractComparisonEvaluation
 {
     protected function getConfigurationBehaviour(): int
     {
@@ -11,6 +11,6 @@ class InEvaluation extends Evaluation
 
     protected function evalValue($fieldValue, array $keysEvaluated = [])
     {
-        return in_array($fieldValue, $this->configuration);
+        return $this->isInList($fieldValue, $this->configuration);
     }
 }

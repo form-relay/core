@@ -11,6 +11,7 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfEmptyContentRes
 use FormRelay\Core\ConfigurationResolver\ContentResolver\JoinContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\LoopDataContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\LowerCaseContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MapContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\NegateContentResolver;
@@ -22,12 +23,14 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\IfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\InsertDataContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SplitContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\UpperCaseContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\ValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AllInEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\IsFalseEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\IsTrueEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\KeyEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\LowerCaseEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\ProcessedEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\RegexpEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\SelfEvaluation;
@@ -40,6 +43,8 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\NotEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\OrEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\RequiredEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\TrimEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\UpperCaseEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\ValueEvaluation;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
@@ -73,11 +78,14 @@ class CoreInitialization extends Initialization
         IsFalseEvaluation::class,
         IsTrueEvaluation::class,
         KeyEvaluation::class,
+        LowerCaseEvaluation::class,
         NotEvaluation::class,
         OrEvaluation::class,
         ProcessedEvaluation::class,
         RegexpEvaluation::class,
         RequiredEvaluation::class,
+        TrimEvaluation::class,
+        UpperCaseEvaluation::class,
         ValueEvaluation::class,
     ];
 
@@ -96,12 +104,14 @@ class CoreInitialization extends Initialization
         JoinContentResolver::class,
         ListContentResolver::class,
         LoopDataContentResolver::class,
+        LowerCaseContentResolver::class,
         MapContentResolver::class,
         MultiValueContentResolver::class,
         NegateContentResolver::class,
         RawContentResolver::class,
         SplitContentResolver::class,
         TrimContentResolver::class,
+        UpperCaseContentResolver::class,
         ValueContentResolver::class,
     ];
 

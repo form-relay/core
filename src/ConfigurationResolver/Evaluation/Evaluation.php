@@ -6,6 +6,7 @@ use FormRelay\Core\ConfigurationResolver\ConfigurationResolver;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
 use FormRelay\Core\Model\Form\FieldInterface;
 use FormRelay\Core\Model\Form\MultiValueField;
+use FormRelay\Core\Utility\GeneralUtility;
 
 abstract class Evaluation extends ConfigurationResolver implements EvaluationInterface
 {
@@ -36,6 +37,31 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
     protected function multiValueIsDisjunctive()
     {
         return true;
+    }
+
+    protected function addKeyToContext($key)
+    {
+        $resolvedKey = $this->resolveContent($key);
+        if (!GeneralUtility::isEmpty($resolvedKey)) {
+            $this->context['key'] = (string)$resolvedKey;
+        }
+    }
+
+    protected function addModifierToContext($modifier, $context = null)
+    {
+        if ($context === null) {
+            $context = $this->context;
+        }
+        if (is_array($modifier)) {
+            foreach ($modifier as $modifierKey => $modifierValue) {
+                $context['modifier'][$modifierKey] = $modifierValue;
+            }
+        } else {
+            $modifiers = GeneralUtility::castValueToArray($modifier);
+            foreach ($modifiers as $modifierKey) {
+                $context['modifier'][$modifierKey] = true;
+            }
+        }
     }
 
     /**
