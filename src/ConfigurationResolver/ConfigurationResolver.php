@@ -142,15 +142,15 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
     protected function fieldExists($key, bool $markAsProcessed = true): bool
     {
         if ($markAsProcessed) {
-            $this->context['tracker']->markAsProcessed($key);
+            $this->context->getFieldTracker()->markAsProcessed($key);
         }
-        return $this->context['data']->fieldExists($key);
+        return $this->context->getData()->fieldExists($key);
     }
 
     protected function getFieldValue($key, bool $markAsProcessed = true)
     {
         $fieldValue = $this->fieldExists($key, $markAsProcessed)
-            ? $this->context['data'][$key]
+            ? $this->context->getData()[$key]
             : null;
         return $fieldValue;
     }

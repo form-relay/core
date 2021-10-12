@@ -50,7 +50,7 @@ class GateEvaluation extends Evaluation
     {
         $key = $this->configuration['key'];
         $gateConfigs = [];
-        $count = $this->context['config']->getRoutePassCount($key);
+        $count = $this->context->getConfiguration()->getRoutePassCount($key);
         for ($i = 0; $i < $count; $i++) {
             $gateConfigs[] = ['gate' => ['key' => $key, 'pass' => $i]];
         }
@@ -74,7 +74,7 @@ class GateEvaluation extends Evaluation
             $result = false;
         } else {
             $keysEvaluated[$key][] = $pass;
-            $settings = $this->context['config']->getRoutePassConfiguration($key, $pass);
+            $settings = $this->context->getConfiguration()->getRoutePassConfiguration($key, $pass);
             if (!isset($settings['enabled']) || !$settings['enabled']) {
                 $result = false;
             } elseif (isset($settings['gate']) && !empty($settings['gate'])) {

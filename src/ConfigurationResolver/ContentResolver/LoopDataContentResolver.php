@@ -50,7 +50,7 @@ class LoopDataContentResolver extends ContentResolver
         if ($glue) {
             $result[static::KEYWORD_GLUE] = $glue;
         }
-        foreach ($this->context['data'] as $key => $value) {
+        foreach ($this->context->getData() as $key => $value) {
 
             if ($condition) {
                 $context = $this->context->copy();
@@ -61,11 +61,11 @@ class LoopDataContentResolver extends ContentResolver
             }
 
             $context = $this->context->copy();
-            $context['data'][$varKey] = $key;
-            $context['data'][$varValue] = $value;
+            $context->getData()[$varKey] = $key;
+            $context->getData()[$varValue] = $value;
             $result[] = $this->resolveContent($template, $context);
-            unset($context['data'][$varKey]);
-            unset($context['data'][$varValue]);
+            unset($context->getData()[$varKey]);
+            unset($context->getData()[$varValue]);
         }
         return $this->resolveContent($result);
     }

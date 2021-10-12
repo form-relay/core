@@ -7,7 +7,7 @@ class ProcessedEvaluation extends Evaluation
     public function eval(array $keysEvaluated = []): bool
     {
         // processed
-        $result = $this->context['tracker']->hasBeenProcessed($this->context['key']);
+        $result = $this->context->getFieldTracker()->hasBeenProcessed($this->context['key']);
 
         // not processed
         if (!$this->configuration) {

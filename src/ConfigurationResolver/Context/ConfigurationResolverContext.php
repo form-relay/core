@@ -4,21 +4,23 @@ namespace FormRelay\Core\ConfigurationResolver\Context;
 
 use ArrayObject;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
-use FormRelay\Core\ConfigurationResolver\ProcessedFieldsTracker;
-use FormRelay\Core\ConfigurationResolver\ProcessedFieldsTrackerInterface;
+use FormRelay\Core\ConfigurationResolver\FieldTracker;
+use FormRelay\Core\ConfigurationResolver\FieldTrackerInterface;
+use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
+use FormRelay\Core\Model\Submission\SubmissionDataInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 
 class ConfigurationResolverContext extends ArrayObject implements ConfigurationResolverContextInterface
 {
-    protected $fieldsTracker;
+    protected $fieldTracker;
     protected $submission;
 
-    public function __construct(SubmissionInterface $submission, array $context = [], ProcessedFieldsTrackerInterface $fieldsTracker = null)
+    public function __construct(SubmissionInterface $submission, array $context = [], FieldTrackerInterface $fieldTracker = null)
     {
-        if ($fieldsTracker === null) {
-            $fieldsTracker = new ProcessedFieldsTracker();
+        if ($fieldTracker === null) {
+            $fieldTracker = new FieldTracker();
         }
-        $this->fieldsTracker = $fieldsTracker;
+        $this->fieldTracker = $fieldTracker;
         $this->submission = $submission;
         parent::__construct($context);
     }
@@ -27,13 +29,13 @@ class ConfigurationResolverContext extends ArrayObject implements ConfigurationR
     {
         switch ($index) {
             case 'submission':
-                return $this->submission;
+                return $this->getSubmission();
             case 'data':
-                return $this->submission->getData();
+                return $this->getData();
             case 'config':
-                return $this->submission->getConfiguration();
+                return $this->getConfiguration();
             case 'tracker':
-                return $this->fieldsTracker;
+                return $this->getFieldTracker();
             default:
                 return parent::offsetGet($index);
         }
@@ -55,8 +57,28 @@ class ConfigurationResolverContext extends ArrayObject implements ConfigurationR
         }
     }
 
+    public function getFieldTracker(): FieldTrackerInterface
+    {
+        return $this->fieldTracker;
+    }
+
+    public function getSubmission(): SubmissionInterface
+    {
+        return $this->submission;
+    }
+
+    public function getData(): SubmissionDataInterface
+    {
+        return $this->getSubmission()->getData();
+    }
+
+    public function getConfiguration(): SubmissionConfigurationInterface
+    {
+        return $this->getSubmission()->getConfiguration();
+    }
+
     public function copy(): ConfigurationResolverContextInterface
     {
-        return new ConfigurationResolverContext($this->submission, iterator_to_array($this), $this->fieldsTracker);
+        return new ConfigurationResolverContext($this->submission, iterator_to_array($this), $this->fieldTracker);
     }
 }

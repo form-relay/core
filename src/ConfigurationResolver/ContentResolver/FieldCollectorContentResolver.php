@@ -34,14 +34,14 @@ class FieldCollectorContentResolver extends ContentResolver
         $template = GeneralUtility::parseSeparatorString($template);
 
         $result = '';
-        foreach ($this->context['data'] as $key => $value) {
+        foreach ($this->context->getData() as $key => $value) {
             if (in_array($key, $excludedFields)) {
                 continue;
             }
             if ($ignoreIfEmpty && GeneralUtility::isEmpty($value)) {
                 continue;
             }
-            if ($unprocessedOnly && $this->context['tracker']->hasBeenProcessed($key)) {
+            if ($unprocessedOnly && $this->context->getFieldTracker()->hasBeenProcessed($key)) {
                 continue;
             }
             $part = $template;
