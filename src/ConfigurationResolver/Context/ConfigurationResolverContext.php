@@ -3,7 +3,6 @@
 namespace FormRelay\Core\ConfigurationResolver\Context;
 
 use ArrayObject;
-use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
 use FormRelay\Core\ConfigurationResolver\FieldTracker;
 use FormRelay\Core\ConfigurationResolver\FieldTrackerInterface;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
@@ -22,39 +21,13 @@ class ConfigurationResolverContext extends ArrayObject implements ConfigurationR
         }
         $this->fieldTracker = $fieldTracker;
         $this->submission = $submission;
+
+        $context['submission'] = $submission;
+        $context['data'] = $submission->getData();
+        $context['config'] = $submission->getConfiguration();
+        $context['tracker'] = $this->fieldTracker;
+
         parent::__construct($context);
-    }
-
-    public function offsetGet($index)
-    {
-        switch ($index) {
-            case 'submission':
-                return $this->getSubmission();
-            case 'data':
-                return $this->getData();
-            case 'config':
-                return $this->getConfiguration();
-            case 'tracker':
-                return $this->getFieldTracker();
-            default:
-                return parent::offsetGet($index);
-        }
-    }
-
-    public function offsetExists($index)
-    {
-        switch ($index) {
-            case 'submission':
-                return true;
-            case 'data':
-                return true;
-            case 'config':
-                return true;
-            case 'tracker':
-                return true;
-            default:
-                return parent::offsetExists($index);
-        }
     }
 
     public function getFieldTracker(): FieldTrackerInterface
