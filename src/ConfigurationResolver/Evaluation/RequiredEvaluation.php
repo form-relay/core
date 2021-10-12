@@ -2,7 +2,7 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\Model\Form\MultiValueField;
+use FormRelay\Core\Utility\GeneralUtility;
 
 class RequiredEvaluation extends Evaluation
 {
@@ -15,19 +15,7 @@ class RequiredEvaluation extends Evaluation
     {
         $result = true;
         foreach ($this->configuration as $requiredField) {
-            if (!$this->fieldExists($requiredField)) {
-                $result = false;
-                break;
-            }
-            $value = $this->getFieldValue($requiredField);
-            if (!$value) {
-                $result = false;
-                break;
-            }
-            if (
-                $value instanceof MultiValueField
-                && count($value) === 0
-            ) {
+            if (GeneralUtility::isEmpty($this->getFieldValue($requiredField))) {
                 $result = false;
                 break;
             }

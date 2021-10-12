@@ -6,6 +6,6 @@ class EqualsEvaluation extends Evaluation
 {
     protected function evalValue($fieldValue, array $keysEvaluated = [])
     {
-        return $fieldValue === $this->configuration;
+        return $fieldValue === $this->resolveContent($this->configuration);
     }
 }

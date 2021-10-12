@@ -60,12 +60,12 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
             if ($this->multiValueIsDisjunctive()) {
                 $result = false;
                 foreach ($fieldValue as $value) {
-                    $result = $result || $this->evalValue($value, $keysEvaluated);
+                    $result = $this->evalValue($value, $keysEvaluated) || $result;
                 }
             } else {
                 $result = true;
                 foreach ($fieldValue as $value) {
-                    $result = $result && $this->evalValue($value, $keysEvaluated);
+                    $result = $this->evalValue($value, $keysEvaluated) && $result;
                 }
             }
         } else {

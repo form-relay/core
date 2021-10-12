@@ -22,6 +22,8 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\IfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\InsertDataContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SplitContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\ValueContentResolver;
+use FormRelay\Core\ConfigurationResolver\Evaluation\AllInEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\IsFalseEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\IsTrueEvaluation;
@@ -38,6 +40,7 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\NotEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\OrEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\RequiredEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\ValueEvaluation;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\IfValueMapper;
@@ -58,6 +61,7 @@ class CoreInitialization extends Initialization
     ];
 
     const EVALUATIONS = [
+        AllInEvaluation::class,
         AndEvaluation::class,
         SelfEvaluation::class,
         EmptyEvaluation::class,
@@ -74,6 +78,7 @@ class CoreInitialization extends Initialization
         ProcessedEvaluation::class,
         RegexpEvaluation::class,
         RequiredEvaluation::class,
+        ValueEvaluation::class,
     ];
 
     const CONTENT_RESOLVERS = [
@@ -97,6 +102,7 @@ class CoreInitialization extends Initialization
         RawContentResolver::class,
         SplitContentResolver::class,
         TrimContentResolver::class,
+        ValueContentResolver::class,
     ];
 
     const VALUE_MAPPERS = [
