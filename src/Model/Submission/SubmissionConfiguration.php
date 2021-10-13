@@ -59,7 +59,7 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
         $passConfigurations = [[]];
         if (isset($rawConfiguration['passes']) && $rawConfiguration['passes']) {
             $passConfigurations = $rawConfiguration['passes'];
-        };
+        }
 
         $configuration = [];
         foreach ($passConfigurations as $passConfiguration) {

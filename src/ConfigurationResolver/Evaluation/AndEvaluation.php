@@ -30,7 +30,8 @@ class AndEvaluation extends Evaluation
             if ($key === static::KEY_FIELD) {
                 $this->addKeyToContext($value);
                 continue;
-            } elseif ($key === static::KEY_MODIFY) {
+            }
+            if ($key === static::KEY_MODIFY) {
                 $this->addModifierToContext($value);
                 continue;
             }

@@ -10,7 +10,6 @@ use FormRelay\Core\Utility\GeneralUtility;
 
 abstract class Evaluation extends ConfigurationResolver implements EvaluationInterface
 {
-
     protected static function getResolverInterface(): string
     {
         return EvaluationInterface::class;

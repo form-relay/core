@@ -2,7 +2,6 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ValueMapper;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\Model\Form\FieldInterface;
 
 class IfValueMapper extends ValueMapper

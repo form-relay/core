@@ -6,8 +6,8 @@ use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
 
 class GeneralEvaluation extends Evaluation implements GeneralConfigurationResolverInterface
 {
-    protected $then = null;
-    protected $else = null;
+    protected $then;
+    protected $else;
 
     public function eval(array $keysEvaluated = []): bool
     {

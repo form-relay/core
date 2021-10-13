@@ -7,8 +7,8 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\ContentResolverInterfac
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EvaluationInterface;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
-use FormRelay\Core\DataProvider\DataProviderInterface;
 use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
+use FormRelay\Core\DataProvider\DataProviderInterface;
 use FormRelay\Core\Exception\RegistryException;
 use FormRelay\Core\Factory\LoggerFactoryInterface;
 use FormRelay\Core\Factory\NullLoggerFactory;

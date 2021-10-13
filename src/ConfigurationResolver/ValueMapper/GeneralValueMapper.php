@@ -4,7 +4,6 @@ namespace FormRelay\Core\ConfigurationResolver\ValueMapper;
 
 use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
 use FormRelay\Core\Model\Form\FieldInterface;
-use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
 class GeneralValueMapper extends ValueMapper implements GeneralConfigurationResolverInterface
 {

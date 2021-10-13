@@ -19,7 +19,7 @@ final class GeneralUtility
 
     public static function isTrue($value)
     {
-        return !!$value;
+        return (bool)$value;
     }
 
     public static function isFalse($value)

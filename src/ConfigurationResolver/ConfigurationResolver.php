@@ -9,10 +9,10 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\EvaluationInterface;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
-use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
-use FormRelay\Core\Helper\RegisterableTrait;
-use FormRelay\Core\Service\ClassRegistryInterface;
 use FormRelay\Core\Helper\ConfigurationTrait;
+use FormRelay\Core\Helper\RegisterableTrait;
+use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
+use FormRelay\Core\Service\ClassRegistryInterface;
 use FormRelay\Core\Utility\GeneralUtility;
 
 abstract class ConfigurationResolver implements ConfigurationResolverInterface
@@ -93,7 +93,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
                 }
         }
     }
-    
+
     protected function resolveForeignKeyword(string $resolverInterface, string $keyword, $config, ConfigurationResolverContextInterface $context = null)
     {
         if ($context === null) {
@@ -126,10 +126,10 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
     protected function sortSubResolvers(array &$subResolvers)
     {
         ksort($subResolvers, SORT_NUMERIC);
-        usort($subResolvers, function(ConfigurationResolverInterface $a, ConfigurationResolverInterface $b) {
+        usort($subResolvers, function (ConfigurationResolverInterface $a, ConfigurationResolverInterface $b) {
             if ($a->getWeight() === $b->getWeight()) {
                 return 0;
-            };
+            }
             return $a->getWeight() < $b->getWeight() ? -1 : 1;
         });
     }
@@ -154,7 +154,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
             : null;
         return $fieldValue;
     }
-    
+
     protected function resolveContent($config, ConfigurationResolverContextInterface $context = null)
     {
         /** @var GeneralContentResolver $contentResolver */

@@ -2,7 +2,6 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Utility\GeneralUtility;
 
@@ -50,9 +49,8 @@ class AbstractComparisonEvaluation extends Evaluation
     {
         if (GeneralUtility::isList($fieldValue) || GeneralUtility::isList($compareValue)) {
             return $this->compareLists($fieldValue, $compareValue);
-        } else {
-            return $this->compareValue($fieldValue, $compareValue);
         }
+        return $this->compareValue($fieldValue, $compareValue);
     }
 
     protected function findInList($fieldValue, array $list): bool

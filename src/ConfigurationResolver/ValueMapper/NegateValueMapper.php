@@ -35,6 +35,6 @@ class NegateValueMapper extends ValueMapper
         $valueMapper = $this->resolveKeyword('general', $config);
         $result = $valueMapper->resolve($fieldValue);
 
-        return !!$result ? $false : $true;
+        return (bool)$result ? $false : $true;
     }
 }

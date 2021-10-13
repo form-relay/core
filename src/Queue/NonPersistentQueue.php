@@ -123,7 +123,7 @@ class NonPersistentQueue implements QueueInterface
     {
         $this->queue = array_filter(
             $this->queue,
-            function($a) use ($job) { return $a !== $job; }
+            function ($a) use ($job) { return $a !== $job; }
         );
     }
 

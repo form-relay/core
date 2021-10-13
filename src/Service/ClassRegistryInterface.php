@@ -7,10 +7,6 @@ use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInt
 use FormRelay\Core\ConfigurationResolver\Evaluation\EvaluationInterface;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
 use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
-use FormRelay\Core\Factory\QueueDataFactoryInterface;
-use FormRelay\Core\Log\LoggerInterface;
-use FormRelay\Core\Queue\QueueInterface;
-use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Route\RouteInterface;
 
 interface ClassRegistryInterface

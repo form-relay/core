@@ -25,7 +25,7 @@ class NegateContentResolver extends ContentResolver
             } elseif ($result === $false) {
                 $result = $true;
             } else {
-                $result = !!$result ? $false : $true;
+                $result = (bool)$result ? $false : $true;
             }
         }
         return false;

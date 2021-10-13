@@ -51,7 +51,6 @@ class LoopDataContentResolver extends ContentResolver
             $result[static::KEYWORD_GLUE] = $glue;
         }
         foreach ($this->context->getData() as $key => $value) {
-
             if ($condition) {
                 $context = $this->context->copy();
                 $context['key'] = $key;
@@ -80,6 +79,4 @@ class LoopDataContentResolver extends ContentResolver
             static::KEY_CONDITION => static::DEFAULT_CONDITION,
         ];
     }
-
-
 }

@@ -4,12 +4,12 @@ namespace FormRelay\Core\DataProvider;
 
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
+use FormRelay\Core\Helper\ConfigurationTrait;
+use FormRelay\Core\Helper\RegisterableTrait;
 use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Service\ClassRegistryInterface;
-use FormRelay\Core\Helper\RegisterableTrait;
-use FormRelay\Core\Helper\ConfigurationTrait;
 use FormRelay\Core\Utility\GeneralUtility;
 
 abstract class DataProvider implements DataProviderInterface

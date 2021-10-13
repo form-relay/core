@@ -2,8 +2,8 @@
 
 namespace FormRelay\Core\DataDispatcher;
 
-use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Helper\RegisterableTrait;
+use FormRelay\Core\Log\LoggerInterface;
 
 abstract class DataDispatcher implements DataDispatcherInterface
 {

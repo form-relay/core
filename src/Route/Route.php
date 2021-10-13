@@ -4,14 +4,14 @@ namespace FormRelay\Core\Route;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
+use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
 use FormRelay\Core\Exception\FormRelayException;
+use FormRelay\Core\Helper\ConfigurationTrait;
+use FormRelay\Core\Helper\RegisterableTrait;
 use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
-use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
 use FormRelay\Core\Request\RequestInterface;
-use FormRelay\Core\Helper\RegisterableTrait;
 use FormRelay\Core\Service\ClassRegistryInterface;
-use FormRelay\Core\Helper\ConfigurationTrait;
 use FormRelay\Core\Utility\GeneralUtility;
 
 abstract class Route implements RouteInterface
@@ -95,7 +95,7 @@ abstract class Route implements RouteInterface
 
         // ignore empty fields
         if ($this->getConfig(static::KEY_IGNORE_EMPTY_FIELDS)) {
-            $fields = array_filter($fields, function($a) { return !GeneralUtility::isEmpty($a); });
+            $fields = array_filter($fields, function ($a) { return !GeneralUtility::isEmpty($a); });
         }
 
         // exclude specific fields directly
@@ -160,7 +160,6 @@ abstract class Route implements RouteInterface
      * @return DataDispatcherInterface|null
      */
     abstract protected function getDispatcher();
-
 
     public static function getDefaultConfiguration(): array
     {
