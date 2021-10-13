@@ -3,8 +3,9 @@
 namespace FormRelay\Core\Model\Submission;
 
 use ArrayAccess;
+use IteratorAggregate;
 
-interface SubmissionDataInterface extends ArrayAccess
+interface SubmissionDataInterface extends ArrayAccess, IteratorAggregate
 {
     public function toArray(): array;
 

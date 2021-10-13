@@ -3,7 +3,6 @@
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\ConfigurationResolver;
-use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
 use FormRelay\Core\Model\Form\FieldInterface;
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Utility\GeneralUtility;
@@ -16,8 +15,7 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
     }
 
     /**
-     * @param string|FieldInterface $fieldValue
-     * @param ConfigurationResolverContextInterface $context
+     * @param string|FieldInterface|null $fieldValue
      * @param array $keysEvaluated
      * @return bool
      */

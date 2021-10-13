@@ -19,7 +19,7 @@ class QueueWorker extends AbstractRelay implements WorkerInterface
         $this->processDataProviders($submission);
 
         try {
-            /** @var RouteInterface $route */
+            /** @var RouteInterface|null $route */
             $route = $this->registry->getRoute($routeName);
             if (!$route) {
                 throw new FormRelayException('route "' . $routeName . '" not found');

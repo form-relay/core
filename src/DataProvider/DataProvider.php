@@ -50,8 +50,8 @@ abstract class DataProvider implements DataProviderInterface
 
     protected function proceed(SubmissionInterface $submission): bool
     {
-        /** @var GeneralEvaluation $evaluation */
         $context = new ConfigurationResolverContext($submission);
+        /** @var GeneralEvaluation $evaluation */
         $evaluation = $this->registry->getEvaluation(
             'general',
             $this->getConfig(static::KEY_ENABLED),

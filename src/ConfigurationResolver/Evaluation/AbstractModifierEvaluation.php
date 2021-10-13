@@ -22,10 +22,11 @@ abstract class AbstractModifierEvaluation extends Evaluation
     public function eval(array $keysEvaluated = []): bool
     {
         $this->addModifierToContext($this->getModifierObject());
-        /** @var EvaluationInterface $evaluation */
         if (is_array($this->configuration)) {
+            /** @var EvaluationInterface $evaluation */
             $evaluation = $this->resolveKeyword('general', $this->configuration);
         } else {
+            /** @var EvaluationInterface $evaluation */
             $evaluation = $this->resolveKeyword('equals', $this->configuration);
         }
         return $evaluation->eval($keysEvaluated);
