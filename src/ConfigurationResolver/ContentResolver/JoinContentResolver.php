@@ -14,7 +14,8 @@ class JoinContentResolver extends ContentResolver
     {
         if ($result instanceof MultiValueField) {
             $glue = GeneralUtility::parseSeparatorString($this->getConfig(static::KEY_GLUE));
-            $result = $result->__toString($glue);
+            $result->setGlue($glue);
+            $result = (string)$result;
         }
         return false;
     }

@@ -6,14 +6,26 @@ use ArrayObject;
 
 class MultiValueField extends ArrayObject implements FieldInterface
 {
+    protected $glue = ',';
+
     public function toArray(): array
     {
         return iterator_to_array($this);
     }
 
-    public function __toString($glue = ','): string
+    public function setGlue(string $glue)
     {
-        return implode($glue, $this->toArray());
+        $this->glue = $glue;
+    }
+
+    public function getGlue(): string
+    {
+        return $this->glue;
+    }
+
+    public function __toString(): string
+    {
+        return implode($this->glue, $this->toArray());
     }
 
     public function pack(): array

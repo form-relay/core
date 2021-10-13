@@ -27,13 +27,12 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
         if ($content !== null) {
             if ($result === null || $result === '') {
                 $result = $content;
-            } elseif ($content !== '') {
+            } elseif ((string)$content !== '') {
                 $result .= $this->glue ?: '';
                 if ($content instanceof MultiValueField && $this->glue) {
-                    $result .= $content->__toString($this->glue);
-                } else {
-                    $result .= $content;
+                    $content->setGlue($this->glue);
                 }
+                $result .= (string)$content;
             }
         }
         return $result;
