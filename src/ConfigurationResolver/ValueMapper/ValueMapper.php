@@ -35,8 +35,7 @@ abstract class ValueMapper extends ConfigurationResolver implements ValueMapperI
             }
             $class = get_class($fieldValue);
             return new $class($result);
-        } else {
-            return $this->resolveValue($fieldValue);
         }
+        return $this->resolveValue($fieldValue);
     }
 }

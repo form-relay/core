@@ -2,7 +2,7 @@
 
 namespace FormRelay\Core\ConfigurationResolver;
 
-class ProcessedFieldsTracker implements ProcessedFieldsTrackerInterface
+class FieldTracker implements FieldTrackerInterface
 {
     protected $processedFields = [];
 

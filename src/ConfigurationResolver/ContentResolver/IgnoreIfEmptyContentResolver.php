@@ -2,17 +2,13 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
+use FormRelay\Core\Utility\GeneralUtility;
 
-class IgnoreIfEmptyContentResolver extends ContentResolver
+class IgnoreIfEmptyContentResolver extends IgnoreContentResolver
 {
-    public function finish(&$result): bool
+    protected function ignore($result): bool
     {
-        if ($this->config && ($result === '' || $result === null)) {
-            $result = null;
-            return true;
-        }
-        return false;
+        return parent::ignore($result) && GeneralUtility::isEmpty($result);
     }
 
     public function getWeight(): int

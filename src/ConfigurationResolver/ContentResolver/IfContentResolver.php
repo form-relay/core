@@ -2,17 +2,13 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
-
 class IfContentResolver extends ContentResolver
 {
     public function finish(&$result): bool
     {
-        $evalResult = $this->resolveEvaluation($this->config);
+        $evalResult = $this->resolveEvaluation($this->configuration);
         if ($evalResult !== null) {
-            /** @var GeneralContentResolver $contentResolver */
-            $contentResolver = $this->resolveKeyword('general', $evalResult);
-            $result = $contentResolver->resolve();
+            $result = $this->resolveContent($evalResult);
             return true;
         }
         return false;

@@ -1,4 +1,8 @@
 
+2.0.0
+
+[FEATURE] Asynchronous Submissions
+
 1.2.2
 
 [TASK] updated default route configuration

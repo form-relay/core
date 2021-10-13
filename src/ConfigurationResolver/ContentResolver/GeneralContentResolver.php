@@ -5,12 +5,16 @@ namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
 use FormRelay\Core\Model\Form\FieldInterface;
 use FormRelay\Core\Model\Form\MultiValueField;
-use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Utility\GeneralUtility;
 
 class GeneralContentResolver extends ContentResolver implements GeneralConfigurationResolverInterface
 {
     protected $glue = '';
+
+    protected function getConfigurationBehaviour(): int
+    {
+        return static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE;
+    }
 
     /**
      * @param string|FieldInterface|null $result
@@ -22,13 +26,12 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
         if ($content !== null) {
             if ($result === null || $result === '') {
                 $result = $content;
-            } elseif ($content !== '') {
+            } elseif ((string)$content !== '') {
                 $result .= $this->glue ?: '';
                 if ($content instanceof MultiValueField && $this->glue) {
-                    $result .= $content->__toString($this->glue);
-                } else {
-                    $result .= $content;
+                    $content->setGlue($this->glue);
                 }
+                $result .= (string)$content;
             }
         }
         return $result;
@@ -46,12 +49,8 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
 
     public function build()
     {
-        if (!is_array($this->config)) {
-            $this->config = [SubmissionConfigurationInterface::KEY_SELF => $this->config];
-        }
-
         $contentResolvers = [];
-        foreach ($this->config as $key => $value) {
+        foreach ($this->configuration as $key => $value) {
             if ($key === static::KEYWORD_GLUE) {
                 $this->glue = GeneralUtility::parseSeparatorString($value);
                 continue;

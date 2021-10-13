@@ -4,64 +4,109 @@ namespace FormRelay\Core\Route;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
-use FormRelay\Core\ConfigurationResolver\FieldMapper\GeneralFieldMapper;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
+use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
+use FormRelay\Core\Exception\FormRelayException;
+use FormRelay\Core\Helper\ConfigurationTrait;
+use FormRelay\Core\Helper\RegisterableTrait;
 use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
-use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
 use FormRelay\Core\Request\RequestInterface;
-use FormRelay\Core\Service\RegistryInterface;
+use FormRelay\Core\Service\ClassRegistryInterface;
 use FormRelay\Core\Utility\GeneralUtility;
 
 abstract class Route implements RouteInterface
 {
-    /** @var RegistryInterface */
+    use RegisterableTrait;
+    use ConfigurationTrait;
+
+    const KEY_ENABLED = 'enabled';
+    const DEFAULT_ENABLED = false;
+
+    const KEY_IGNORE_EMPTY_FIELDS = 'ignoreEmptyFields';
+    const DEFAULT_IGNORE_EMPTY_FIELDS = false;
+
+    const KEY_PASSTHROUGH_FIELDS = 'passthroughFields';
+    const DEFAULT_PASSTHROUGH_FIELDS = false;
+
+    const KEY_EXCLUDE_FIELDS = 'excludeFields';
+    const DEFAULT_EXCLUDE_FIELDS = [];
+
+    const KEY_GATE = 'gate';
+    const DEFAULT_GATE = [];
+
+    const KEY_FIELDS = 'fields';
+    const DEFAULT_FIELDS = [];
+
+    /** @var ClassRegistryInterface */
     protected $registry;
 
     /** @var LoggerInterface */
     protected $logger;
 
-    /** @var RequestInterface */
-    protected $request;
-
     /** @var SubmissionInterface */
     protected $submission;
 
     /** @var int */
-    protected $currentPass;
+    protected $pass;
 
     /** @var array */
     protected $configuration;
 
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ClassRegistryInterface $registry, LoggerInterface $logger)
     {
         $this->registry = $registry;
-        $this->request = $registry->getRequest();
-        $this->logger = $registry->getLogger(static::class);
+        $this->logger = $logger;
     }
 
-    protected function getConfig(string $key, $default = null)
+    public static function getClassType(): string
     {
-        if (array_key_exists($key, $this->configuration)) {
-            return $this->configuration[$key];
+        return 'Route';
+    }
+
+    protected function resolveContent($config, $context = null)
+    {
+        if ($context === null) {
+            $context = new ConfigurationResolverContext($this->submission);
         }
-        return $default;
+        /** @var GeneralContentResolver $contentResolver */
+        $contentResolver = $this->registry->getContentResolver('general', $config, $context);
+        return $contentResolver->resolve();
     }
 
     protected function buildRouteData(): array
     {
-        $fieldConfigList = $this->getConfig('fields', []);
         $fields = [];
-        $baseContext = new ConfigurationResolverContext($this->submission);
-        foreach ($fieldConfigList as $key => $value) {
-            $context = $baseContext->copy();
-            /** @var GeneralContentResolver $contentResolver */
-            $contentResolver = $this->registry->getContentResolver('general', $value, $context);
-            $result = $contentResolver->resolve();
-            if ($result !== null) {
-                $fields[$key] = $result;
+        if ($this->getConfig(static::KEY_PASSTHROUGH_FIELDS)) {
+            // pass through all fields as they are
+            foreach ($this->submission->getData() as $key => $value) {
+                $fields[$key] = $value;
+            }
+        } else {
+            // compute field configuration
+            $fieldConfigList = $this->getConfig(static::KEY_FIELDS);
+            $baseContext = new ConfigurationResolverContext($this->submission);
+            foreach ($fieldConfigList as $key => $value) {
+                $result = $this->resolveContent($value, $baseContext->copy());
+                if ($result !== null) {
+                    $fields[$key] = $result;
+                }
             }
         }
+
+        // ignore empty fields
+        if ($this->getConfig(static::KEY_IGNORE_EMPTY_FIELDS)) {
+            $fields = array_filter($fields, function ($a) { return !GeneralUtility::isEmpty($a); });
+        }
+
+        // exclude specific fields directly
+        $excludeFields = $this->getConfig(static::KEY_EXCLUDE_FIELDS);
+        GeneralUtility::castValueToArray($excludeFields);
+        foreach ($excludeFields as $excludeField) {
+            if (array_key_exists($excludeField, $fields)) {
+                unset($fields[$excludeField]);
+            }
+        }
+
         return $fields;
     }
 
@@ -72,45 +117,43 @@ abstract class Route implements RouteInterface
             'gate',
             [
                 'key' => static::getKeyword(),
-                'pass' => $this->currentPass
+                'pass' => $this->pass
             ],
             $context
         );
         return $evaluation->eval();
     }
 
-    protected function processPass(): bool
+    public function processPass(SubmissionInterface $submission, int $pass): bool
     {
+        $this->submission = $submission;
+        $this->pass = $pass;
+        $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration(static::getKeyword(), $pass);
+
         if (!$this->processGate()) {
-            $this->logger->debug('gate not passed for route "' . static::getKeyword() . '" in pass ' . $this->currentPass . '.');
+            $this->logger->debug('gate not passed for route "' . static::getKeyword() . '" in pass ' . $pass . '.');
             return false;
         }
         $data = $this->buildRouteData();
         if (!$data) {
-            $this->logger->debug('no data generated for route "' . static::getKeyword() . '" in pass ' . $this->currentPass . '.');
-            return false;
+            throw new FormRelayException('no data generated for route "' . static::getKeyword() . '" in pass ' . $pass . '.');
         }
 
         $dataDispatcher = $this->getDispatcher();
         if (!$dataDispatcher) {
-            $this->logger->debug('no dispatcher found for route "' . static::getKeyword() . '" in pass ' . $this->currentPass . '.');
-            return false;
+            throw new FormRelayException('no dispatcher found for route "' . static::getKeyword() . '" in pass ' . $pass . '.');
         }
 
         return $dataDispatcher->send($data);
     }
 
-    public function process(SubmissionInterface $submission): bool
+    public function getPassCount(SubmissionInterface $submission): int
     {
-        $this->submission = $submission;
-        $result = false;
-        $passCount = $submission->getConfiguration()->getRoutePassCount(static::getKeyword());
-        for ($pass = 0; $pass < $passCount; $pass++) {
-            $this->currentPass = $pass;
-            $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration(static::getKeyword(), $pass);
-            $result = $this->processPass() || $result;
-        }
-        return $result;
+        return $submission->getConfiguration()->getRoutePassCount(static::getKeyword());
+    }
+
+    public function addContext(SubmissionInterface $submission, RequestInterface $request)
+    {
     }
 
     /**
@@ -118,28 +161,15 @@ abstract class Route implements RouteInterface
      */
     abstract protected function getDispatcher();
 
-    public function getWeight(): int
-    {
-        return 10;
-    }
-
-    public static function getKeyword(): string
-    {
-        $namespaceParts = explode('\\', static::class);
-        if (count($namespaceParts) > 1 && $namespaceParts[0] === 'FormRelay') {
-            return GeneralUtility::camel2dashed($namespaceParts[1]);
-        }
-        return '';
-    }
-
-
     public static function getDefaultConfiguration(): array
     {
         return [
-            'enabled' => false,
-            'gate' => [],
-            'fields' => [
-            ],
+            static::KEY_ENABLED => static::DEFAULT_ENABLED,
+            static::KEY_IGNORE_EMPTY_FIELDS => static::DEFAULT_IGNORE_EMPTY_FIELDS,
+            static::KEY_PASSTHROUGH_FIELDS => static::DEFAULT_PASSTHROUGH_FIELDS,
+            static::KEY_EXCLUDE_FIELDS => static::DEFAULT_EXCLUDE_FIELDS,
+            static::KEY_GATE => static::DEFAULT_GATE,
+            static::KEY_FIELDS => static::DEFAULT_FIELDS,
         ];
     }
 }

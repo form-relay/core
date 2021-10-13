@@ -3,60 +3,55 @@
 namespace FormRelay\Core\ConfigurationResolver\Context;
 
 use ArrayObject;
-use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
-use FormRelay\Core\ConfigurationResolver\ProcessedFieldsTracker;
-use FormRelay\Core\ConfigurationResolver\ProcessedFieldsTrackerInterface;
+use FormRelay\Core\ConfigurationResolver\FieldTracker;
+use FormRelay\Core\ConfigurationResolver\FieldTrackerInterface;
+use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
+use FormRelay\Core\Model\Submission\SubmissionDataInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 
 class ConfigurationResolverContext extends ArrayObject implements ConfigurationResolverContextInterface
 {
-    protected $fieldsTracker;
+    protected $fieldTracker;
     protected $submission;
 
-    public function __construct(SubmissionInterface $submission, array $context = [], ProcessedFieldsTrackerInterface $fieldsTracker = null)
+    public function __construct(SubmissionInterface $submission, array $context = [], FieldTrackerInterface $fieldTracker = null)
     {
-        if ($fieldsTracker === null) {
-            $fieldsTracker = new ProcessedFieldsTracker();
+        if ($fieldTracker === null) {
+            $fieldTracker = new FieldTracker();
         }
-        $this->fieldsTracker = $fieldsTracker;
+        $this->fieldTracker = $fieldTracker;
         $this->submission = $submission;
+
+        $context['submission'] = $submission;
+        $context['data'] = $submission->getData();
+        $context['config'] = $submission->getConfiguration();
+        $context['tracker'] = $this->fieldTracker;
+
         parent::__construct($context);
     }
 
-    public function offsetGet($index)
+    public function getFieldTracker(): FieldTrackerInterface
     {
-        switch ($index) {
-            case 'submission':
-                return $this->submission;
-            case 'data':
-                return $this->submission->getData();
-            case 'config':
-                return $this->submission->getConfiguration();
-            case 'tracker':
-                return $this->fieldsTracker;
-            default:
-                return parent::offsetGet($index);
-        }
+        return $this->fieldTracker;
     }
 
-    public function offsetExists($index)
+    public function getSubmission(): SubmissionInterface
     {
-        switch ($index) {
-            case 'submission':
-                return true;
-            case 'data':
-                return true;
-            case 'config':
-                return true;
-            case 'tracker':
-                return true;
-            default:
-                return parent::offsetExists($index);
-        }
+        return $this->submission;
+    }
+
+    public function getData(): SubmissionDataInterface
+    {
+        return $this->getSubmission()->getData();
+    }
+
+    public function getConfiguration(): SubmissionConfigurationInterface
+    {
+        return $this->getSubmission()->getConfiguration();
     }
 
     public function copy(): ConfigurationResolverContextInterface
     {
-        return new ConfigurationResolverContext($this->submission, iterator_to_array($this), $this->fieldsTracker);
+        return new ConfigurationResolverContext($this->submission, iterator_to_array($this), $this->fieldTracker);
     }
 }

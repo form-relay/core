@@ -3,7 +3,6 @@
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\ConfigurationResolver\ConfigurationResolver;
-use FormRelay\Core\Model\Form\MultiValueField;
 
 abstract class ContentResolver extends ConfigurationResolver implements ContentResolverInterface
 {

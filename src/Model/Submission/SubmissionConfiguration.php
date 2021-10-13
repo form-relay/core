@@ -2,6 +2,8 @@
 
 namespace FormRelay\Core\Model\Submission;
 
+use FormRelay\Core\Utility\ConfigurationUtility;
+
 class SubmissionConfiguration implements SubmissionConfigurationInterface
 {
     protected $configurationList = [];
@@ -11,66 +13,40 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
         $this->configurationList = $configurationList;
     }
 
-    protected function mergeConfiguration(array $target, array $source, bool $resolveNull = true)
+    public function addConfigurationOverride(array $configuration)
     {
-        foreach ($source as $key => $value) {
-            if (!array_key_exists($key, $target)) {
-                if (!$resolveNull || $value !== null) {
-                    $target[$key] = $value;
-                }
-            } elseif (is_array($value) && is_array($target[$key])) {
-                $target[$key] = $this->mergeConfiguration($target[$key], $value, $resolveNull);
-            } elseif (is_array($value)) {
-                if ($target[$key] === null) {
-                    $target[$key] = $value;
-                } else {
-                    $target[$key] = $this->mergeConfiguration([static::KEY_SELF => $target[$key]], $value, $resolveNull);
-                }
-            } elseif (is_array($target[$key])) {
-                if ($value === null) {
-                    if ($resolveNull) {
-                        unset($target[$key]);
-                    } else {
-                        $target[$key] = $value;
-                    }
-                } else {
-                    $target[$key] = $this->mergeConfiguration($target[$key], [static::KEY_SELF => $value], $resolveNull);
-                }
-            } else {
-                if ($resolveNull && $value === null) {
-                    unset($target[$key]);
-                } else {
-                    $target[$key] = $value;
-                }
-            }
-        }
-        return $target;
+        $this->configurationList[] = $configuration;
     }
 
-    protected function resolveNullInMergedConfiguration(array $configuration)
+    public function toArray(): array
     {
-        return $this->mergeConfiguration($configuration, $configuration, true);
+        return $this->configurationList;
     }
 
     protected function getMergedConfiguration(bool $resolveNull = true): array
     {
         $result = [];
         foreach ($this->configurationList as $configuration) {
-            $result = $this->mergeConfiguration($result, $configuration, false);
+            $result = ConfigurationUtility::mergeConfiguration($result, $configuration, false);
         }
         if ($resolveNull) {
-            $result = $this->resolveNullInMergedConfiguration($result);
+            $result = ConfigurationUtility::resolveNullInMergedConfiguration($result);
         }
         return $result;
     }
 
-    public function getDataProviderConfiguration(string $dataProviderName)
+    public function get(string $key, $default = null)
     {
         $configuration = $this->getMergedConfiguration();
-        if (isset($configuration['dataProviders'][$dataProviderName])) {
-            return $configuration['dataProviders'][$dataProviderName];
+        if (isset($configuration[$key])) {
+            return $configuration[$key];
         }
-        return [];
+        return $default;
+    }
+
+    public function getDataProviderConfiguration(string $dataProviderName)
+    {
+        return $this->get('dataProviders', [])[$dataProviderName] ?? [];
     }
 
     protected function getRouteConfiguration(string $routeName): array
@@ -83,26 +59,26 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
         $passConfigurations = [[]];
         if (isset($rawConfiguration['passes']) && $rawConfiguration['passes']) {
             $passConfigurations = $rawConfiguration['passes'];
-        };
+        }
 
         $configuration = [];
         foreach ($passConfigurations as $passConfiguration) {
             $passBaseConfiguration = $baseConfiguration;
-            $configuration[] = $this->mergeConfiguration($passBaseConfiguration, $passConfiguration, false);
+            $configuration[] = ConfigurationUtility::mergeConfiguration($passBaseConfiguration, $passConfiguration, false);
         }
-        $configuration = $this->resolveNullInMergedConfiguration($configuration);
+        $configuration = ConfigurationUtility::resolveNullInMergedConfiguration($configuration);
         return $configuration;
     }
 
-    public function getRoutePassCount(string $keyword): int
+    public function getRoutePassCount(string $routeName): int
     {
-        $configuration = $this->getRouteConfiguration($keyword);
+        $configuration = $this->getRouteConfiguration($routeName);
         return count($configuration);
     }
 
-    public function getRoutePassConfiguration(string $keyword, int $pass): array
+    public function getRoutePassConfiguration(string $routeName, int $pass): array
     {
-        $configuration = $this->getRouteConfiguration($keyword);
+        $configuration = $this->getRouteConfiguration($routeName);
         return $configuration[$pass];
     }
 }

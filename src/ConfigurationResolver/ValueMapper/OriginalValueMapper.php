@@ -6,7 +6,7 @@ class OriginalValueMapper extends ValueMapper
 {
     public function resolveValue($fieldValue)
     {
-        if ($this->config) {
+        if ($this->configuration) {
             return $fieldValue;
         }
         return null;

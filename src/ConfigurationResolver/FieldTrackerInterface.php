@@ -2,7 +2,7 @@
 
 namespace FormRelay\Core\ConfigurationResolver;
 
-interface ProcessedFieldsTrackerInterface
+interface FieldTrackerInterface
 {
     public function markAsProcessed($key);
     public function markAsUnprocessed($key);

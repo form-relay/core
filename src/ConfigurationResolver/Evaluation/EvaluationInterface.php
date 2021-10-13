@@ -3,7 +3,6 @@
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\ConfigurationResolverInterface;
-use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
 
 interface EvaluationInterface extends ConfigurationResolverInterface
 {

@@ -6,8 +6,35 @@ use ArrayObject;
 
 class MultiValueField extends ArrayObject implements FieldInterface
 {
-    public function __toString($glue = ','): string
+    protected $glue = ',';
+
+    public function toArray(): array
     {
-        return implode($glue, iterator_to_array($this));
+        return iterator_to_array($this);
+    }
+
+    public function setGlue(string $glue)
+    {
+        $this->glue = $glue;
+    }
+
+    public function getGlue(): string
+    {
+        return $this->glue;
+    }
+
+    public function __toString(): string
+    {
+        return implode($this->glue, $this->toArray());
+    }
+
+    public function pack(): array
+    {
+        return $this->toArray();
+    }
+
+    public static function unpack(array $packed): FieldInterface
+    {
+        return new static($packed);
     }
 }
