@@ -6,13 +6,13 @@ use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
 
 class GeneralEvaluation extends Evaluation implements GeneralConfigurationResolverInterface
 {
-    protected $then = null;
-    protected $else = null;
+    protected $then;
+    protected $else;
 
     public function eval(array $keysEvaluated = []): bool
     {
         /** @var EvaluationInterface $evaluation */
-        $evaluation = $this->resolveKeyword('and', $this->config);
+        $evaluation = $this->resolveKeyword('and', $this->configuration);
         return $evaluation->eval($keysEvaluated);
     }
 
@@ -26,14 +26,14 @@ class GeneralEvaluation extends Evaluation implements GeneralConfigurationResolv
      */
     public function resolve(array $keysEvaluated = [])
     {
-        if (is_array($this->config)) {
-            if (isset($this->config['then'])) {
-                $this->then = $this->config['then'];
-                unset($this->config['then']);
+        if (is_array($this->configuration)) {
+            if (isset($this->configuration['then'])) {
+                $this->then = $this->configuration['then'];
+                unset($this->configuration['then']);
             }
-            if (isset($this->config['else'])) {
-                $this->else = $this->config['else'];
-                unset($this->config['else']);
+            if (isset($this->configuration['else'])) {
+                $this->else = $this->configuration['else'];
+                unset($this->configuration['else']);
             }
         }
         $result = $this->eval($keysEvaluated);

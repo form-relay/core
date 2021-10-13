@@ -10,16 +10,19 @@ class SplitContentResolver extends ContentResolver
     const DEFAULT_TOKEN = '\\s';
 
     const KEY_SLICE = 'slice';
+    const DEFAULT_SLICE = null;
+
     const KEY_INDEX = 'index';
+    const DEFAULT_INDEX = null;
 
     public function finish(&$result): bool
     {
         if ($result !== null) {
-            if (!is_array($this->config)) {
-                $this->config = [static::KEY_SLICE => $this->config];
+            if (!is_array($this->configuration)) {
+                $this->configuration = [static::KEY_SLICE => $this->configuration];
             }
-            $token = GeneralUtility::parseSeparatorString($this->config[static::KEY_TOKEN] ?? static::DEFAULT_TOKEN);
-            $slice = $this->config[static::KEY_SLICE] ?? $this->config[static::KEY_INDEX] ?? '';
+            $token = GeneralUtility::parseSeparatorString($this->getConfig(static::KEY_TOKEN));
+            $slice = $this->getConfig(static::KEY_SLICE) ?? $this->getConfig(static::KEY_INDEX) ?? '';
             $indices = explode(':', $slice);
 
             $offset = $indices[0] ?: 1;
@@ -47,5 +50,14 @@ class SplitContentResolver extends ContentResolver
     public function getWeight(): int
     {
         return 15;
+    }
+
+    public static function getDefaultConfiguration(): array
+    {
+        return parent::getDefaultConfiguration() + [
+            static::KEY_TOKEN => static::DEFAULT_TOKEN,
+            static::KEY_SLICE => static::DEFAULT_SLICE,
+            static::KEY_INDEX => static::DEFAULT_INDEX,
+        ];
     }
 }

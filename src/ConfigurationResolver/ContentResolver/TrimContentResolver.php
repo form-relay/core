@@ -2,18 +2,10 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
-class TrimContentResolver extends ContentResolver
+class TrimContentResolver extends AbstractModifierContentResolver
 {
-    public function finish(&$result): bool
+    protected function modify(&$result)
     {
-        if ($this->config && $result !== null) {
-            $result = trim($result);
-        }
-        return false;
-    }
-
-    public function getWeight(): int
-    {
-        return 20;
+        $result = trim($result);
     }
 }

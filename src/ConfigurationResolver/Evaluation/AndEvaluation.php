@@ -2,12 +2,15 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
-use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
-
 class AndEvaluation extends Evaluation
 {
     const KEY_FIELD = 'field';
+    const KEY_MODIFY = 'modify';
+
+    protected function getConfigurationBehaviour(): int
+    {
+        return static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE;
+    }
 
     protected function initialValue(): bool
     {
@@ -16,22 +19,20 @@ class AndEvaluation extends Evaluation
 
     protected function calculate(bool $result, EvaluationInterface $evaluation, array $keysEvaluated): bool
     {
-        return $result && $evaluation->eval($keysEvaluated);
+        return $evaluation->eval($keysEvaluated) && $result;
     }
 
     public function eval(array $keysEvaluated = []): bool
     {
         $subEvaluations = [];
-        if (!is_array($this->config)) {
-            $this->config = [SubmissionConfigurationInterface::KEY_SELF => $this->config];
-        }
 
-        foreach ($this->config as $key => $value) {
+        foreach ($this->configuration as $key => $value) {
             if ($key === static::KEY_FIELD) {
-                $resolvedKey = $this->resolveContent($value);
-                if ($resolvedKey !== null && $resolvedKey !== '') {
-                    $this->context['key'] = $resolvedKey;
-                }
+                $this->addKeyToContext($value);
+                continue;
+            }
+            if ($key === static::KEY_MODIFY) {
+                $this->addModifierToContext($value);
                 continue;
             }
 
@@ -41,11 +42,6 @@ class AndEvaluation extends Evaluation
                 if (is_numeric($key)) {
                     $evaluation = $this->resolveKeyword('general', $value);
                 } else {
-                    /**
-                     * The context can change from evaluation to evaluation
-                     * but all evaluations are called at the end
-                     * with the last context
-                     */
                     $this->context['key'] = $key;
                     if (is_array($value)) {
                         $evaluation = $this->resolveKeyword('general', $value);

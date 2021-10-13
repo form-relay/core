@@ -2,7 +2,6 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ValueMapper;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\Model\Form\FieldInterface;
 
 class IfValueMapper extends ValueMapper
@@ -13,9 +12,9 @@ class IfValueMapper extends ValueMapper
      */
     protected function resolveValue($fieldValue)
     {
-        $result = $this->resolveEvaluation($this->config);
+        $result = $this->resolveEvaluation($this->configuration);
         if ($result !== null) {
-            return $this->resolveValueMap($result);
+            return $this->resolveValueMap($result, $fieldValue);
         }
         return null;
     }

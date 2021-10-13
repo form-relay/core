@@ -11,6 +11,6 @@ class OrEvaluation extends AndEvaluation
 
     protected function calculate(bool $result, EvaluationInterface $evaluation, array $keysEvaluated): bool
     {
-        return $result || $evaluation->eval($keysEvaluated);
+        return $evaluation->eval($keysEvaluated) || $result;
     }
 }

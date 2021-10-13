@@ -8,8 +8,8 @@ class NotEvaluation extends Evaluation
     {
         /** @var EvaluationInterface $evaluation */
         $evaluation = $this->resolveKeyword(
-            is_array($this->config) ? 'general' : 'equals',
-            $this->config,
+            is_array($this->configuration) ? 'general' : 'equals',
+            $this->configuration,
             $this->context
         );
         return !$evaluation->eval($keysEvaluated);

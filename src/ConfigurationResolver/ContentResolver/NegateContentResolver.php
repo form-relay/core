@@ -10,20 +10,37 @@ class NegateContentResolver extends ContentResolver
     const KEY_FALSE = 'false';
     const DEFAULT_FALSE = '0';
 
-    protected function ignoreScalarConfig()
+    protected function getConfigurationBehaviour(): int
     {
-        return true;
+        return static::CONFIGURATION_BEHAVIOUR_IGNORE_SCALAR;
     }
 
     public function finish(&$result): bool
     {
-        $true = $this->config[static::KEY_TRUE] ?? static::DEFAULT_TRUE;
-        $false = $this->config[static::KEY_FALSE] ?? static::DEFAULT_FALSE;
-        return !!$result ? $false : $true;
+        if ($result !== null) {
+            $true = $this->resolveContent($this->getConfig(static::KEY_TRUE));
+            $false = $this->resolveContent($this->getConfig(static::KEY_FALSE));
+            if ($result === $true) {
+                $result = $false;
+            } elseif ($result === $false) {
+                $result = $true;
+            } else {
+                $result = (bool)$result ? $false : $true;
+            }
+        }
+        return false;
     }
 
     public function getWeight(): int
     {
         return 101;
+    }
+
+    public static function getDefaultConfiguration(): array
+    {
+        return parent::getDefaultConfiguration() + [
+            static::KEY_TRUE => static::DEFAULT_TRUE,
+            static::KEY_FALSE => static::DEFAULT_FALSE,
+        ];
     }
 }

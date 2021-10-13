@@ -17,7 +17,7 @@ class SwitchValueMapper extends ValueMapper
     public function resolveValue($fieldValue)
     {
         $valueMapper = null;
-        foreach ($this->config as $case) {
+        foreach ($this->configuration as $case) {
             $caseValue = $case[static::KEY_CASE] ?? ($case[SubmissionConfigurationInterface::KEY_SELF] ?? '');
             $caseResult = $case[static::KEY_VALUE] ?? '';
             if ($caseValue === $fieldValue) {

@@ -7,10 +7,10 @@ class ExistsEvaluation extends Evaluation
     public function eval(array $keysEvaluated = []): bool
     {
         // exists
-        $exists = $this->fieldExists($this->context['key']);
+        $result = $this->fieldExists($this->context['key']);
 
         // does not exist
-        if (!$this->config) {
+        if (!$this->configuration) {
             $result = !$result;
         }
 

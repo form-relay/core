@@ -6,6 +6,6 @@ class RawContentResolver extends ContentResolver
 {
     public function build()
     {
-        return $this->config;
+        return $this->configuration;
     }
 }

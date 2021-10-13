@@ -12,9 +12,9 @@ class RawValueMapper extends ValueMapper
      */
     public function resolveValue($fieldValue)
     {
-        if (isset($this->config[$fieldValue])) {
+        if (isset($this->configuration[$fieldValue])) {
             /** @var GeneralValueMapper $valueMapper */
-            $valueMapper = $this->resolveKeyword('general', $this->config[$fieldValue]);
+            $valueMapper = $this->resolveKeyword('general', $this->configuration[$fieldValue]);
             $result = $valueMapper->resolve($fieldValue);
             if ($result !== null) {
                 return $result;

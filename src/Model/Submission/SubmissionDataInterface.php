@@ -3,9 +3,12 @@
 namespace FormRelay\Core\Model\Submission;
 
 use ArrayAccess;
+use IteratorAggregate;
 
-interface SubmissionDataInterface extends ArrayAccess
+interface SubmissionDataInterface extends ArrayAccess, IteratorAggregate
 {
-    public function keyExists($key): bool;
+    public function toArray(): array;
+
+    public function fieldExists($key): bool;
     public function fieldEmpty($key): bool;
 }

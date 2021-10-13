@@ -4,22 +4,22 @@ namespace FormRelay\Core\ConfigurationResolver\ValueMapper;
 
 use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
 use FormRelay\Core\Model\Form\FieldInterface;
-use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
 class GeneralValueMapper extends ValueMapper implements GeneralConfigurationResolverInterface
 {
+    protected function getConfigurationBehaviour(): int
+    {
+        return static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE;
+    }
+
     /**
      * @param string|FieldInterface|null $fieldValue
      * @return string|FieldInterface|null
      */
     protected function resolveValue($fieldValue)
     {
-        if (!is_array($this->config)) {
-            $this->config = [SubmissionConfigurationInterface::KEY_SELF => $this->config];
-        }
-
         $valueMappers = [];
-        foreach ($this->config as $key => $value) {
+        foreach ($this->configuration as $key => $value) {
             // try to instantiate sub-mapper
             $valueMapper = $this->resolveKeyword($key, $value);
 

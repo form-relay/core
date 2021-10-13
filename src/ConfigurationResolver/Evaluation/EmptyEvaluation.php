@@ -2,23 +2,12 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
-class EmptyEvaluation extends Evaluation
+use FormRelay\Core\Utility\GeneralUtility;
+
+class EmptyEvaluation extends AbstractIsEvaluation
 {
     protected function evalValue($fieldValue, array $keysEvaluated = [])
     {
-        return !!$fieldValue;
-    }
-
-    public function eval(array $keysEvaluated = []): bool
-    {
-        // not empty
-        $result = parent::eval($keysEvaluated);
-
-        // empty
-        if ($this->config) {
-            $result = !$result;
-        }
-
-        return $result;
+        return GeneralUtility::isEmpty($fieldValue);
     }
 }

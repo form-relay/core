@@ -10,7 +10,7 @@ interface ValueMapperInterface extends ConfigurationResolverInterface
     const RESOLVER_TYPE = 'ValueMapper';
 
     /**
-     * @param string|FieldInterface|null
+     * @param string|FieldInterface|null $fieldValue
      * @return string|FieldInterface|null
      */
     public function resolve($fieldValue = null);
