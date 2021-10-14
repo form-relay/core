@@ -5,7 +5,7 @@ namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Utility\GeneralUtility;
 
-class AbstractComparisonEvaluation extends Evaluation
+abstract class AbstractComparisonEvaluation extends Evaluation
 {
     protected function modifyValue($fieldValue)
     {
