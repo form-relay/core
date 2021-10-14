@@ -30,6 +30,7 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EmptyEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EqualsEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\ExistsEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\FieldEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GateEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
@@ -72,6 +73,7 @@ class CoreInitialization extends Initialization
         EmptyEvaluation::class,
         EqualsEvaluation::class,
         ExistsEvaluation::class,
+        FieldEvaluation::class,
         GateEvaluation::class,
         GeneralEvaluation::class,
         InEvaluation::class,
