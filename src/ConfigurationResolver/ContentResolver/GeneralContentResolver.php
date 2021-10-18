@@ -7,7 +7,7 @@ use FormRelay\Core\Model\Form\FieldInterface;
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Utility\GeneralUtility;
 
-class GeneralContentResolver extends ContentResolver implements GeneralConfigurationResolverInterface
+class GeneralContentResolver extends AbstractWrapperContentResolver implements GeneralConfigurationResolverInterface
 {
     protected $glue = '';
 
@@ -19,9 +19,9 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
     /**
      * @param string|FieldInterface|null $result
      * @param string|FieldInterface|null $content
-     * @return string|FieldInterface|null
+     * @return bool flag whether or not the build process should continue
      */
-    protected function add($result, $content)
+    protected function add(&$result, $content): bool
     {
         if ($content !== null) {
             if ($result === null || $result === '') {
@@ -34,7 +34,17 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
                 $result .= (string)$content;
             }
         }
-        return $result;
+        return true;
+    }
+
+    protected function preprocessConfiguration(): array
+    {
+        $config = $this->configuration;
+        if (array_key_exists(static::KEYWORD_GLUE, $config)) {
+            $this->glue = GeneralUtility::parseSeparatorString($config[static::KEYWORD_GLUE]);
+            unset($config[static::KEYWORD_GLUE]);
+        }
+        return $config;
     }
 
     /**
@@ -44,35 +54,6 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
     {
         $result = $this->build();
         $this->finish($result);
-        return $result;
-    }
-
-    public function build()
-    {
-        $contentResolvers = [];
-        foreach ($this->configuration as $key => $value) {
-            if ($key === static::KEYWORD_GLUE) {
-                $this->glue = GeneralUtility::parseSeparatorString($value);
-                continue;
-            }
-            $contentResolver = $this->resolveKeyword(is_numeric($key) ? 'general' : $key, $value);
-            if ($contentResolver) {
-                $contentResolvers[] = $contentResolver;
-            }
-        }
-
-        $this->sortSubResolvers($contentResolvers);
-
-        $result = null;
-        foreach ($contentResolvers as $contentResolver) {
-            $content = $contentResolver->build();
-            $result = $this->add($result, $content);
-        }
-        foreach ($contentResolvers as $contentResolver) {
-            if ($contentResolver->finish($result)) {
-                break;
-            }
-        }
         return $result;
     }
 }
