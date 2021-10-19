@@ -10,7 +10,7 @@ class FieldContentResolver extends ContentResolver
         if ($fieldName) {
             return $this->getFieldValue($fieldName);
         }
-        return '';
+        return null;
     }
 
     public function getWeight(): int
