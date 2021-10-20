@@ -2,11 +2,13 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
+use FormRelay\Core\Utility\GeneralUtility;
+
 class DefaultContentResolver extends ContentResolver
 {
     public function finish(&$result): bool
     {
-        if ($result === '' || $result === null) {
+        if (GeneralUtility::isEmpty($result)) {
             $result = $this->resolveContent($this->configuration, $this->context);
         }
         return false;
