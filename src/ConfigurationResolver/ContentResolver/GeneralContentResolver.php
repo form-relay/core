@@ -24,13 +24,10 @@ class GeneralContentResolver extends AbstractWrapperContentResolver implements G
     protected function add(&$result, $content): bool
     {
         if ($content !== null) {
-            if ($result === null || $result === '') {
+            if (GeneralUtility::isEmpty($result)) {
                 $result = $content;
-            } elseif ((string)$content !== '') {
+            } elseif (!GeneralUtility::isEmpty($content)) {
                 $result .= $this->glue ?: '';
-                if ($content instanceof MultiValueField && $this->glue) {
-                    $content->setGlue($this->glue);
-                }
                 $result .= (string)$content;
             }
         }

@@ -14,7 +14,7 @@ class FirstContentResolver extends AbstractWrapperContentResolver
      */
     protected function add(&$result, $content): bool
     {
-        if ($content !== null && GeneralUtility::isEmpty($result)) {
+        if ($content !== null) {
             $result = $content;
         }
         return GeneralUtility::isEmpty($result);

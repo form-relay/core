@@ -6,6 +6,9 @@ use FormRelay\Core\Model\Form\FieldInterface;
 
 abstract class AbstractWrapperContentResolver extends ContentResolver
 {
+    /** @var array $subContentResolvers */
+    protected $subContentResolvers;
+
     protected function getConfigurationBehaviour(): int
     {
         return static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE;
@@ -16,7 +19,17 @@ abstract class AbstractWrapperContentResolver extends ContentResolver
      * @param string|FieldInterface|null $content
      * @return bool flag whether or not the build process should continue
      */
-    abstract protected function add(&$result, $content): bool;
+    protected function add(&$result, $content): bool
+    {
+        if ($content !== null) {
+            if ($result === null) {
+                $result = $content;
+            } else {
+                $result .= $content;
+            }
+        }
+        return true;
+    }
 
     protected function getSubContentResolvers(array $config): array
     {
@@ -31,10 +44,10 @@ abstract class AbstractWrapperContentResolver extends ContentResolver
         return $contentResolvers;
     }
 
-    protected function buildSubContent(array $contentResolvers)
+    protected function buildSubContent()
     {
         $result = null;
-        foreach ($contentResolvers as $contentResolver) {
+        foreach ($this->subContentResolvers as $contentResolver) {
             $content = $contentResolver->build();
             if (!$this->add($result, $content)) {
                 break;
@@ -45,11 +58,10 @@ abstract class AbstractWrapperContentResolver extends ContentResolver
 
     /**
      * @param string|FieldInterface|null $result
-     * @param array $contentResolvers
      */
-    protected function finishSubContent(&$result, array $contentResolvers)
+    protected function finishSubContent(&$result)
     {
-        foreach ($contentResolvers as $contentResolver) {
+        foreach ($this->subContentResolvers as $contentResolver) {
             if ($contentResolver->finish($result)) {
                 break;
             }
@@ -64,9 +76,9 @@ abstract class AbstractWrapperContentResolver extends ContentResolver
     public function build()
     {
         $config = $this->preprocessConfiguration();
-        $contentResolvers = $this->getSubContentResolvers($config);
-        $result = $this->buildSubContent($contentResolvers);
-        $this->finishSubContent($result, $contentResolvers);
+        $this->subContentResolvers = $this->getSubContentResolvers($config);
+        $result = $this->buildSubContent();
+        $this->finishSubContent($result);
         return $result;
     }
 }
