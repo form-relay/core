@@ -16,29 +16,17 @@ class GeneralContentResolver extends AbstractWrapperContentResolver implements G
         return static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE;
     }
 
-    /**
-     * @param string|FieldInterface|null $result
-     * @param string|FieldInterface|null $content
-     * @return bool flag whether or not the build process should continue
-     */
-    protected function add(&$result, $content): bool
+    protected function getGlue(): string
     {
-        if ($content !== null) {
-            if (GeneralUtility::isEmpty($result)) {
-                $result = $content;
-            } elseif (!GeneralUtility::isEmpty($content)) {
-                $result .= $this->glue ?: '';
-                $result .= (string)$content;
-            }
-        }
-        return true;
+        return $this->glue;
     }
 
     protected function preprocessConfiguration(): array
     {
         $config = $this->configuration;
         if (array_key_exists(static::KEYWORD_GLUE, $config)) {
-            $this->glue = GeneralUtility::parseSeparatorString($config[static::KEYWORD_GLUE]);
+            $glue = $this->resolveContent($config[static::KEYWORD_GLUE]);
+            $this->glue = GeneralUtility::parseSeparatorString($glue);
             unset($config[static::KEYWORD_GLUE]);
         }
         return $config;

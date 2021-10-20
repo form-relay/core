@@ -3,6 +3,7 @@
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\Model\Form\FieldInterface;
+use FormRelay\Core\Utility\GeneralUtility;
 
 abstract class AbstractWrapperContentResolver extends ContentResolver
 {
@@ -14,6 +15,11 @@ abstract class AbstractWrapperContentResolver extends ContentResolver
         return static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE;
     }
 
+    protected function getGlue(): string
+    {
+        return '';
+    }
+
     /**
      * @param string|FieldInterface|null $result
      * @param string|FieldInterface|null $content
@@ -22,10 +28,11 @@ abstract class AbstractWrapperContentResolver extends ContentResolver
     protected function add(&$result, $content): bool
     {
         if ($content !== null) {
-            if ($result === null) {
+            if (GeneralUtility::isEmpty($result)) {
                 $result = $content;
-            } else {
-                $result .= $content;
+            } elseif (!GeneralUtility::isEmpty($content)) {
+                $result .= $this->getGlue();
+                $result .= (string)$content;
             }
         }
         return true;
