@@ -23,9 +23,10 @@ abstract class AbstractWrapperContentResolver extends ContentResolver
     /**
      * @param string|FieldInterface|null $result
      * @param string|FieldInterface|null $content
+     * @param mixed $key
      * @return bool flag whether or not the build process should continue
      */
-    protected function add(&$result, $content): bool
+    protected function add(&$result, $content, $key): bool
     {
         if ($content !== null) {
             if (GeneralUtility::isEmpty($result)) {
@@ -38,25 +39,35 @@ abstract class AbstractWrapperContentResolver extends ContentResolver
         return true;
     }
 
+    protected function getSubContentResolver($key, $value)
+    {
+        return $this->resolveKeyword(is_numeric($key) ? 'general' : $key, $value);
+    }
+
     protected function getSubContentResolvers(array $config): array
     {
         $contentResolvers = [];
         foreach ($config as $key => $value) {
-            $contentResolver = $this->resolveKeyword(is_numeric($key) ? 'general' : $key, $value);
+            $contentResolver = $this->getSubContentResolver($key, $value);
             if ($contentResolver) {
-                $contentResolvers[] = $contentResolver;
+                $contentResolvers[$key] = $contentResolver;
             }
         }
         $this->sortSubResolvers($contentResolvers);
         return $contentResolvers;
     }
 
+    protected function getInitialValue()
+    {
+        return null;
+    }
+
     protected function buildSubContent()
     {
-        $result = null;
-        foreach ($this->subContentResolvers as $contentResolver) {
+        $result = $this->getInitialValue();
+        foreach ($this->subContentResolvers as $key => $contentResolver) {
             $content = $contentResolver->build();
-            if (!$this->add($result, $content)) {
+            if (!$this->add($result, $content, $key)) {
                 break;
             }
         }

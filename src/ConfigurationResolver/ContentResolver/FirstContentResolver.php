@@ -10,9 +10,10 @@ class FirstContentResolver extends AbstractWrapperContentResolver
     /**
      * @param string|FieldInterface|null $result
      * @param string|FieldInterface|null $content
+     * @param mixed $key
      * @return bool flag whether or not the build process should continue
      */
-    protected function add(&$result, $content): bool
+    protected function add(&$result, $content, $key): bool
     {
         if ($content !== null) {
             $result = $content;
