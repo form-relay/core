@@ -9,7 +9,10 @@ class DefaultContentResolver extends ContentResolver
     public function finish(&$result): bool
     {
         if (GeneralUtility::isEmpty($result)) {
-            $result = $this->resolveContent($this->configuration, $this->context);
+            $default = $this->resolveContent($this->configuration, $this->context);
+            if ($default !== null) {
+                $result = $default;
+            }
         }
         return false;
     }
