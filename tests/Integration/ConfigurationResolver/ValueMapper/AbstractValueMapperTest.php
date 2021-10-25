@@ -10,7 +10,7 @@ abstract class AbstractValueMapperTest extends AbstractConfigurationResolverTest
 {
     protected $fieldValue = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->addBasicValueMappers();

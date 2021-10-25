@@ -12,7 +12,7 @@ abstract class AbstractEvaluationTest extends AbstractConfigurationResolverTest
 {
     protected $eval = false;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->addBasicEvaluations();

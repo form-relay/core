@@ -10,7 +10,7 @@ use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
 class DefaultContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->addContentResolver(DefaultContentResolver::class);

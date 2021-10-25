@@ -7,7 +7,7 @@ use FormRelay\Core\Model\Form\MultiValueField;
 
 class EmptyEvaluationTest extends AbstractEvaluationTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->addEvaluation(EmptyEvaluation::class);

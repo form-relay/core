@@ -8,7 +8,7 @@ use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
 class TrimContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->addContentResolver(TrimContentResolver::class);

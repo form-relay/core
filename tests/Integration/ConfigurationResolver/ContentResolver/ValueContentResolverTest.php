@@ -7,7 +7,7 @@ use FormRelay\Core\Model\Form\MultiValueField;
 
 class ValueContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->addContentResolver(ValueContentResolver::class);
