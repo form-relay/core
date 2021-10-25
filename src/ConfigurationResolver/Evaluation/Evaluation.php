@@ -3,6 +3,7 @@
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\ConfigurationResolver;
+use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\Model\Form\FieldInterface;
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Utility\GeneralUtility;
@@ -36,14 +37,6 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
         return true;
     }
 
-    protected function addKeyToContext($key)
-    {
-        $resolvedKey = $this->resolveContent($key);
-        if (!GeneralUtility::isEmpty($resolvedKey)) {
-            $this->context['key'] = (string)$resolvedKey;
-        }
-    }
-
     protected function addModifierToContext($modifier, $context = null)
     {
         if ($context === null) {
@@ -70,14 +63,7 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
      */
     public function eval(array $keysEvaluated = []): bool
     {
-        $fieldValue = null;
-        if (isset($this->context['key'])) {
-            if ($this->context['useKey'] ?? false) {
-                $fieldValue = $this->context['key'];
-            } else {
-                $fieldValue = $this->getFieldValue($this->context['key']);
-            }
-        }
+        $fieldValue = $this->getSelectedValue();
 
         if ($fieldValue instanceof MultiValueField) {
             if ($this->multiValueIsDisjunctive()) {

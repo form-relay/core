@@ -42,7 +42,7 @@ class AndEvaluation extends Evaluation
                 if (is_numeric($key)) {
                     $evaluation = $this->resolveKeyword('general', $value);
                 } else {
-                    $this->context['key'] = $key;
+                    $this->addKeyToContext($key);
                     if (is_array($value)) {
                         $evaluation = $this->resolveKeyword('general', $value);
                     } else {

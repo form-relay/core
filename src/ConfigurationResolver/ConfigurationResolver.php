@@ -4,6 +4,7 @@ namespace FormRelay\Core\ConfigurationResolver;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\ContentResolverInterface;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
+use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EvaluationInterface;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
@@ -11,6 +12,7 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
 use FormRelay\Core\Helper\ConfigurationTrait;
 use FormRelay\Core\Helper\RegisterableTrait;
+use FormRelay\Core\Model\Form\FieldInterface;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Service\ClassRegistryInterface;
 use FormRelay\Core\Utility\GeneralUtility;
@@ -153,6 +155,55 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
             ? $this->context->getData()[$key]
             : null;
         return $fieldValue;
+    }
+
+    /**
+     * @param mixed $key
+     * @param ConfigurationResolverContext|null $context
+     */
+    protected function addKeyToContext($key, $context = null)
+    {
+        if ($context === null) {
+            $context = $this->context;
+        }
+        $resolvedKey = $this->resolveContent($key);
+        if (!GeneralUtility::isEmpty($resolvedKey)) {
+            $context['key'] = $resolvedKey;
+        } else {
+            unset($context['key']);
+        }
+    }
+
+    /**
+     * @param ConfigurationResolverContext|null $context
+     * @return FieldInterface|string|null
+     */
+    protected function getKeyFromContext($context = null)
+    {
+        if ($context === null) {
+            $context = $this->context;
+        }
+        return $context['key'] ?? '';
+    }
+
+    /**
+     * @param ConfigurationResolverContext|null $context
+     * @return FieldInterface|string|null
+     */
+    protected function getSelectedValue($context = null)
+    {
+        if ($context === null) {
+            $context = $this->context;
+        }
+        $key = $this->getKeyFromContext();
+        if ($key) {
+            if ($context['useKey']) {
+                return $key;
+            } else {
+                return $this->getFieldValue($key);
+            }
+        }
+        return null;
     }
 
     protected function resolveContent($config, ConfigurationResolverContextInterface $context = null)
