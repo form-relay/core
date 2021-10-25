@@ -10,7 +10,7 @@
     "relay"
   ],
   "homepage": "https://www.mediatis.de",
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "authors": [
     {
       "name": "Michael Vöhringer",
@@ -47,5 +47,9 @@
     "psr-4": {
       "FormRelay\\Core\\Tests\\": "tests/"
     }
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/",
+    "testdox": "./vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox --colors=always tests/"
   }
 }

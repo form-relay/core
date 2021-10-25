@@ -198,6 +198,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function evalFieldDoesNotExist()
     {
+        $this->markTestSkipped();
         $this->addBasicContentResolvers();
         $config = [
             'field1' => [
