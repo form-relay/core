@@ -7,9 +7,11 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SelfContentResolver;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\EqualsEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EvaluationInterface;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\SelfEvaluation;
+use FormRelay\Core\ConfigurationResolver\FieldTracker;
 use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
@@ -29,9 +31,18 @@ abstract class AbstractConfigurationResolverTest extends TestCase
     /** @var array */
     protected $context = [];
 
+    /** @var FieldTracker */
+    protected $fieldTracker;
+
     protected $contentResolverClasses = [];
     protected $evaluationClasses = [];
     protected $valueMapperClasses = [];
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->fieldTracker = new FieldTracker();
+    }
 
     protected function addContentResolver(string $class)
     {
@@ -58,6 +69,7 @@ abstract class AbstractConfigurationResolverTest extends TestCase
     {
         $this->addEvaluation(GeneralEvaluation::class);
         $this->addEvaluation(SelfEvaluation::class);
+        $this->addEvaluation(EqualsEvaluation::class);
 
         // TODO GeneralEvaluation should just extend AndEvaluation instead of invoking it
         $this->addEvaluation(AndEvaluation::class);
@@ -109,7 +121,7 @@ abstract class AbstractConfigurationResolverTest extends TestCase
         $registry = $this->initializeRegistry();
 
         $submission = new Submission($this->data, $this->configuration);
-        $context = new ConfigurationResolverContext($submission, $this->context);
+        $context = new ConfigurationResolverContext($submission, $this->context, $this->fieldTracker);
 
         $resolverClass = $this->getGeneralResolverClass();
         $resolver = new $resolverClass($registry, $config, $context);

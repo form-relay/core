@@ -170,7 +170,6 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function evalFieldEquals()
     {
-        $this->addBasicContentResolvers();
         $this->data['field1'] = 'value1';
         $config = [
             'field1' => [
@@ -184,7 +183,6 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function evalFieldEqualsNot()
     {
-        $this->addBasicContentResolvers();
         $this->data['field1'] = 'value1';
         $config = [
             'field1' => [
@@ -199,7 +197,6 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalFieldDoesNotExist()
     {
         $this->markTestSkipped();
-        $this->addBasicContentResolvers();
         $config = [
             'field1' => [
                 static::KEY_SELF => 'value1',

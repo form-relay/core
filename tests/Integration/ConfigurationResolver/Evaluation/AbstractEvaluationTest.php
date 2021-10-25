@@ -2,9 +2,7 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\SelfEvaluation;
 use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
 use FormRelay\Core\Tests\Integration\ConfigurationResolver\AbstractConfigurationResolverTest;
 
@@ -16,6 +14,7 @@ abstract class AbstractEvaluationTest extends AbstractConfigurationResolverTest
     {
         parent::setUp();
         $this->addBasicEvaluations();
+        $this->addBasicContentResolvers();
     }
 
     protected function getGeneralResolverClass(): string
