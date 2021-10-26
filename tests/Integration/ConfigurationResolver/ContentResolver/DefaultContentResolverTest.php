@@ -79,10 +79,8 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => new MultiValueField(['value1', 'value2']),
             'default' => 'default1',
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(MultiValueField::class, $result);
-        $this->assertEquals(['value1', 'value2'], $result->toArray());
+        $this->assertMultiValueEquals(['value1','value2'], $result);
     }
 
     /** @test */
@@ -106,11 +104,8 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => new MultiValueField(['']),
             'default' => 'default1',
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-
-        $this->assertInstanceOf(MultiValueField::class, $result);
-        $this->assertEquals([''], $result->toArray());
+        $this->assertMultiValueEquals([''], $result);
     }
 
     /** @test */
@@ -120,10 +115,8 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => new MultiValueField(['', '']),
             'default' => 'default1',
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(MultiValueField::class, $result);
-        $this->assertEquals(['', ''], $result->toArray());
+        $this->assertMultiValueEquals(['',''], $result);
     }
 
     // TODO GeneralUtility::isEmpty should count the items of multiValue fields
@@ -138,10 +131,8 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => $multiValue,
             'default' => 'default1',
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(MultiValueField::class, $result);
-        $this->assertEquals(['', ''], $result->toArray());
+        $this->assertMultiValueEquals(['',''], $result);
     }
 
     /** @test */
@@ -156,9 +147,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
                 ]
             ]
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(MultiValueField::class, $result);
-        $this->assertEquals(['value1', 'value2'], $result->toArray());
+        $this->assertMultiValueEquals(['value1','value2'], $result);
     }
 }

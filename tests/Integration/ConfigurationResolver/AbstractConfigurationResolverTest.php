@@ -18,10 +18,13 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
 use FormRelay\Core\Model\Submission\Submission;
 use FormRelay\Core\Service\RegistryInterface;
+use FormRelay\Core\Tests\MultiValueTestTrait;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractConfigurationResolverTest extends TestCase
 {
+    use MultiValueTestTrait;
+
     /** @var array */
     protected $data = [];
 
@@ -79,6 +82,13 @@ abstract class AbstractConfigurationResolverTest extends TestCase
     {
         $this->addValueMapper(GeneralValueMapper::class);
         $this->addValueMapper(SelfValueMapper::class);
+    }
+
+    protected function setupDummyData(int $amount = 3) {
+        $this->data = [];
+        for ($i = 1; $i <= $amount; $i++) {
+            $this->data['field' . $i] = 'value' . $i;
+        }
     }
 
     abstract protected function getGeneralResolverClass(): string;

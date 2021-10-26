@@ -53,10 +53,8 @@ class FieldContentResolverTest extends AbstractContentResolverTest
         $config = [
             'field' => 'field1',
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(MultiValueField::class, $result);
-        $this->assertEquals(['value1', 'value2'], $result->toArray());
+        $this->assertMultiValueEquals(['value1','value2'], $result);
     }
 
     /** @test */
@@ -66,9 +64,7 @@ class FieldContentResolverTest extends AbstractContentResolverTest
         $config = [
             'field' => 'field1',
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(MultiValueField::class, $result);
-        $this->assertEmpty($result->toArray());
+        $this->assertMultiValueEmpty($result);
     }
 }

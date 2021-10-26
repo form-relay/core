@@ -84,10 +84,8 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
                 'multiValue' => ['value1', 'value2'],
             ],
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(MultiValueField::class, $result);
-        $this->assertEquals(['value1', 'value2'], $result->toArray());
+        $this->assertMultiValueEquals(['value1', 'value2'], $result);
     }
 
     /** @test */
@@ -101,10 +99,8 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
                 'multiValue' => ['value1', 'value2'],
             ],
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(MultiValueField::class, $result);
-        $this->assertEquals(['value1', 'value2'], $result->toArray());
+        $this->assertMultiValueEquals(['value1', 'value2'], $result);
     }
 
     // TODO resolver glue should not be used on multiValue fields

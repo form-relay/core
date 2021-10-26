@@ -23,10 +23,8 @@ class MultiValueContentResolverTest extends AbstractContentResolverTest
         $config = [
             static::KEYWORD => [3,5,17],
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(static::MULTI_VALUE_CLASS, $result);
-        $this->assertEquals([3,5,17], $result->toArray());
+        $this->assertMultiValueEquals([3,5,17], $result, static::MULTI_VALUE_CLASS);
     }
 
     /** @test */
@@ -35,10 +33,8 @@ class MultiValueContentResolverTest extends AbstractContentResolverTest
         $config = [
             static::KEYWORD => [],
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(static::MULTI_VALUE_CLASS, $result);
-        $this->assertEquals([], $result->toArray());
+        $this->assertMultiValueEquals([], $result, static::MULTI_VALUE_CLASS);
     }
 
     /** @test */
@@ -47,10 +43,8 @@ class MultiValueContentResolverTest extends AbstractContentResolverTest
         $config = [
             static::KEYWORD => [3,null,17],
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(static::MULTI_VALUE_CLASS, $result);
-        $this->assertEquals([0 => 3, 2 => 17], $result->toArray());
+        $this->assertMultiValueEquals([0 => 3, 2 => 17], $result, static::MULTI_VALUE_CLASS);
     }
 
     /** @test */
@@ -59,9 +53,7 @@ class MultiValueContentResolverTest extends AbstractContentResolverTest
         $config = [
             static::KEYWORD => [null, null, null],
         ];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(static::MULTI_VALUE_CLASS, $result);
-        $this->assertEquals([], $result->toArray());
+        $this->assertMultiValueEquals([], $result, static::MULTI_VALUE_CLASS);
     }
 }

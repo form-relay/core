@@ -61,19 +61,15 @@ class SelfContentResolverTest extends AbstractContentResolverTest
     public function complexFieldReturnsItself()
     {
         $config = new MultiValueField(['value1', 'value2']);
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(MultiValueField::class, $result);
-        $this->assertEquals(['value1', 'value2'], $result->toArray());
+        $this->assertMultiValueEquals(['value1','value2'], $result);
     }
 
     /** @test */
     public function selfComplexFieldReturnsItself()
     {
         $config = [static::KEY_SELF => new MultiValueField(['value1', 'value2'])];
-        /** @var MultiValueField $result */
         $result = $this->runResolverTest($config);
-        $this->assertInstanceOf(MultiValueField::class, $result);
-        $this->assertEquals(['value1', 'value2'], $result->toArray());
+        $this->assertMultiValueEquals(['value1', 'value2'], $result);
     }
 }

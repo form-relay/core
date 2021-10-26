@@ -2,6 +2,7 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
+use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\NegateContentResolver;
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
@@ -145,5 +146,90 @@ class NegateContentResolverTest extends AbstractContentResolverTest
         }
     }
 
-    // TODO test multiValue fields
+    protected function runNegateMultiValue($value, $true, $false, $negate, $expected, $useNullOnTrue, $useNullOnFalse)
+    {
+        if ($useNullOnTrue || $useNullOnFalse) {
+            // TODO null values on true or false options will currently return null, they should be ignored instead
+            return;
+        }
+        if ($value === null) {
+            $value = [];
+        }
+        if ($expected === null) {
+            $expected = [];
+        }
+        $config = [
+            'list' => [$value],
+        ];
+        if ($true !== null || $false !== null || $useNullOnTrue || $useNullOnFalse) {
+            $config['negate'] = [
+                SubmissionConfigurationInterface::KEY_SELF => $negate,
+            ];
+        } else {
+            $config['negate'] = $negate;
+        }
+        if ($true !== null || $useNullOnTrue) {
+            $config['negate']['true'] = $true;
+        }
+        if ($false !== null || $useNullOnFalse) {
+            $config['negate']['false'] = $false;
+        }
+        $result = $this->runResolverTest($config);
+        if (empty($expected)) {
+            $this->assertMultiValueEmpty($result);
+        } else {
+            $this->assertMultiValueEquals($expected, $result);
+        }
+    }
+
+    // TODO negate modifier does not take multi values into account
+    /**
+     * @param $value
+     * @param $true
+     * @param $false
+     * @param $expected
+     * @dataProvider provider
+     * @test
+     */
+    public function negateMultiValueEnabled($value, $true, $false, $expected)
+    {
+        $this->markTestSkipped();
+        $this->addContentResolver(ListContentResolver::class);
+        $this->runNegateMultiValue($value, $true, $false, true, $expected, false, false);
+        if ($true === null) {
+            $this->runNegateMultiValue($value, $true, $false, true, $expected, true, false);
+        }
+        if ($false === null) {
+            $this->runNegateMultiValue($value, $true, $false, true, $expected, false, true);
+        }
+        if ($false === null && $true === null) {
+            $this->runNegateMultiValue($value, $true, $false, true, $expected, true, true);
+        }
+    }
+
+    // TODO negate modifier does not take multi values into account
+    // TODO disabling negate modifier is not implemented yet
+    /**
+     * @param $value
+     * @param $true
+     * @param $false
+     * @param $expected
+     * @dataProvider provider
+     * @test
+     */
+    public function negateMultiValueDisabled($value, $true, $false, $expected)
+    {
+        $this->markTestSkipped();
+        $this->addContentResolver(ListContentResolver::class);
+        $this->runNegateMultiValue($value, $true, $false, false, $value, false, false);
+        if ($true === null) {
+            $this->runNegateMultiValue($value, $true, $false, false, $value, true, false);
+        }
+        if ($false === null) {
+            $this->runNegateMultiValue($value, $true, $false, false, $value, false, true);
+        }
+        if ($false === null && $true === null) {
+            $this->runNegateMultiValue($value, $true, $false, false, $value, true, true);
+        }
+    }
 }
