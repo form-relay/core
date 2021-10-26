@@ -3,9 +3,7 @@
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\DefaultContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
-use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
 class DefaultContentResolverTest extends AbstractContentResolverTest
@@ -30,7 +28,6 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
     public function null()
     {
         $config = [
-            SubmissionConfigurationInterface::KEY_SELF => null,
             'default' => 'default1',
         ];
         $result = $this->runResolverTest($config);
@@ -76,7 +73,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
     public function multiValue()
     {
         $config = [
-            SubmissionConfigurationInterface::KEY_SELF => new MultiValueField(['value1', 'value2']),
+            'multiValue' => ['value1', 'value2'],
             'default' => 'default1',
         ];
         $result = $this->runResolverTest($config);
@@ -87,7 +84,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
     public function emptyMultiValue()
     {
         $config = [
-            SubmissionConfigurationInterface::KEY_SELF => new MultiValueField(),
+            'multiValue' => [],
             'default' => 'default1',
         ];
         $result = $this->runResolverTest($config);
@@ -101,7 +98,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
     {
         $this->markTestSkipped();
         $config = [
-            SubmissionConfigurationInterface::KEY_SELF => new MultiValueField(['']),
+            'multiValue' => [''],
             'default' => 'default1',
         ];
         $result = $this->runResolverTest($config);
@@ -112,23 +109,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
     public function multiValueMultipleEmptyItems()
     {
         $config = [
-            SubmissionConfigurationInterface::KEY_SELF => new MultiValueField(['', '']),
-            'default' => 'default1',
-        ];
-        $result = $this->runResolverTest($config);
-        $this->assertMultiValueEquals(['',''], $result);
-    }
-
-    // TODO GeneralUtility::isEmpty should count the items of multiValue fields
-    //      instead of imploding the whole field
-    /** @test */
-    public function multiValueMultipleEmptyItemsNoGlue()
-    {
-        $this->markTestSkipped();
-        $multiValue = new MultiValueField(['', '']);
-        $multiValue->setGlue('');
-        $config = [
-            SubmissionConfigurationInterface::KEY_SELF => $multiValue,
+            'multiValue' => ['', ''],
             'default' => 'default1',
         ];
         $result = $this->runResolverTest($config);
@@ -138,13 +119,9 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function defaultIsMultiValue()
     {
-        $this->contentResolverClasses['multiValue'] = MultiValueContentResolver::class;
         $config = [
             'default' => [
-                'multiValue' => [
-                    'value1',
-                    'value2',
-                ]
+                'multiValue' => ['value1', 'value2'],
             ]
         ];
         $result = $this->runResolverTest($config);
