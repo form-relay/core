@@ -3,7 +3,6 @@
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfEmptyContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
 class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
@@ -81,9 +80,8 @@ class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
      */
     public function ignoreMultiValue($ignore, $enabled)
     {
-        $this->addContentResolver(ListContentResolver::class);
         $config = [
-            'list' => [5, 7, 13],
+            'multiValue' => [5, 7, 13],
             'ignoreIfEmpty' => $ignore,
         ];
         $result = $this->runResolverTest($config);
@@ -98,9 +96,8 @@ class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
      */
     public function ignoreEmptyMultiValue($ignore, $enabled)
     {
-        $this->addContentResolver(ListContentResolver::class);
         $config = [
-            'list' => [],
+            'multiValue' => [],
             'ignoreIfEmpty' => $ignore,
         ];
         $result = $this->runResolverTest($config);
@@ -119,9 +116,8 @@ class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
      */
     public function ignoreMultiValueWithEmptyItemsOnly($ignore, $enabled)
     {
-        $this->addContentResolver(ListContentResolver::class);
         $config = [
-            'list' => ['', ''],
+            'multiValue' => ['', ''],
             'ignoreIfEmpty' => $ignore,
         ];
         $result = $this->runResolverTest($config);

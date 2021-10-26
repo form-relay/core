@@ -2,7 +2,6 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MapContentResolver;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
@@ -49,9 +48,8 @@ class MapContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function mapMultiValue()
     {
-        $this->addContentResolver(ListContentResolver::class);
         $config = [
-            'list' => ['value1', 'value2', 'value3'],
+            'multiValue' => ['value1', 'value2', 'value3'],
             'map' => [
                 'value1' => 'value1b',
                 'value2' => 'value2b',
@@ -65,9 +63,8 @@ class MapContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function noMapMultiValue()
     {
-        $this->addContentResolver(ListContentResolver::class);
         $config = [
-            'list' => ['value1', 'value2', 'value3'],
+            'multiValue' => ['value1', 'value2', 'value3'],
             'map' => [
                 'value4' => 'value4b',
                 'value5' => 'value5b',
@@ -81,9 +78,8 @@ class MapContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function someMapMultiValue()
     {
-        $this->addContentResolver(ListContentResolver::class);
         $config = [
-            'list' => ['value1', 'value2', 'value3'],
+            'multiValue' => ['value1', 'value2', 'value3'],
             'map' => [
                 'value1' => 'value1b',
                 'value3' => 'value3b',

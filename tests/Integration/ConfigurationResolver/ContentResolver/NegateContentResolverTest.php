@@ -2,9 +2,7 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\NegateContentResolver;
-use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
 class NegateContentResolverTest extends AbstractContentResolverTest
@@ -159,7 +157,7 @@ class NegateContentResolverTest extends AbstractContentResolverTest
             $expected = [];
         }
         $config = [
-            'list' => [$value],
+            'multiValue' => [$value],
         ];
         if ($true !== null || $false !== null || $useNullOnTrue || $useNullOnFalse) {
             $config['negate'] = [
@@ -194,7 +192,6 @@ class NegateContentResolverTest extends AbstractContentResolverTest
     public function negateMultiValueEnabled($value, $true, $false, $expected)
     {
         $this->markTestSkipped();
-        $this->addContentResolver(ListContentResolver::class);
         $this->runNegateMultiValue($value, $true, $false, true, $expected, false, false);
         if ($true === null) {
             $this->runNegateMultiValue($value, $true, $false, true, $expected, true, false);
@@ -220,7 +217,6 @@ class NegateContentResolverTest extends AbstractContentResolverTest
     public function negateMultiValueDisabled($value, $true, $false, $expected)
     {
         $this->markTestSkipped();
-        $this->addContentResolver(ListContentResolver::class);
         $this->runNegateMultiValue($value, $true, $false, false, $value, false, false);
         if ($true === null) {
             $this->runNegateMultiValue($value, $true, $false, false, $value, true, false);

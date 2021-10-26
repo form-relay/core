@@ -3,7 +3,6 @@
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldCollectorContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 
 class FieldCollectorContentResolverTest extends AbstractContentResolverTest
 {
@@ -165,7 +164,7 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
             ['field2,field3', "field1 = value1\n"],
 
             [
-                ['list' => ['field2', 'field3']],
+                ['multiValue' => ['field2', 'field3']],
                 "field1 = value1\n"
             ]
         ];
@@ -179,7 +178,6 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
      */
     public function exclude($exclude, $expected)
     {
-        $this->addContentResolver(ListContentResolver::class);
         $config = $this->getNeutralConfig();
         if ($exclude !== null) {
             $config['fieldCollector']['exclude'] = $exclude;

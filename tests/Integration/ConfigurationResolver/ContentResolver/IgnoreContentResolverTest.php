@@ -3,7 +3,6 @@
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
 class IgnoreContentResolverTest extends AbstractContentResolverTest
@@ -87,9 +86,8 @@ class IgnoreContentResolverTest extends AbstractContentResolverTest
      */
     public function ignoreMultiValue($ignore, $ignored)
     {
-        $this->addContentResolver(ListContentResolver::class);
         $config = [
-            'list' => [5, 7, 13],
+            'multiValue' => [5, 7, 13],
             static::KEYWORD => $ignore,
         ];
         $result = $this->runResolverTest($config);
@@ -108,9 +106,8 @@ class IgnoreContentResolverTest extends AbstractContentResolverTest
      */
     public function ignoreEmptyMultiValue($ignore, $ignored)
     {
-        $this->addContentResolver(ListContentResolver::class);
         $config = [
-            'list' => [],
+            'multiValue' => [],
             static::KEYWORD => $ignore,
         ];
         $result = $this->runResolverTest($config);

@@ -3,7 +3,6 @@
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\JoinContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
 class JoinContentResolverTest extends AbstractContentResolverTest
@@ -39,9 +38,8 @@ class JoinContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function joinMultiValue()
     {
-        $this->addContentResolver(ListContentResolver::class);
         $config = [
-            'list' => [5, 7, 17],
+            'multiValue' => [5, 7, 17],
             'join' => true,
         ];
         $result = $this->runResolverTest($config);
@@ -51,9 +49,8 @@ class JoinContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function joinMultiValueWithGlue()
     {
-        $this->addContentResolver(ListContentResolver::class);
         $config = [
-            'list' => [5, 7, 17],
+            'multiValue' => [5, 7, 17],
             'join' => [
                 'glue' => ',',
             ],

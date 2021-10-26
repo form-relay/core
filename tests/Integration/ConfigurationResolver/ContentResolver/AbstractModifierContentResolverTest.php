@@ -2,7 +2,6 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
@@ -43,7 +42,7 @@ abstract class AbstractModifierContentResolverTest extends AbstractContentResolv
     protected function runModifyMultiValue($value, $expected, $enabled)
     {
         $config = [
-            'list' => $value,
+            'multiValue' => $value,
             static::KEYWORD => $enabled,
         ];
         $result = $this->runResolverTest($config);
@@ -65,7 +64,6 @@ abstract class AbstractModifierContentResolverTest extends AbstractContentResolv
     public function modifyMultiValue($value, $expected)
     {
         $this->markTestSkipped();
-        $this->addContentResolver(ListContentResolver::class);
         $this->runModifyMultiValue($value, $expected, true);
         $this->runModifyMultiValue($value, $value, false);
     }
@@ -73,8 +71,8 @@ abstract class AbstractModifierContentResolverTest extends AbstractContentResolv
     protected function runModifyNestedMultiValue($value, $expected, $enabled)
     {
         $config = [
-            'list' => [
-                'list' => $value,
+            'multiValue' => [
+                'multiValue' => $value,
             ],
             static::KEYWORD => $enabled,
         ];
@@ -95,7 +93,6 @@ abstract class AbstractModifierContentResolverTest extends AbstractContentResolv
     public function modifyNestedMultiValue($value, $expected)
     {
         $this->markTestSkipped();
-        $this->addContentResolver(ListContentResolver::class);
         $this->runModifyNestedMultiValue($value, $expected, true);
         $this->runModifyNestedMultiValue($value, $value, false);
     }

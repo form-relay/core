@@ -4,6 +4,7 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\ContentResolverInterface;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SelfContentResolver;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
@@ -66,6 +67,7 @@ abstract class AbstractConfigurationResolverTest extends TestCase
     {
         $this->addContentResolver(GeneralContentResolver::class);
         $this->addContentResolver(SelfContentResolver::class);
+        $this->addContentResolver(MultiValueContentResolver::class);
     }
 
     protected function addBasicEvaluations()
