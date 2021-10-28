@@ -32,5 +32,8 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: PHP Version Check
+        run: php --version
+
       - name: Run test suite
         run: composer run-script testdox
