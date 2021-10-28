@@ -17,7 +17,6 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function defaultOnly()
     {
-        print(phpversion());
         $config = [
             'default' => 'default1',
         ];

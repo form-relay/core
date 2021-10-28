@@ -1,10 +1,10 @@
 name: PHP Composer
 
-on: [push]
-#  push:
-#    branches: [ master, develop ]
-#  pull_request:
-#    branches: [ master ]
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
 
 jobs:
   build:
@@ -37,9 +37,6 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           tools: composer:v2
-
-      - name: PHP Version Check
-        run: php --version
 
       - name: Run test suite
         run: composer run-script testdox
