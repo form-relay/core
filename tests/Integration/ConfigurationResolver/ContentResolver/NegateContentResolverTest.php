@@ -2,7 +2,9 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
+use FormRelay\Core\ConfigurationResolver\ContentResolver\DiscreteMultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\NegateContentResolver;
+use FormRelay\Core\Model\Form\DiscreteMultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
 class NegateContentResolverTest extends AbstractContentResolverTest
@@ -227,5 +229,19 @@ class NegateContentResolverTest extends AbstractContentResolverTest
         if ($false === null && $true === null) {
             $this->runNegateMultiValue($value, $true, $false, false, $value, true, true);
         }
+    }
+
+    // TODO negate modifier does not take multi values into account
+    /** @test */
+    public function negateDiscreteMultiValue()
+    {
+        $this->markTestSkipped();
+        $this->addContentResolver(DiscreteMultiValueContentResolver::class);
+        $config = [
+            'discreteMultiValue' => ['0', '1', '0'],
+            'negate' => true,
+        ];
+        $result = $this->runResolverTest($config);
+        $this->assertMultiValueEquals(['1', '0', '1'], $result, DiscreteMultiValueField::class);
     }
 }

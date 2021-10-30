@@ -14,9 +14,12 @@ trait MultiValueTestTrait // extends \PHPUnit\Framework\TestCase
         static::assertInstanceOf($class, $actual);
     }
 
-    public static function assertMultiValueEquals(array $expected, $actual, string $class = MultiValueField::class)
+    public static function assertMultiValueEquals($expected, $actual, string $class = MultiValueField::class)
     {
         static::assertMultiValue($actual, $class);
+        if ($expected instanceof MultiValueField) {
+            $expected = $expected->toArray();
+        }
         /** @var MultiValueField $actual */
         static::assertEquals($expected, $actual->toArray());
     }

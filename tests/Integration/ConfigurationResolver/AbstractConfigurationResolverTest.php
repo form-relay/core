@@ -27,25 +27,32 @@ abstract class AbstractConfigurationResolverTest extends TestCase
     use MultiValueTestTrait;
 
     /** @var array */
-    protected $data = [];
+    protected $data;
 
     /** @var array */
-    protected $configuration = [];
+    protected $configuration;
 
     /** @var array */
-    protected $context = [];
+    protected $context;
 
     /** @var FieldTracker */
     protected $fieldTracker;
 
-    protected $contentResolverClasses = [];
-    protected $evaluationClasses = [];
-    protected $valueMapperClasses = [];
+    protected $contentResolverClasses;
+    protected $evaluationClasses;
+    protected $valueMapperClasses;
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->data = [];
+        $this->configuration = [];
+        $this->context = [];
         $this->fieldTracker = new FieldTracker();
+
+        $this->contentResolverClasses = [];
+        $this->evaluationClasses = [];
+        $this->valueMapperClasses = [];
     }
 
     protected function addContentResolver(string $class)

@@ -2,17 +2,16 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\EmptyEvaluation;
-use FormRelay\Core\Model\Form\MultiValueField;
+use FormRelay\Core\ConfigurationResolver\Evaluation\IsFalseEvaluation;
 
-class EmptyEvaluationTest extends AbstractIsEvaluationTest
+class IsFalseEvaluationTest extends AbstractIsEvaluationTest
 {
-    const KEYWORD = 'empty';
+    const KEYWORD = 'isFalse';
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(EmptyEvaluation::class);
+        $this->addEvaluation(IsFalseEvaluation::class);
     }
 
     public function isProvider(): array
@@ -23,8 +22,8 @@ class EmptyEvaluationTest extends AbstractIsEvaluationTest
             [null,     false, /* => */ false],
             ['',       true,  /* => */ true],
             ['',       false, /* => */ false],
-            ['0',      true,  /* => */ false],
-            ['0',      false, /* => */ true],
+            ['0',      true,  /* => */ true],
+            ['0',      false, /* => */ false],
             ['1',      true,  /* => */ false],
             ['1',      false, /* => */ true],
             ['value1', true,  /* => */ false],
@@ -39,16 +38,16 @@ class EmptyEvaluationTest extends AbstractIsEvaluationTest
             // TODO multiValue fields with no items will cause disjunctive evaluations to be always false
             //      and conjunctive evaluations to be always true
             //      we may need an additional check on the whole field (in eval()), not just on evalValue()
-            // [new MultiValueField(),           true,  /* => */ true],
-            // [new MultiValueField(),           false, /* => */ false],
+            // [[],           true,  /* => */ true],
+            // [[],           false, /* => */ false],
 
-            [new MultiValueField(['value1']), true,  /* => */ false],
-            [new MultiValueField(['value1']), false, /* => */ true],
+            [['value1'], true,  /* => */ false],
+            [['value1'], false, /* => */ true],
 
-            [new MultiValueField(['', 'value2']), true,  /* => */ true],
-            [new MultiValueField(['', 'value2']), false, /* => */ false],
-            [new MultiValueField(['value1', '']), true,  /* => */ true],
-            [new MultiValueField(['value1', '']), false, /* => */ false],
+            [['', 'value2'], true,  /* => */ true],
+            [['', 'value2'], false, /* => */ false],
+            [['value1', ''], true,  /* => */ true],
+            [['value1', ''], false, /* => */ false],
         ];
     }
 }
