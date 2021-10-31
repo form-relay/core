@@ -11,9 +11,9 @@ class GateEvaluationTest extends AbstractEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(GateEvaluation::class);
-        $this->addEvaluation(AndEvaluation::class);
-        $this->addEvaluation(OrEvaluation::class);
+        $this->registry->registerEvaluation(GateEvaluation::class);
+        $this->registry->registerEvaluation(AndEvaluation::class);
+        $this->registry->registerEvaluation(OrEvaluation::class);
         $this->setupDummyData();
         $this->createRouteConfig('routeGateSucceeds', true);
         $this->createRouteConfig('routeGateSucceeds2', true);
@@ -51,7 +51,7 @@ class GateEvaluationTest extends AbstractEvaluationTest
         } else {
             $routeConf['routes'][$name]['gate'] = $this->createGateConfig($gatePasses);
         }
-        $this->configuration[] = $routeConf;
+        $this->submissionConfiguration[] = $routeConf;
     }
 
     public function gateProvider(): array
@@ -139,4 +139,6 @@ class GateEvaluationTest extends AbstractEvaluationTest
             $this->assertFalse($result);
         }
     }
+
+    // TODO test loop check
 }

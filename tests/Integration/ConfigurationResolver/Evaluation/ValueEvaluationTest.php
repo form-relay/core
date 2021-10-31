@@ -11,6 +11,6 @@ class ValueEvaluationTest extends SelfEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(ValueEvaluation::class);
+        $this->registry->registerEvaluation(ValueEvaluation::class);
     }
 }

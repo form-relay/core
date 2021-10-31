@@ -11,7 +11,7 @@ class InsertDataContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(InsertDataContentResolver::class);
+        $this->registry->registerContentResolver(InsertDataContentResolver::class);
     }
 
     public function insertDataProvider(): array
@@ -61,7 +61,7 @@ class InsertDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function insertDataMultiValueOnly()
     {
-        $this->data['field1'] = new MultiValueField([5, 7, 17]);
+        $this->submissionData['field1'] = new MultiValueField([5, 7, 17]);
         $config = [
             SubmissionConfigurationInterface::KEY_SELF => '{field1}',
             'insertData' => true,
@@ -73,7 +73,7 @@ class InsertDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function insertDataContainsMultiValue()
     {
-        $this->data['field1'] = new MultiValueField([5, 7, 17]);
+        $this->submissionData['field1'] = new MultiValueField([5, 7, 17]);
         $config = [
             SubmissionConfigurationInterface::KEY_SELF => 'field1: {field1}',
             'insertData' => true,

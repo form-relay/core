@@ -20,7 +20,7 @@ abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
      */
     public function modify($value, $modifiedValue)
     {
-        $this->data['field1'] = $value;
+        $this->submissionData['field1'] = $value;
         $config = [
             'field1' => [
                 static::KEYWORD => $modifiedValue,
@@ -38,8 +38,8 @@ abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
      */
     public function modifyMultiValue($value, $modifiedValue)
     {
-        $this->addContentResolver(MultiValueContentResolver::class);
-        $this->data['field1'] = new MultiValueField($value);
+        $this->registry->registerContentResolver(MultiValueContentResolver::class);
+        $this->submissionData['field1'] = new MultiValueField($value);
         $config = [
             'field1' => [
                 static::KEYWORD => [

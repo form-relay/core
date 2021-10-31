@@ -10,7 +10,7 @@ class RequiredEvaluationTest extends AbstractEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(RequiredEvaluation::class);
+        $this->registry->registerEvaluation(RequiredEvaluation::class);
     }
 
     public function requiredProvider(): array
@@ -35,10 +35,10 @@ class RequiredEvaluationTest extends AbstractEvaluationTest
      */
     public function required($required, $expected)
     {
-        $this->data['notEmptyField'] = 'value1';
-        $this->data['notEmptyField2'] = 'value2';
-        $this->data['emptyField'] = '';
-        $this->data['emptyField2'] = '';
+        $this->submissionData['notEmptyField'] = 'value1';
+        $this->submissionData['notEmptyField2'] = 'value2';
+        $this->submissionData['emptyField'] = '';
+        $this->submissionData['emptyField2'] = '';
         $config = [
             'required' => $required,
         ];
@@ -58,10 +58,10 @@ class RequiredEvaluationTest extends AbstractEvaluationTest
      */
     public function requiredMultiValue($required, $expected)
     {
-        $this->data['notEmptyField'] = new MultiValueField(['value1']);
-        $this->data['notEmptyField2'] = new MultiValueField(['value2']);
-        $this->data['emptyField'] = new MultiValueField();
-        $this->data['emptyField2'] = new MultiValueField();
+        $this->submissionData['notEmptyField'] = new MultiValueField(['value1']);
+        $this->submissionData['notEmptyField2'] = new MultiValueField(['value2']);
+        $this->submissionData['emptyField'] = new MultiValueField();
+        $this->submissionData['emptyField2'] = new MultiValueField();
         $config = [
             'required' => $required,
         ];

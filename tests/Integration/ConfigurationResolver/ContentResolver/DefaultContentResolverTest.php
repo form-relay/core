@@ -11,7 +11,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(DefaultContentResolver::class);
+        $this->registry->registerContentResolver(DefaultContentResolver::class);
     }
 
     /** @test */
@@ -48,7 +48,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function emptyStringWhenTrimmed()
     {
-        $this->addContentResolver(TrimContentResolver::class);
+        $this->registry->registerContentResolver(TrimContentResolver::class);
         $config = [
             SubmissionConfigurationInterface::KEY_SELF => ' ',
             'trim' => true,

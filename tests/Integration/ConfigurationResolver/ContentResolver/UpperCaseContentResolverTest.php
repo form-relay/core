@@ -11,7 +11,7 @@ class UpperCaseContentResolverTest extends AbstractModifierContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(UpperCaseContentResolver::class);
+        $this->registry->registerContentResolver(UpperCaseContentResolver::class);
     }
 
     public function modifyProvider(): array

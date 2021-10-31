@@ -13,9 +13,9 @@ class IfValueMapperTest extends AbstractValueMapperTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addBasicEvaluations();
-        $this->addBasicContentResolvers();
-        $this->addValueMapper(IfValueMapper::class);
+        $this->registerBasicEvaluations();
+        $this->registerBasicContentResolvers();
+        $this->registry->registerValueMapper(IfValueMapper::class);
     }
 
     /** @test */

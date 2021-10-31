@@ -14,7 +14,7 @@ class OriginalValueMapperTest extends AbstractValueMapperTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addValueMapper(OriginalValueMapper::class);
+        $this->registry->registerValueMapper(OriginalValueMapper::class);
         $this->setupDummyData();
     }
 
@@ -32,9 +32,9 @@ class OriginalValueMapperTest extends AbstractValueMapperTest
     /** @test */
     public function ifOriginal()
     {
-        $this->addBasicEvaluations();
-        $this->addBasicContentResolvers();
-        $this->addValueMapper(IfValueMapper::class);
+        $this->registerBasicEvaluations();
+        $this->registerBasicContentResolvers();
+        $this->registry->registerValueMapper(IfValueMapper::class);
         $this->fieldValue = 'value1';
         $config = [
             'if' => [

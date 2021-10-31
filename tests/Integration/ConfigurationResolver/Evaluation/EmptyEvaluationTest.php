@@ -12,7 +12,7 @@ class EmptyEvaluationTest extends AbstractIsEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(EmptyEvaluation::class);
+        $this->registry->registerEvaluation(EmptyEvaluation::class);
     }
 
     public function isProvider(): array

@@ -10,7 +10,7 @@ class AndEvaluationTest extends AbstractEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(AndEvaluation::class);
+        $this->registry->registerEvaluation(AndEvaluation::class);
         $this->setupDummyData();
     }
 
@@ -59,7 +59,7 @@ class AndEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function complexNestedConditionEvalTrue()
     {
-        $this->addEvaluation(OrEvaluation::class);
+        $this->registry->registerEvaluation(OrEvaluation::class);
         $config = [
             'and' => [
                 1 => [
@@ -83,7 +83,7 @@ class AndEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function complexNestedConditionEvalFalse()
     {
-        $this->addEvaluation(OrEvaluation::class);
+        $this->registry->registerEvaluation(OrEvaluation::class);
         $config = [
             'and' => [
                 1 => [

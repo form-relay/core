@@ -16,7 +16,7 @@ class SwitchValueMapperTest extends AbstractValueMapperTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addValueMapper(SwitchValueMapper::class);
+        $this->registry->registerValueMapper(SwitchValueMapper::class);
     }
 
     /** @test */
@@ -102,9 +102,9 @@ class SwitchValueMapperTest extends AbstractValueMapperTest
     /** @test */
     public function switchCaseMatchesKeyword()
     {
-        $this->addBasicEvaluations();
-        $this->addBasicContentResolvers();
-        $this->addValueMapper(IfValueMapper::class);
+        $this->registerBasicEvaluations();
+        $this->registerBasicContentResolvers();
+        $this->registry->registerValueMapper(IfValueMapper::class);
         $this->fieldValue = 'if';
         $config = [
             'switch' => [

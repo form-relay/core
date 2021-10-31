@@ -10,7 +10,7 @@ class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(IgnoreIfEmptyContentResolver::class);
+        $this->registry->registerContentResolver(IgnoreIfEmptyContentResolver::class);
     }
 
     public function trueFalseProvider(): array

@@ -11,9 +11,9 @@ class IgnoreIfContentResolverTest extends IgnoreContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addBasicEvaluations();
-        $this->addContentResolver(IgnoreIfContentResolver::class);
-        $this->data['field1'] = 'value1';
+        $this->registerBasicEvaluations();
+        $this->registry->registerContentResolver(IgnoreIfContentResolver::class);
+        $this->submissionData['field1'] = 'value1';
     }
 
     public function trueFalseProvider(): array

@@ -170,7 +170,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function evalFieldEquals()
     {
-        $this->data['field1'] = 'value1';
+        $this->submissionData['field1'] = 'value1';
         $config = [
             'field1' => [
                 static::KEY_SELF => 'value1',
@@ -183,7 +183,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function evalFieldEqualsNot()
     {
-        $this->data['field1'] = 'value1';
+        $this->submissionData['field1'] = 'value1';
         $config = [
             'field1' => [
                 static::KEY_SELF => 'value2',

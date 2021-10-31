@@ -11,7 +11,7 @@ class LowerCaseContentResolverTest extends AbstractModifierContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(LowerCaseContentResolver::class);
+        $this->registry->registerContentResolver(LowerCaseContentResolver::class);
     }
 
     public function modifyProvider(): array

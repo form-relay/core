@@ -11,7 +11,7 @@ class TrimContentResolverTest extends AbstractModifierContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(TrimContentResolver::class);
+        $this->registry->registerContentResolver(TrimContentResolver::class);
     }
 
     public function modifyProvider(): array

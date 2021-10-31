@@ -14,7 +14,7 @@ abstract class AbstractValueMapperTest extends AbstractConfigurationResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addBasicValueMappers();
+        $this->registerBasicValueMappers();
     }
 
     protected function getGeneralResolverClass(): string

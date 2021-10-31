@@ -13,8 +13,8 @@ abstract class AbstractEvaluationTest extends AbstractConfigurationResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addBasicEvaluations();
-        $this->addBasicContentResolvers();
+        $this->registerBasicEvaluations();
+        $this->registerBasicContentResolvers();
     }
 
     protected function getGeneralResolverClass(): string

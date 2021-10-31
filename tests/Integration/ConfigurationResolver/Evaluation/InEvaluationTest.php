@@ -10,7 +10,7 @@ class InEvaluationTest extends AbstractEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(InEvaluation::class);
+        $this->registry->registerEvaluation(InEvaluation::class);
     }
 
     /** @test */
@@ -44,7 +44,7 @@ class InEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function in()
     {
-        $this->data['field1'] = 5;
+        $this->submissionData['field1'] = 5;
         $config = [
             'field1' => [
                 'in' => '4,5,6',
@@ -57,8 +57,8 @@ class InEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function inList()
     {
-        $this->addContentResolver(ListContentResolver::class);
-        $this->data['field1'] = 5;
+        $this->registry->registerContentResolver(ListContentResolver::class);
+        $this->submissionData['field1'] = 5;
         $config = [
             'field1' => [
                 'in' => [
@@ -75,7 +75,7 @@ class InEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function notIn()
     {
-        $this->data['field1'] = 5;
+        $this->submissionData['field1'] = 5;
         $config = [
             'field1' => [
                 'in' => '4,6,7',
@@ -88,7 +88,7 @@ class InEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function notInList()
     {
-        $this->data['field1'] = 5;
+        $this->submissionData['field1'] = 5;
         $config = [
             'field1' => [
                 'in' => [

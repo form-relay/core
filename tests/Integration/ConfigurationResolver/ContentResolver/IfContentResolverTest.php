@@ -11,10 +11,10 @@ class IfContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addBasicEvaluations();
-        $this->addContentResolver(IfContentResolver::class);
-        $this->data['field1'] = 'value1';
-        $this->data['field2'] = 'value2';
+        $this->registerBasicEvaluations();
+        $this->registry->registerContentResolver(IfContentResolver::class);
+        $this->submissionData['field1'] = 'value1';
+        $this->submissionData['field2'] = 'value2';
     }
 
     public function ifProvider(): array

@@ -12,8 +12,8 @@ class TrimEvaluationTest extends AbstractModifierEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(TrimEvaluation::class);
-        $this->addContentResolver(TrimContentResolver::class);
+        $this->registry->registerEvaluation(TrimEvaluation::class);
+        $this->registry->registerContentResolver(TrimContentResolver::class);
     }
 
     public function modifyProvider(): array

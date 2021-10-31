@@ -12,7 +12,7 @@ class NegateContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(NegateContentResolver::class);
+        $this->registry->registerContentResolver(NegateContentResolver::class);
     }
 
     public function provider()
@@ -236,7 +236,7 @@ class NegateContentResolverTest extends AbstractContentResolverTest
     public function negateDiscreteMultiValue()
     {
         $this->markTestSkipped();
-        $this->addContentResolver(DiscreteMultiValueContentResolver::class);
+        $this->registry->registerContentResolver(DiscreteMultiValueContentResolver::class);
         $config = [
             'discreteMultiValue' => ['0', '1', '0'],
             'negate' => true,

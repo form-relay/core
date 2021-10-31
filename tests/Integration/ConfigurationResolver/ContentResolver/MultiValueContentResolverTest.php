@@ -14,7 +14,7 @@ class MultiValueContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(static::RESOLVER_CLASS);
+        $this->registry->registerContentResolver(static::RESOLVER_CLASS);
     }
 
     /** @test */

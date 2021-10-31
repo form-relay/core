@@ -10,7 +10,7 @@ class RegexpEvaluationTest extends AbstractEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(RegexpEvaluation::class);
+        $this->registry->registerEvaluation(RegexpEvaluation::class);
     }
 
     public function regexpProvider(): array
@@ -48,7 +48,7 @@ class RegexpEvaluationTest extends AbstractEvaluationTest
      */
     public function regexp($value, $regexp, $match)
     {
-        $this->data['field1'] = $value;
+        $this->submissionData['field1'] = $value;
         $config = [
             'field1' => [
                 'regexp' => $regexp,
@@ -71,7 +71,7 @@ class RegexpEvaluationTest extends AbstractEvaluationTest
      */
     public function regexpMultiValue($value, $regexp, $match)
     {
-        $this->data['field1'] = new MultiValueField($value);
+        $this->submissionData['field1'] = new MultiValueField($value);
         $config = [
             'field1' => [
                 'regexp' => $regexp,

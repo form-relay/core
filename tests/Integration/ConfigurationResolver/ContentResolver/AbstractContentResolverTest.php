@@ -10,7 +10,7 @@ abstract class AbstractContentResolverTest extends AbstractConfigurationResolver
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addBasicContentResolvers();
+        $this->registerBasicContentResolvers();
     }
 
     protected function getGeneralResolverClass(): string

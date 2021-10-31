@@ -21,7 +21,7 @@ abstract class AbstractIsEvaluationTest extends AbstractEvaluationTest
     public function is($value, $is, $expected)
     {
         if ($value !== null) {
-            $this->data['field1'] = $value;
+            $this->submissionData['field1'] = $value;
         }
         $config = [
             'field1' => [
@@ -45,7 +45,7 @@ abstract class AbstractIsEvaluationTest extends AbstractEvaluationTest
      */
     public function isMultiValue($value, $is, $expected)
     {
-        $this->data['field1'] = new MultiValueField($value);
+        $this->submissionData['field1'] = new MultiValueField($value);
         $config = [
             'field1' => [
                 static::KEYWORD => $is,

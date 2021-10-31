@@ -12,8 +12,8 @@ class LowerCaseEvaluationTest extends AbstractModifierEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(LowerCaseEvaluation::class);
-        $this->addContentResolver(LowerCaseContentResolver::class);
+        $this->registry->registerEvaluation(LowerCaseEvaluation::class);
+        $this->registry->registerContentResolver(LowerCaseContentResolver::class);
     }
 
     public function modifyProvider(): array

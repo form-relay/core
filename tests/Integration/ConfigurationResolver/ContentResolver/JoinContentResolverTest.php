@@ -10,7 +10,7 @@ class JoinContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(JoinContentResolver::class);
+        $this->registry->registerContentResolver(JoinContentResolver::class);
     }
 
     /** @test */

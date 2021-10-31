@@ -9,7 +9,7 @@ class KeyEvaluationTest extends AbstractEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(KeyEvaluation::class);
+        $this->registry->registerEvaluation(KeyEvaluation::class);
     }
 
     /** @test */

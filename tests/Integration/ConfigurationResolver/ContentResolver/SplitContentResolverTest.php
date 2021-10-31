@@ -10,7 +10,7 @@ class SplitContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(SplitContentResolver::class);
+        $this->registry->registerContentResolver(SplitContentResolver::class);
     }
 
     public function splitByIndexProvider(): array

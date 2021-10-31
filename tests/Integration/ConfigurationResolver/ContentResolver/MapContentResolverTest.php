@@ -13,8 +13,8 @@ class MapContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(MapContentResolver::class);
-        $this->addBasicValueMappers();
+        $this->registry->registerContentResolver(MapContentResolver::class);
+        $this->registerBasicValueMappers();
     }
 
     /** @test */

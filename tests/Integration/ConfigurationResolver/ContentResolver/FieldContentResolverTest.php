@@ -10,7 +10,7 @@ class FieldContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(FieldContentResolver::class);
+        $this->registry->registerContentResolver(FieldContentResolver::class);
     }
 
     /** @test */
@@ -26,7 +26,7 @@ class FieldContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function fieldExists()
     {
-        $this->data['field1'] = 'value1';
+        $this->submissionData['field1'] = 'value1';
         $config = [
             'field' => 'field1',
         ];
@@ -37,7 +37,7 @@ class FieldContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function fieldIsEmpty()
     {
-        $this->data['field1'] = '';
+        $this->submissionData['field1'] = '';
         $config = [
             'field' => 'field1',
         ];
@@ -49,7 +49,7 @@ class FieldContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function fieldHasMultiValue()
     {
-        $this->data['field1'] = new MultiValueField(['value1', 'value2']);
+        $this->submissionData['field1'] = new MultiValueField(['value1', 'value2']);
         $config = [
             'field' => 'field1',
         ];
@@ -60,7 +60,7 @@ class FieldContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function fieldHasEmptyMultiValue()
     {
-        $this->data['field1'] = new MultiValueField();
+        $this->submissionData['field1'] = new MultiValueField();
         $config = [
             'field' => 'field1',
         ];

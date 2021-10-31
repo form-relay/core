@@ -9,7 +9,7 @@ class ProcessedEvaluationTest extends AbstractEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(ProcessedEvaluation::class);
+        $this->registry->registerEvaluation(ProcessedEvaluation::class);
         $this->setupDummyData();
     }
 

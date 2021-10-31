@@ -9,11 +9,11 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(FieldCollectorContentResolver::class);
-        $this->addBasicEvaluations();
-        $this->data['field1'] = 'value1';
-        $this->data['field2'] = 'value2';
-        $this->data['field3'] = 'value3';
+        $this->registry->registerContentResolver(FieldCollectorContentResolver::class);
+        $this->registerBasicEvaluations();
+        $this->submissionData['field1'] = 'value1';
+        $this->submissionData['field2'] = 'value2';
+        $this->submissionData['field3'] = 'value3';
     }
 
     protected function getNeutralConfig(): array
@@ -29,7 +29,7 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function noData()
     {
-        $this->data = [];
+        $this->submissionData = [];
         $config = [
             'fieldCollector' => true,
         ];
@@ -108,7 +108,7 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
      */
     public function ignoreIfEmpty($value2, $useDefaultConfig, $ignoreIfEmpty, $expected)
     {
-        $this->data['field2'] = $value2;
+        $this->submissionData['field2'] = $value2;
         $config = $useDefaultConfig ? ['fieldCollector' => true] : $this->getNeutralConfig();
         if ($ignoreIfEmpty === null) {
             unset($config['fieldCollector']['ignoreIfEmpty']);

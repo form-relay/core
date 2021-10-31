@@ -12,7 +12,7 @@ class IgnoreContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(IgnoreContentResolver::class);
+        $this->registry->registerContentResolver(IgnoreContentResolver::class);
     }
 
     public function trueFalseProvider(): array

@@ -16,10 +16,10 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addBasicEvaluations();
-        $this->addContentResolver(LoopDataContentResolver::class);
-        $this->addContentResolver(InsertDataContentResolver::class);
-        $this->addContentResolver(FieldContentResolver::class);
+        $this->registerBasicEvaluations();
+        $this->registry->registerContentResolver(LoopDataContentResolver::class);
+        $this->registry->registerContentResolver(InsertDataContentResolver::class);
+        $this->registry->registerContentResolver(FieldContentResolver::class);
     }
 
     /** @test */
@@ -85,7 +85,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function loopDataWithValueCondition()
     {
-        $this->addEvaluation(InEvaluation::class);
+        $this->registry->registerEvaluation(InEvaluation::class);
         $this->setupDummyData();
         $config = [
             'loopData' => [
@@ -103,8 +103,8 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function loopDataWithKeyCondition()
     {
-        $this->addEvaluation(KeyEvaluation::class);
-        $this->addEvaluation(InEvaluation::class);
+        $this->registry->registerEvaluation(KeyEvaluation::class);
+        $this->registry->registerEvaluation(InEvaluation::class);
         $this->setupDummyData();
         $config = [
             'loopData' => [
@@ -124,8 +124,8 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function loopDataWithOtherCondition()
     {
-        $this->addEvaluation(KeyEvaluation::class);
-        $this->addEvaluation(InEvaluation::class);
+        $this->registry->registerEvaluation(KeyEvaluation::class);
+        $this->registry->registerEvaluation(InEvaluation::class);
         $this->setupDummyData();
         $config = [
             'loopData' => [
@@ -145,9 +145,9 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     public function loopDataFieldTemplateMultiValuesWithLoopGlue()
     {
         $this->markTestSkipped();
-        $this->data['field1'] = new MultiValueField([5, 7, 17]);
-        $this->data['field2'] = 's';
-        $this->data['field3'] = new MultiValueField(['c', 7, 'k']);
+        $this->submissionData['field1'] = new MultiValueField([5, 7, 17]);
+        $this->submissionData['field2'] = 's';
+        $this->submissionData['field3'] = new MultiValueField(['c', 7, 'k']);
         $config = [
             'loopData' => [
                 'glue' => ';',
@@ -161,7 +161,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function loopDataFieldTemplateOneMultiValue()
     {
-        $this->data['field1'] = new MultiValueField([5, 7, 17]);
+        $this->submissionData['field1'] = new MultiValueField([5, 7, 17]);
         $config = [
             'loopData' => [
                 'template' => ['field' => 'value'],
@@ -174,8 +174,8 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function loopDataFieldTemplateOneMultiValueJoined()
     {
-        $this->addContentResolver(JoinContentResolver::class);
-        $this->data['field1'] = new MultiValueField([5, 7, 17]);
+        $this->registry->registerContentResolver(JoinContentResolver::class);
+        $this->submissionData['field1'] = new MultiValueField([5, 7, 17]);
         $config = [
             'loopData' => [
                 'template' => [
@@ -191,8 +191,8 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function loopDataFieldTemplateOneMultiValueJoinedWithGlue()
     {
-        $this->addContentResolver(JoinContentResolver::class);
-        $this->data['field1'] = new MultiValueField([5, 7, 17]);
+        $this->registry->registerContentResolver(JoinContentResolver::class);
+        $this->submissionData['field1'] = new MultiValueField([5, 7, 17]);
         $config = [
             'loopData' => [
                 'template' => [

@@ -15,7 +15,7 @@ class RawValueMapperTest extends AbstractValueMapperTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addValueMapper(RawValueMapper::class);
+        $this->registry->registerValueMapper(RawValueMapper::class);
     }
 
     /** @test */
@@ -47,9 +47,9 @@ class RawValueMapperTest extends AbstractValueMapperTest
     /** @test */
     public function rawKeywordMatches()
     {
-        $this->addBasicEvaluations();
-        $this->addBasicContentResolvers();
-        $this->addValueMapper(IfValueMapper::class);
+        $this->registerBasicEvaluations();
+        $this->registerBasicContentResolvers();
+        $this->registry->registerValueMapper(IfValueMapper::class);
         $this->fieldValue = 'if';
         $config = [
             'raw' => [
@@ -63,9 +63,9 @@ class RawValueMapperTest extends AbstractValueMapperTest
     /** @test */
     public function rawKeywordDoesNotMatch()
     {
-        $this->addBasicEvaluations();
-        $this->addBasicContentResolvers();
-        $this->addValueMapper(IfValueMapper::class);
+        $this->registerBasicEvaluations();
+        $this->registerBasicContentResolvers();
+        $this->registry->registerValueMapper(IfValueMapper::class);
         $this->fieldValue = 'value1';
         $config = [
             'raw' => [

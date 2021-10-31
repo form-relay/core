@@ -12,8 +12,8 @@ class UpperCaseEvaluationTest extends AbstractModifierEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(UpperCaseEvaluation::class);
-        $this->addContentResolver(UpperCaseContentResolver::class);
+        $this->registry->registerEvaluation(UpperCaseEvaluation::class);
+        $this->registry->registerContentResolver(UpperCaseContentResolver::class);
     }
 
     public function modifyProvider(): array

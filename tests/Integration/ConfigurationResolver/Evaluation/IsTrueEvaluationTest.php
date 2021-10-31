@@ -14,7 +14,7 @@ class IsTrueEvaluationTest extends IsFalseEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addEvaluation(IsTrueEvaluation::class);
+        $this->registry->registerEvaluation(IsTrueEvaluation::class);
     }
 
     public function isProvider(): array

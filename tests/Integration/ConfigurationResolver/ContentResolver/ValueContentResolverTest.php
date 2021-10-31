@@ -10,7 +10,7 @@ class ValueContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->addContentResolver(ValueContentResolver::class);
+        $this->registry->registerContentResolver(ValueContentResolver::class);
     }
 
     /** @test */
