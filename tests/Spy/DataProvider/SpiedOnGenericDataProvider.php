@@ -8,7 +8,7 @@ use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Service\ClassRegistryInterface;
 
-class SpiedOnDataProvider extends DataProvider
+class SpiedOnGenericDataProvider extends DataProvider
 {
     public $spy;
 
@@ -16,6 +16,11 @@ class SpiedOnDataProvider extends DataProvider
     {
         parent::__construct($registry, $logger);
         $this->spy = $spy;
+    }
+
+    public static function getKeyword(): string
+    {
+        return 'generic';
     }
 
 

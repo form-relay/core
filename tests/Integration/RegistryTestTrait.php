@@ -20,9 +20,9 @@ use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Service\Registry;
 use FormRelay\Core\Service\RegistryInterface;
 use FormRelay\Core\Tests\Spy\DataProvider\DataProviderSpyInterface;
-use FormRelay\Core\Tests\Spy\DataProvider\SpiedOnDataProvider;
+use FormRelay\Core\Tests\Spy\DataProvider\SpiedOnGenericDataProvider;
 use FormRelay\Core\Tests\Spy\Route\RouteSpyInterface;
-use FormRelay\Core\Tests\Spy\Route\SpiedOnRoute;
+use FormRelay\Core\Tests\Spy\Route\SpiedOnGenericRoute;
 
 trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
 {
@@ -87,14 +87,14 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
     protected function registerRouteSpy()
     {
         $spy = $this->createMock(RouteSpyInterface::class);
-        $this->registry->registerRoute(SpiedOnRoute::class, [$spy]);
+        $this->registry->registerRoute(SpiedOnGenericRoute::class, [$spy]);
         return $spy;
     }
 
     protected function registerDataProviderSpy()
     {
         $spy = $this->createMock(DataProviderSpyInterface::class);
-        $this->registry->registerDataProvider(SpiedOnDataProvider::class, [$spy]);
+        $this->registry->registerDataProvider(SpiedOnGenericDataProvider::class, [$spy]);
         return $spy;
     }
 }

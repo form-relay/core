@@ -64,7 +64,7 @@ class RelayTest extends TestCase
             'configuration' => [[
                 'async' => true,
                 'routes' => [
-                    'spiedOn' => [
+                    'generic' => [
                         'enabled' => true,
                         'fields' => [
                             'field1' => ['field' => 'field1'],
@@ -76,7 +76,7 @@ class RelayTest extends TestCase
             ]],
             'context' => [
                 'job' => [
-                    'route' => 'spiedOn',
+                    'route' => 'generic',
                     'pass' => 0,
                 ],
             ],
