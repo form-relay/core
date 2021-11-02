@@ -5,6 +5,7 @@ namespace FormRelay\Core\Service;
 use FormRelay\Core\DataProvider\DataProviderInterface;
 use FormRelay\Core\Exception\FormRelayException;
 use FormRelay\Core\Log\LoggerInterface;
+use FormRelay\Core\Model\Submission\Submission;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\Queue\JobInterface;
 use FormRelay\Core\Queue\QueueInterface;
@@ -56,8 +57,7 @@ class Relay implements RelayInterface
 
     protected function addJobToQueue(SubmissionInterface $submission, string $route, int $pass, int $status = QueueInterface::STATUS_PENDING): JobInterface
     {
-        $submission->getContext()->setInNamespace('job', 'route', $route);
-        $submission->getContext()->setInNamespace('job', 'pass', $pass);
+        $this->addRoutePassToContext($submission, $route, $pass);
         $jobData = $this->registry->getQueueDataFactory()->pack($submission);
         return $this->queue->addJob($jobData, $status);
     }
@@ -75,6 +75,12 @@ class Relay implements RelayInterface
     protected function getJobRoutePass(JobInterface $job): int
     {
         return $this->convertJobToSubmission($job)->getContext()->getFromNamespace('job', 'pass', 0);
+    }
+
+    protected function addRoutePassToContext(SubmissionInterface $submission, string $route, int $pass)
+    {
+        $submission->getContext()->setInNamespace('job', 'route', $route);
+        $submission->getContext()->setInNamespace('job', 'pass', $pass);
     }
 
     /**
@@ -145,11 +151,13 @@ class Relay implements RelayInterface
 
         if (!$async) {
             try {
+                $submission->getContext()->clearNamespace('job');
                 $this->processDataProviders($submission);
                 foreach ($jobs as $routeName => $jobsInRoute) {
                     foreach ($jobsInRoute as $pass => $job) {
                         try {
-                            $this->processRoutePass($submission, $route, $pass);
+                            $this->addRoutePassToContext($submission, $routeName, $pass);
+                            $this->processRoutePass($submission, $routeName, $pass);
                             $this->queue->markAsDone($job);
                         } catch (FormRelayException $e) {
                             $this->logger->error($e->getMessage());
