@@ -1,4 +1,12 @@
 
+2.0.2
+
+[BUGFIX] empty submission caused error during unpacking (LMSM21-188)
+
+[BUGFIX] default content resolver was able to overwrite an empty value with a null value
+
+[BUGFIX] fixed default content resolver for non-primitive field values
+
 2.0.1
 
 [BUGFIX] fixed field content resolver for invalid empty field names
