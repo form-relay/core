@@ -50,7 +50,11 @@ class QueueDataFactory implements QueueDataFactoryInterface
         return $result;
     }
 
-    public function unpack(array $data): SubmissionInterface
+    /**
+     * @param array $data
+     * @throws FormRelayException
+     */
+    protected function validatePackage(array $data)
     {
         if (!$data || !is_array($data) || empty($data)) {
             throw new FormRelayException('job data is empty');
@@ -64,6 +68,16 @@ class QueueDataFactory implements QueueDataFactoryInterface
         if (!isset($data['context']) || !is_array($data['context'])) {
             throw new FormRelayException('job has no valid submission context');
         }
+    }
+
+    /**
+     * @param array $data
+     * @return SubmissionInterface
+     * @throws FormRelayException
+     */
+    public function unpack(array $data): SubmissionInterface
+    {
+        $this->validatePackage($data);
         return new Submission($this->unpackData($data['data']), $data['configuration'], $data['context']);
     }
 }
