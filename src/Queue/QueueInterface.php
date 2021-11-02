@@ -22,9 +22,9 @@ interface QueueInterface
 
     public function markListAsRunning(array $jobs);
     public function markListAsDone(array $jobs);
-    public function markListAsFailed(array $jobs);
+    public function markListAsFailed(array $jobs, string $message = '');
 
-    public function addJob(array $data, $status = self::STATUS_PENDING);
+    public function addJob(array $data, $status = self::STATUS_PENDING): JobInterface;
     public function removeJob(JobInterface $job);
 
     public function removeOldJobs(int $minAgeInSeconds, array $status = []);

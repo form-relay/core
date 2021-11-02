@@ -30,7 +30,7 @@ class NonPersistentQueue implements QueueInterface
             if ($count > $offset) {
                 $result[] = $job;
             }
-            if ($count >= $limit) {
+            if ($limit > 0 && ($count - $offset) >= $limit) {
                 break;
             }
         }
@@ -103,20 +103,21 @@ class NonPersistentQueue implements QueueInterface
         }
     }
 
-    public function markListAsFailed(array $jobs)
+    public function markListAsFailed(array $jobs, string $message = '')
     {
         foreach ($jobs as $job) {
-            $this->markAsFailed($job);
+            $this->markAsFailed($job, $message);
         }
     }
 
-    public function addJob(array $data, $status = QueueInterface::STATUS_PENDING)
+    public function addJob(array $data, $status = QueueInterface::STATUS_PENDING): JobInterface
     {
         $job = new SubmissionJob();
         $job->setId($this->index++);
         $job->setData($data);
         $job->setStatus($status);
         $this->queue[] = $job;
+        return $job;
     }
 
     public function removeJob(JobInterface $job)

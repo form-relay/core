@@ -283,6 +283,7 @@ class Registry implements RegistryInterface
     {
         return [
             'async' => false,
+            'disableStorage' => false,
         ];
     }
 
