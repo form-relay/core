@@ -36,7 +36,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: composer:v2
+          coverage: xdebug
+          tools: composer:v2, phpunit:latest
 
       - name: Run test suite
         run: composer run-script testdox
