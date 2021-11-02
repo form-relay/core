@@ -96,11 +96,15 @@ class Relay implements RelayInterface
     public function processJob(JobInterface $job)
     {
         try {
+            if ($job->getStatus() !== QueueInterface::STATUS_RUNNING) {
+                $this->queue->markAsRunning($job);
+            }
             $submission = $this->convertJobToSubmission($job);
             $this->processDataProviders($submission);
             $route = $this->getJobRouteName($job);
             $pass = $this->getJobRoutePass($job);
             $this->processRoutePass($submission, $route, $pass);
+            $this->queue->markAsDone($job);
         } catch (FormRelayException $e) {
             $this->logger->error($e->getMessage());
             $this->queue->markAsFailed($job, $e->getMessage());
