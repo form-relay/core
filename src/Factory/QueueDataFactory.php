@@ -2,6 +2,7 @@
 
 namespace FormRelay\Core\Factory;
 
+use FormRelay\Core\Exception\FormRelayException;
 use FormRelay\Core\Model\Form\FieldInterface;
 use FormRelay\Core\Model\Submission\Submission;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
@@ -49,8 +50,34 @@ class QueueDataFactory implements QueueDataFactoryInterface
         return $result;
     }
 
+    /**
+     * @param array $data
+     * @throws FormRelayException
+     */
+    protected function validatePackage(array $data)
+    {
+        if (!$data || !is_array($data) || empty($data)) {
+            throw new FormRelayException('job data is empty');
+        }
+        if (!isset($data['data']) || !is_array($data['data'])) {
+            throw new FormRelayException('job has no valid submission data');
+        }
+        if (!isset($data['configuration']) || !is_array($data['configuration'])) {
+            throw new FormRelayException('job has no valid submission configuration');
+        }
+        if (!isset($data['context']) || !is_array($data['context'])) {
+            throw new FormRelayException('job has no valid submission context');
+        }
+    }
+
+    /**
+     * @param array $data
+     * @return SubmissionInterface
+     * @throws FormRelayException
+     */
     public function unpack(array $data): SubmissionInterface
     {
+        $this->validatePackage($data);
         return new Submission($this->unpackData($data['data']), $data['configuration'], $data['context']);
     }
 }
