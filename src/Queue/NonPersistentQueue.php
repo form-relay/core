@@ -30,7 +30,7 @@ class NonPersistentQueue implements QueueInterface
             if ($count > $offset) {
                 $result[] = $job;
             }
-            if ($count >= $limit) {
+            if ($limit > 0 && ($count - $offset) >= $limit) {
                 break;
             }
         }
