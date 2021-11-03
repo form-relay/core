@@ -38,5 +38,8 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           tools: composer:v2
 
-      - name: Run test suite
-        run: composer run-script testdox
+      - name: Run unit tests
+          run: composer run-script unit-testdox
+
+      - name: Run integration tests
+          run: composer run-script integration-testdox
