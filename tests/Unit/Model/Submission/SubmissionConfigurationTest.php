@@ -339,4 +339,96 @@ class SubmissionConfigurationTest extends TestCase
             'key3' => 'value3',
         ], $pass3);
     }
+
+    /** @test */
+    public function routePassConfigurationIndicesNotContinuous()
+    {
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => [
+                        'key1' => 'value1',
+                        'passes' => [
+                            10 => [
+                                'key1' => 'value1.1',
+                            ],
+                            20 => [
+                                'key1' => 'value1.2',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $this->assertEquals(2, $this->subject->getRoutePassCount('route1'));
+
+        $pass1 = $this->subject->getRoutePassConfiguration('route1', 0);
+        $this->assertEquals('value1.1', $pass1['key1']);
+
+        $pass2 = $this->subject->getRoutePassConfiguration('route1', 1);
+        $this->assertEquals('value1.2', $pass2['key1']);
+    }
+
+    /** @test */
+    public function routePassConfigurationIndicesNotNumerical()
+    {
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => [
+                        'key1' => 'value1',
+                        'passes' => [
+                            'pass1' => [
+                                'key1' => 'value1.1',
+                            ],
+                            'pass2' => [
+                                'key1' => 'value1.2',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $this->assertEquals(2, $this->subject->getRoutePassCount('route1'));
+
+        $pass1 = $this->subject->getRoutePassConfiguration('route1', 0);
+        $this->assertEquals('value1.1', $pass1['key1']);
+
+        $pass2 = $this->subject->getRoutePassConfiguration('route1', 1);
+        $this->assertEquals('value1.2', $pass2['key1']);
+    }
+
+    /** @test */
+    public function routePassConfigurationOrder()
+    {
+        // TODO the pass indices should be sorted numerical
+        $this->markTestSkipped();
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => [
+                        'key1' => 'value1',
+                        'passes' => [
+                            20 => [
+                                'key1' => 'value1.2',
+                            ],
+                            10 => [
+                                'key1' => 'value1.1',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $this->assertEquals(2, $this->subject->getRoutePassCount('route1'));
+
+        $pass1 = $this->subject->getRoutePassConfiguration('route1', 0);
+        $this->assertEquals('value1.1', $pass1['key1']);
+
+        $pass2 = $this->subject->getRoutePassConfiguration('route1', 1);
+        $this->assertEquals('value1.2', $pass2['key1']);
+    }
 }
