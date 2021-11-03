@@ -39,7 +39,7 @@ jobs:
           tools: composer:v2
 
       - name: Run unit tests
-          run: composer run-script unit-testdox
+        run: composer run-script unit-testdox
 
       - name: Run integration tests
-          run: composer run-script integration-testdox
+        run: composer run-script integration-testdox
