@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\ContentResolver\LowerCaseContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\LowerCaseEvaluation;
 
+/**
+ * @covers LowerCaseEvaluation
+ */
 class LowerCaseEvaluationTest extends AbstractModifierEvaluationTest
 {
     const KEYWORD = 'lowerCase';

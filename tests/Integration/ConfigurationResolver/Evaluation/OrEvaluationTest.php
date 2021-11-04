@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\OrEvaluation;
 
+/**
+ * @covers OrEvaluation
+ */
 class OrEvaluationTest extends AbstractEvaluationTest
 {
     protected function setUp(): void

@@ -7,6 +7,9 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\IsFalseEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\IsTrueEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 
+/**
+ * @covers IsTrueEvaluation
+ */
 class IsTrueEvaluationTest extends IsFalseEvaluationTest
 {
     const KEYWORD = 'isTrue';

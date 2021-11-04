@@ -11,6 +11,9 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\SwitchValueMapper;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Tests\Integration\ConfigurationResolver\AbstractConfigurationResolverTest;
 
+/**
+ * @covers SwitchValueMapper
+ */
 class SwitchValueMapperTest extends AbstractValueMapperTest
 {
     protected function setUp(): void

@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SplitContentResolver;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
+/**
+ * @covers SplitContentResolver
+ */
 class SplitContentResolverTest extends AbstractContentResolverTest
 {
     protected function setUp(): void

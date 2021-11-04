@@ -4,6 +4,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldCollectorContentResolver;
 
+/**
+ * @covers FieldCollectorContentResolver
+ */
 class FieldCollectorContentResolverTest extends AbstractContentResolverTest
 {
     protected function setUp(): void

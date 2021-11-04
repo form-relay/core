@@ -2,10 +2,21 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
+use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
+/**
+ * @covers GeneralEvaluation
+ */
 class GeneralEvaluationTest extends AbstractEvaluationTest
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->registry->registerEvaluation(GeneralEvaluation::class);
+    }
+
+
     public function provider()
     {
         $scalar1 = 'value1';

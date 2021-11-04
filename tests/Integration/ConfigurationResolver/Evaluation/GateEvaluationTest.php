@@ -6,6 +6,9 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GateEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\OrEvaluation;
 
+/**
+ * @covers GateEvaluation
+ */
 class GateEvaluationTest extends AbstractEvaluationTest
 {
     protected function setUp(): void

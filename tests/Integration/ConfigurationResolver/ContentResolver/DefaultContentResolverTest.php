@@ -6,6 +6,9 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\DefaultContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
+/**
+ * @covers DefaultContentResolver
+ */
 class DefaultContentResolverTest extends AbstractContentResolverTest
 {
     protected function setUp(): void

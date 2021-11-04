@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\ContentResolver\JoinContentResolver;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
+/**
+ * @covers JoinContentResolver
+ */
 class JoinContentResolverTest extends AbstractContentResolverTest
 {
     protected function setUp(): void

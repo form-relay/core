@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\Model\Form\MultiValueField;
 
+/**
+ * @covers MultiValueContentResolver
+ */
 class MultiValueContentResolverTest extends AbstractContentResolverTest
 {
     const RESOLVER_CLASS = MultiValueContentResolver::class;

@@ -4,6 +4,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\LowerCaseContentResolver;
 
+/**
+ * @covers LowerCaseContentResolver
+ */
 class LowerCaseContentResolverTest extends AbstractModifierContentResolverTest
 {
     const KEYWORD = 'lowerCase';

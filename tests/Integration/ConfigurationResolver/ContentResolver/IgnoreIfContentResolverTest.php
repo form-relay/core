@@ -4,6 +4,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfContentResolver;
 
+/**
+ * @covers IgnoreIfEmptyContentResolver
+ */
 class IgnoreIfContentResolverTest extends IgnoreContentResolverTest
 {
     const KEYWORD = 'ignoreIf';

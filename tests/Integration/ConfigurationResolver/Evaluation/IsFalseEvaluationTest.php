@@ -4,6 +4,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 
 use FormRelay\Core\ConfigurationResolver\Evaluation\IsFalseEvaluation;
 
+/**
+ * @covers IsFalseEvaluation
+ */
 class IsFalseEvaluationTest extends AbstractIsEvaluationTest
 {
     const KEYWORD = 'isFalse';

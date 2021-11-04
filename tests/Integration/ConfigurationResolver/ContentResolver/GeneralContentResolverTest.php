@@ -2,11 +2,21 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
+use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\Model\Form\MultiValueField;
 
+/**
+ * @covers GeneralContentResolver
+ */
 class GeneralContentResolverTest extends AbstractContentResolverTest
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->registry->registerContentResolver(GeneralContentResolver::class);
+    }
+
     /** @test */
     public function singleValue()
     {

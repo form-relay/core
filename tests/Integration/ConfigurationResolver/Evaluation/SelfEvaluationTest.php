@@ -2,11 +2,21 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
+use FormRelay\Core\ConfigurationResolver\Evaluation\SelfEvaluation;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
+/**
+ * @covers SelfEvaluation
+ */
 class SelfEvaluationTest extends AbstractEvaluationTest
 {
     const KEY_SELF = SubmissionConfigurationInterface::KEY_SELF;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->registry->registerEvaluation(SelfEvaluation::class);
+    }
 
     /** @test */
     public function evalFalseReturnsFalse()

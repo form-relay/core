@@ -4,11 +4,21 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ValueMapper;
 
 use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
+use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Tests\Integration\ConfigurationResolver\AbstractConfigurationResolverTest;
 
+/**
+ * @covers SelfValueMapper
+ */
 class SelfValueMapperTest extends AbstractValueMapperTest
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->registry->registerValueMapper(SelfValueMapper::class);
+    }
+
     // TODO there is legacy code trying to fetch the field value from the context if null is passed
     //      which doesn't really make sense anymore and also messes up this test
     /** @test */

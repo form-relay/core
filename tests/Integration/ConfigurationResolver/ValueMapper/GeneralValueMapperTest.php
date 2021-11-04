@@ -9,8 +9,17 @@ use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Tests\Integration\ConfigurationResolver\AbstractConfigurationResolverTest;
 
+/**
+ * @covers GeneralValueMapper
+ */
 class GeneralValueMapperTest extends AbstractValueMapperTest
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->registry->registerValueMapper(GeneralValueMapper::class);
+    }
+
     // TODO there is legacy code trying to fetch the field value from the context if null is passed
     //      which doesn't really make sense anymore and also messes up this test
     /** @test */

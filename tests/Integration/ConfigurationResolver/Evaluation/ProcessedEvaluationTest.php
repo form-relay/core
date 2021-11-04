@@ -4,6 +4,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 
 use FormRelay\Core\ConfigurationResolver\Evaluation\ProcessedEvaluation;
 
+/**
+ * @covers ProcessedEvaluation
+ */
 class ProcessedEvaluationTest extends AbstractEvaluationTest
 {
     protected function setUp(): void

@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfEmptyContentResolver;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
+/**
+ * @covers IgnoreIfEmptyContentResolver
+ */
 class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
 {
     protected function setUp(): void

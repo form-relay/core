@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\Evaluation\RegexpEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 
+/**
+ * @covers RegexpEvaluation
+ */
 class RegexpEvaluationTest extends AbstractEvaluationTest
 {
     protected function setUp(): void

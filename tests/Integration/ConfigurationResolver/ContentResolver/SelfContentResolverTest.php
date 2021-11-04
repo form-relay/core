@@ -2,12 +2,22 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
+use FormRelay\Core\ConfigurationResolver\ContentResolver\SelfContentResolver;
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
+/**
+ * @covers SelfContentResolver
+ */
 class SelfContentResolverTest extends AbstractContentResolverTest
 {
     const KEY_SELF = SubmissionConfigurationInterface::KEY_SELF;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->registry->registerContentResolver(SelfContentResolver::class);
+    }
 
     /** @test */
     public function nullReturnsNull()

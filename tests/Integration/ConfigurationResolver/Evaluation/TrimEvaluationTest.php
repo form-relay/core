@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\TrimEvaluation;
 
+/**
+ * @covers TrimEvaluation
+ */
 class TrimEvaluationTest extends AbstractModifierEvaluationTest
 {
     const KEYWORD = 'trim';

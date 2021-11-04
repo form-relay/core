@@ -11,6 +11,9 @@ use FormRelay\Core\Model\Submission\Submission;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers QueueDataFactory
+ */
 class QueueDataFactoryTest extends TestCase
 {
     /** @var QueueDataFactory $subject */

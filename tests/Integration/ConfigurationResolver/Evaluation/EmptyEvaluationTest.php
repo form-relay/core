@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\Evaluation\EmptyEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 
+/**
+ * @covers EmptyEvaluation
+ */
 class EmptyEvaluationTest extends AbstractIsEvaluationTest
 {
     const KEYWORD = 'empty';

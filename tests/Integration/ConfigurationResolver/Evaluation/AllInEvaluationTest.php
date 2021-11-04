@@ -6,6 +6,9 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AllInEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 
+/**
+ * @covers AllInEvaluation
+ */
 class AllInEvaluationTest extends AbstractEvaluationTest
 {
     protected function setUp(): void

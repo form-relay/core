@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\ContentResolver\UpperCaseContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\UpperCaseEvaluation;
 
+/**
+ * @covers UpperCaseEvaluation
+ */
 class UpperCaseEvaluationTest extends AbstractModifierEvaluationTest
 {
     const KEYWORD = 'upperCase';

@@ -6,6 +6,9 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\InsertDataContentResolv
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
+/**
+ * @covers InsertDataContentResolver
+ */
 class InsertDataContentResolverTest extends AbstractContentResolverTest
 {
     protected function setUp(): void

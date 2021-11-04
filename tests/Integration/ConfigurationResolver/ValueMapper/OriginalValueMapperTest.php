@@ -9,6 +9,9 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\OriginalValueMapper;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Tests\Integration\ConfigurationResolver\AbstractConfigurationResolverTest;
 
+/**
+ * @covers OriginalValueMapper
+ */
 class OriginalValueMapperTest extends AbstractValueMapperTest
 {
     protected function setUp(): void

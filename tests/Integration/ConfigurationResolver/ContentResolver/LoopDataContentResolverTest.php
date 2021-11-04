@@ -11,6 +11,9 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\KeyEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
+/**
+ * @covers LoopDataContentResolver
+ */
 class LoopDataContentResolverTest extends AbstractContentResolverTest
 {
     protected function setUp(): void

@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldContentResolver;
 use FormRelay\Core\Model\Form\MultiValueField;
 
+/**
+ * @covers FieldContentResolver
+ */
 class FieldContentResolverTest extends AbstractContentResolverTest
 {
     protected function setUp(): void

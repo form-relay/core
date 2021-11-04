@@ -2,11 +2,17 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
+use FormRelay\Core\ConfigurationResolver\Evaluation\EqualsEvaluation;
+
+/**
+ * @covers EqualsEvaluation
+ */
 class EqualsEvaluationTest extends AbstractEvaluationTest
 {
     protected function setUp(): void
     {
         parent::setUp();
+        $this->registry->registerEvaluation(EqualsEvaluation::class);
         $this->setupDummyData();
     }
 

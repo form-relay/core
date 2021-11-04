@@ -4,6 +4,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 
 use FormRelay\Core\ConfigurationResolver\Evaluation\ExistsEvaluation;
 
+/**
+ * @covers ExistsEvaluation
+ */
 class ExistsEvaluationTest extends AbstractEvaluationTest
 {
     protected function setUp(): void

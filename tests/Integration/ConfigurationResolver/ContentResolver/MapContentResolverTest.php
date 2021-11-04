@@ -5,9 +5,12 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MapContentResolver;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
-// NOTE more elaborate tests on value mappers can be found under the namespace
-//      FormRelay\Core\Tests\Integration\ConfigurationResolver\ValueMapper
-
+/**
+ * NOTE: more elaborate tests on value mappers can be found under the namespace
+ *       FormRelay\Core\Tests\Integration\ConfigurationResolver\ValueMapper
+ *
+ * @covers MapContentResolver
+ */
 class MapContentResolverTest extends AbstractContentResolverTest
 {
     protected function setUp(): void

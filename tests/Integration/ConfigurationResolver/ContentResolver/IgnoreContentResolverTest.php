@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreContentResolver;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
+/**
+ * @covers IgnoreContentResolver
+ */
 class IgnoreContentResolverTest extends AbstractContentResolverTest
 {
     const KEYWORD = 'ignore';

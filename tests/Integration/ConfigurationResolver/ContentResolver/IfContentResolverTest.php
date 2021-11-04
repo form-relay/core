@@ -6,6 +6,9 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IfContentResolver;
 use FormRelay\Core\Model\Form\MultiValueField;
 
+/**
+ * @covers IfContentResolver
+ */
 class IfContentResolverTest extends AbstractContentResolverTest
 {
     protected function setUp(): void

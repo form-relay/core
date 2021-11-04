@@ -4,6 +4,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 
 use FormRelay\Core\ConfigurationResolver\Evaluation\KeyEvaluation;
 
+/**
+ * @covers KeyEvaluation
+ */
 class KeyEvaluationTest extends AbstractEvaluationTest
 {
     protected function setUp(): void

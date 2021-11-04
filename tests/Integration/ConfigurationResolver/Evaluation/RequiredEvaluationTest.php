@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\Evaluation\RequiredEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 
+/**
+ * @covers RequiredEvaluation
+ */
 class RequiredEvaluationTest extends AbstractEvaluationTest
 {
     protected function setUp(): void

@@ -6,6 +6,9 @@ use FormRelay\Core\Service\Relay;
 use FormRelay\Core\Tests\Integration\RelayTestTrait;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers Relay
+ */
 class RelayTest extends TestCase
 {
     use RelayTestTrait;

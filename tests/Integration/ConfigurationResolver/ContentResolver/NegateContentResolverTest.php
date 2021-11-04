@@ -7,6 +7,9 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\NegateContentResolver;
 use FormRelay\Core\Model\Form\DiscreteMultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
+/**
+ * @covers NegateContentResolver
+ */
 class NegateContentResolverTest extends AbstractContentResolverTest
 {
     protected function setUp(): void

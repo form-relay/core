@@ -5,6 +5,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
 
+/**
+ * @covers InEvaluation
+ */
 class InEvaluationTest extends AbstractEvaluationTest
 {
     protected function setUp(): void

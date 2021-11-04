@@ -8,6 +8,9 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\IfValueMapper;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Tests\Integration\ConfigurationResolver\AbstractConfigurationResolverTest;
 
+/**
+ * @covers IfValueMapper
+ */
 class IfValueMapperTest extends AbstractValueMapperTest
 {
     protected function setUp(): void

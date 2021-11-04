@@ -4,6 +4,9 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 
 use FormRelay\Core\ConfigurationResolver\Evaluation\NotEvaluation;
 
+/**
+ * @covers NotEvaluation
+ */
 class NotEvaluationTest extends AbstractEvaluationTest
 {
     protected function setUp(): void
