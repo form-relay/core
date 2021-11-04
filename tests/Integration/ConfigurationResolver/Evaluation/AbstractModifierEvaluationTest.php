@@ -1,8 +1,9 @@
 <?php
 
-namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
+namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
+use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 
 abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
@@ -39,6 +40,7 @@ abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
     public function modifyMultiValue($value, $modifiedValue)
     {
         $this->registry->registerContentResolver(MultiValueContentResolver::class);
+        $this->registry->registerEvaluation(InEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField($value);
         $config = [
             'field1' => [
