@@ -44,8 +44,8 @@ abstract class AbstractRelay
 
     protected function addJobToQueue(SubmissionInterface $submission, string $route, int $pass)
     {
-        $submission->getContext()['job']['route'] = $route;
-        $submission->getContext()['job']['pass'] = $pass;
+        $submission->getContext()->setInNamespace('job', 'route', $route);
+        $submission->getContext()->setInNamespace('job', 'pass', $pass);
         $jobData = $this->registry->getQueueDataFactory()->pack($submission);
         $this->registry->getQueue()->addJob($jobData);
     }
