@@ -114,8 +114,8 @@ class NonPersistentQueue implements QueueInterface
     {
         $job = new SubmissionJob();
         $job->setId($this->index++);
-        $job->setData($data);
         $job->setStatus($status);
+        $job->setData($data);
         $this->queue[] = $job;
         return $job;
     }

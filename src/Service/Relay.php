@@ -10,6 +10,7 @@ use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\Queue\JobInterface;
 use FormRelay\Core\Queue\QueueInterface;
 use FormRelay\Core\Route\RouteInterface;
+use FormRelay\Core\Utility\GeneralUtility;
 
 class Relay implements RelayInterface
 {
@@ -77,10 +78,25 @@ class Relay implements RelayInterface
         return $this->convertJobToSubmission($job)->getContext()->getFromNamespace('job', 'pass', 0);
     }
 
+    protected function addSubmissionHash(SubmissionInterface $submission, bool $short = true): string
+    {
+        $packed = $this->registry->getQueueDataFactory()->pack($submission);
+        $hash = GeneralUtility::calculateHash($packed);
+        $shortHash = GeneralUtility::shortenHash($hash);
+        $submission->getContext()->setInNamespace('submission', 'hash', $hash);
+        $submission->getContext()->setInNamespace('submission', 'short-hash', $shortHash);
+        return $short ? $shortHash : $hash;
+    }
+
     protected function addRoutePassToContext(SubmissionInterface $submission, string $route, int $pass)
     {
+        $hash = $this->addSubmissionHash($submission);
+        $submission->getContext()->clearNamespace('job');
         $submission->getContext()->setInNamespace('job', 'route', $route);
         $submission->getContext()->setInNamespace('job', 'pass', $pass);
+
+        $label = $hash . '#' . $submission->getConfiguration()->getRoutePassLabel($route, $pass);
+        $submission->getContext()->setInNamespace('job', 'label', $label);
     }
 
     /**

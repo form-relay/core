@@ -199,4 +199,50 @@ class GeneralUtilityTest extends TestCase
         }
         $this->assertEquals($expected, $result);
     }
+
+    public function calculateHashProvider(): array
+    {
+        return [
+            [[], false, 'undefined'],
+            [[], true, 'undefined'],
+            [['key1' => 'value1'], false, 'E2E517365FFE6FEDD279364E3FA74786'],
+            [['key1' => 'value1'], true, 'E2E51'],
+        ];
+    }
+
+    /**
+     * @param $submission
+     * @param $short
+     * @param $expected
+     * @dataProvider calculateHashProvider
+     * @test
+     */
+    public function calculateHash($submission, $short, $expected)
+    {
+        $result = GeneralUtility::calculateHash($submission, $short);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function shortenHashProvider(): array
+    {
+        return [
+            ['', ''],
+            ['A', 'A'],
+            ['ABCDE', 'ABCDE'],
+            ['ABCDEF', 'ABCDE'],
+            ['ABCDEFGHIJKLM', 'ABCDE'],
+        ];
+    }
+
+    /**
+     * @param $hash
+     * @param $expected
+     * @dataProvider shortenHashProvider
+     * @test
+     */
+    public function shortenHash($hash, $expected)
+    {
+        $result = GeneralUtility::shortenHash($hash);
+        $this->assertEquals($expected, $result);
+    }
 }

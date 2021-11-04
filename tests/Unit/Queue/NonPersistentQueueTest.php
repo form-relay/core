@@ -32,13 +32,15 @@ class NonPersistentQueueTest extends TestCase
     public function addOneJob()
     {
         $data = ['value1'];
-        $this->subject->addJob($data);
+        /** @var JobInterface $job */
+        $job = $this->subject->addJob($data);
+        $this->assertInstanceOf(JobInterface::class, $job);
+        $this->assertEquals($data, $job->getData());
+        $this->assertEquals(QueueInterface::STATUS_PENDING, $job->getStatus());
 
         $jobs = $this->subject->fetch();
         $this->assertCount(1, $jobs);
-        $this->assertInstanceOf(JobInterface::class, $jobs[0]);
-        $this->assertEquals($data, $jobs[0]->getData());
-        $this->assertEquals(QueueInterface::STATUS_PENDING, $jobs[0]->getStatus());
+        $this->assertEquals($job, $jobs[0]);
     }
 
     /**
@@ -49,43 +51,24 @@ class NonPersistentQueueTest extends TestCase
     public function addOneJobWithStatus($status)
     {
         $data = ['value1'];
-        $this->subject->addJob($data, $status);
+        $job = $this->subject->addJob($data, $status);
+        $this->assertInstanceOf(JobInterface::class, $job);
+        $this->assertEquals($data, $job->getData());
+        $this->assertEquals($status, $job->getStatus());
 
         $jobs = $this->subject->fetch();
         $this->assertCount(1, $jobs);
-        $this->assertInstanceOf(JobInterface::class, $jobs[0]);
-        $this->assertEquals($data, $jobs[0]->getData());
-        $this->assertEquals($status, $jobs[0]->getStatus());
+        $this->assertEquals($job, $jobs[0]);
     }
 
     /** @test */
     public function addTwoJobs()
     {
-        $data = ['value1'];
-        $this->subject->addJob($data);
-
-        $jobs = $this->subject->fetch();
-        $this->assertCount(1, $jobs);
-        $this->assertInstanceOf(JobInterface::class, $jobs[0]);
-        $this->assertEquals($data, $jobs[0]->getData());
-
-        $data2 = ['value2'];
-        $this->subject->addJob($data2);
+        $this->subject->addJob(['value1']);
+        $this->subject->addJob(['value2']);
 
         $jobs = $this->subject->fetch();
         $this->assertCount(2, $jobs);
-
-        $this->assertInstanceOf(JobInterface::class, $jobs[0]);
-        $this->assertThat($jobs[0]->getData(), $this->logicalOr(
-            $this->equalTo($data),
-            $this->equalTo($data2)
-        ));
-
-        $this->assertInstanceOf(JobInterface::class, $jobs[1]);
-        $this->assertThat($jobs[1]->getData(), $this->logicalOr(
-            $this->equalTo($data),
-            $this->equalTo($data2)
-        ));
     }
 
     /** @test */
@@ -333,11 +316,10 @@ class NonPersistentQueueTest extends TestCase
      */
     public function fetchRunningWithMinTimeInSecondsSinceChanged($expectedCount, $status, $minAge, $modify)
     {
-        $this->subject->addJob(['value1'], $status);
+        /** @var JobInterface $job */
+        $job = $this->subject->addJob(['value1'], $status);
 
         if ($modify) {
-            /** @var JobInterface $job */
-            $job = $this->subject->fetch()[0];
             $job->getChanged()->modify($modify);
         }
 
@@ -348,28 +330,57 @@ class NonPersistentQueueTest extends TestCase
     /** @test */
     public function removeAllOldJobs()
     {
-        $this->subject->addJob(['value1'], QueueInterface::STATUS_PENDING);
+        $this->subject->addJob(['value1'], QueueInterface::STATUS_DONE);
         $this->subject->addJob(['value2'], QueueInterface::STATUS_PENDING);
         $this->subject->addJob(['value3'], QueueInterface::STATUS_DONE);
-        $this->subject->addJob(['value4'], QueueInterface::STATUS_FAILED);
+        $this->subject->addJob(['value4'], QueueInterface::STATUS_DONE);
         $this->subject->addJob(['value5'], QueueInterface::STATUS_RUNNING);
-        $this->subject->addJob(['value6'], QueueInterface::STATUS_PENDING);
-        $this->markTestIncomplete();
-        // TODO continue with this test when the addJob method returns the created job
+        $this->subject->addJob(['value6'], QueueInterface::STATUS_FAILED);
+        $this->subject->addJob(['value7'], QueueInterface::STATUS_PENDING);
+
+        $jobs = $this->subject->fetch();
+        $this->assertCount(7, $jobs);
+
+        $jobs[0]->getCreated()->modify('-3 hours');
+        $jobs[1]->getCreated()->modify('-1 day');
+        $jobs[2]->getCreated()->modify('-10 minutes');
+        $jobs[3]->getCreated()->modify('-2 hours');
+        $jobs[4]->getCreated()->modify('+1 day');
+        $jobs[5]->getCreated()->modify('+10 minutes');
+        $jobs[6]->getCreated()->modify('+2 hours');
+
+        $this->subject->removeOldJobs(3600);
+
+        $remainingJobs = $this->subject->fetch();
+        $this->assertCount(4, $remainingJobs);
     }
 
     /** @test */
     public function removeOldJobsThatAreDone()
     {
-        $this->subject->addJob(['value1'], QueueInterface::STATUS_PENDING);
+        $this->subject->addJob(['value1'], QueueInterface::STATUS_DONE);
         $this->subject->addJob(['value2'], QueueInterface::STATUS_PENDING);
         $this->subject->addJob(['value3'], QueueInterface::STATUS_DONE);
-        $this->subject->addJob(['value4'], QueueInterface::STATUS_FAILED);
+        $this->subject->addJob(['value4'], QueueInterface::STATUS_DONE);
         $this->subject->addJob(['value5'], QueueInterface::STATUS_RUNNING);
-        $this->subject->addJob(['value6'], QueueInterface::STATUS_DONE);
+        $this->subject->addJob(['value6'], QueueInterface::STATUS_FAILED);
         $this->subject->addJob(['value7'], QueueInterface::STATUS_PENDING);
-        $this->markTestIncomplete();
-        // TODO continue with this test when the addJob method returns the created job
+
+        $jobs = $this->subject->fetch();
+        $this->assertCount(7, $jobs);
+
+        $jobs[0]->getCreated()->modify('-3 hours');
+        $jobs[1]->getCreated()->modify('-1 day');
+        $jobs[2]->getCreated()->modify('-10 minutes');
+        $jobs[3]->getCreated()->modify('-2 hours');
+        $jobs[4]->getCreated()->modify('+1 day');
+        $jobs[5]->getCreated()->modify('+10 minutes');
+        $jobs[6]->getCreated()->modify('+2 hours');
+
+        $this->subject->removeOldJobs(3600, [QueueInterface::STATUS_DONE]);
+
+        $remainingJobs = $this->subject->fetch();
+        $this->assertCount(5, $remainingJobs);
     }
 
     protected function markAs($status, $otherStatus, $method, $arguments = [], $expectedStatusMessage = '')

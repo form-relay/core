@@ -60,4 +60,31 @@ final class GeneralUtility
 
         return $array;
     }
+
+    public static function shortenHash(string $hash): string
+    {
+        if ($hash === 'undefined') {
+            return 'undefined';
+        }
+        return substr($hash, 0, 5);
+    }
+
+    public static function calculateHash(array $submission, bool $short = false): string
+    {
+        if (empty($submission)) {
+            return 'undefined';
+        }
+        if (isset($submission['context']['job'])) {
+            unset($submission['context']['job']);
+        }
+        if (isset($submission['context']['submission'])) {
+            unset($submission['context']['submission']);
+        }
+        $serialized = serialize($submission);
+        if (!$serialized) {
+            return 'undefined';
+        }
+        $hash = strtoupper(md5($serialized));
+        return $short ? static::shortenHash($hash) : $hash;
+    }
 }
