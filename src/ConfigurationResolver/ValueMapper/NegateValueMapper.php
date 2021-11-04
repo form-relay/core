@@ -2,6 +2,7 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ValueMapper;
 
+/** @deprecated  */
 class NegateValueMapper extends ValueMapper
 {
     const KEY_TRUE = 'true';

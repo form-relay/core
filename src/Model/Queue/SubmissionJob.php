@@ -18,7 +18,7 @@ class SubmissionJob implements JobInterface
     public function __construct()
     {
         $this->created = new DateTime();
-        $this->changed = null;
+        $this->changed = new DateTime();
         $this->status = QueueInterface::STATUS_PENDING;
         $this->statusMessage = '';
         $this->data = [];
