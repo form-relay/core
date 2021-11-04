@@ -62,7 +62,7 @@ class GeneralEvaluationTest extends AbstractEvaluationTest
             $config['else'] = $else;
         }
 
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
 
         if ($expected === null) {
             $this->assertNull($result);

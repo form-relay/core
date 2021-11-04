@@ -11,7 +11,7 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
     public function singleValue()
     {
         $config = 'value1';
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 
@@ -22,7 +22,7 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
             1 => 'value1',
             2 => 'value2',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1value2', $result);
     }
 
@@ -34,7 +34,7 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
             1 => 'value1',
             2 => 'value2',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1,value2', $result);
     }
 
@@ -46,7 +46,7 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
             1 => '',
             2 => '',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('', $result);
     }
 
@@ -58,7 +58,7 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
             1 => '',
             2 => 'value2',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value2', $result);
     }
 
@@ -70,7 +70,7 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
             1 => 'value1',
             2 => '',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 
@@ -84,7 +84,7 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
                 'multiValue' => ['value1', 'value2'],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1', 'value2'], $result);
     }
 
@@ -99,7 +99,7 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
                 'multiValue' => ['value1', 'value2'],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1', 'value2'], $result);
     }
 
@@ -120,7 +120,7 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
             ],
         ];
         /** @var MultiValueField $result */
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1,value2;value3,value4', $result);
     }
 
@@ -132,7 +132,7 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
             1 => null,
             2 => null,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertNull($result);
     }
 
@@ -144,7 +144,7 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
             1 => null,
             2 => 'value2',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value2', $result);
     }
 
@@ -156,7 +156,7 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
             1 => 'value1',
             2 => null,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 }

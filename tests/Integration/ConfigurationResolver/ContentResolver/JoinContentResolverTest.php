@@ -20,7 +20,7 @@ class JoinContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => null,
             'join' => true,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertNull($result);
     }
 
@@ -31,7 +31,7 @@ class JoinContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => 'value1',
             'join' => true,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 
@@ -42,7 +42,7 @@ class JoinContentResolverTest extends AbstractContentResolverTest
             'multiValue' => [5, 7, 17],
             'join' => true,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals("5\n7\n17", $result);
     }
 
@@ -55,7 +55,7 @@ class JoinContentResolverTest extends AbstractContentResolverTest
                 'glue' => ',',
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals("5,7,17", $result);
     }
 }

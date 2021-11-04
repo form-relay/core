@@ -18,7 +18,7 @@ class EqualsEvaluationTest extends AbstractEvaluationTest
                 'equals' => 'value1',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -30,7 +30,7 @@ class EqualsEvaluationTest extends AbstractEvaluationTest
                 'equals' => 'value4',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -41,7 +41,7 @@ class EqualsEvaluationTest extends AbstractEvaluationTest
             'field' => 'field1',
             'equals' => 'value1',
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -52,7 +52,7 @@ class EqualsEvaluationTest extends AbstractEvaluationTest
             'field' => 'field1',
             'equals' => 'value4',
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -67,7 +67,7 @@ class EqualsEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -82,7 +82,7 @@ class EqualsEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 }

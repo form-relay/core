@@ -28,7 +28,7 @@ abstract class AbstractIsEvaluationTest extends AbstractEvaluationTest
                 static::KEYWORD => $is,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         if ($expected) {
             $this->assertTrue($result);
         } else {
@@ -51,7 +51,7 @@ abstract class AbstractIsEvaluationTest extends AbstractEvaluationTest
                 static::KEYWORD => $is,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         if ($expected) {
             $this->assertTrue($result);
         } else {

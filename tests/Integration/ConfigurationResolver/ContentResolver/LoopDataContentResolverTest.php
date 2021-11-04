@@ -29,7 +29,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
         $config = [
             'loopData' => true,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals("field1 = value1\nfield2 = value2\nfield3 = value3\n", $result);
     }
 
@@ -45,7 +45,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
                 ],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals("field1:value1;field2:value2;field3:value3;", $result);
     }
 
@@ -59,7 +59,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
                 'glue' => ','
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1,value2,value3', $result);
     }
 
@@ -78,7 +78,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
                 ],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('field1=value1,field2=value2,field3=value3', $result);
     }
 
@@ -96,7 +96,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
                 'template' => ['field' => 'value'],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1,value3', $result);
     }
 
@@ -117,7 +117,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
                 'template' => ['field' => 'value'],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1,value3', $result);
     }
 
@@ -136,7 +136,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
                 'template' => ['field' => 'value'],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1,value2,value3', $result);
     }
 
@@ -154,7 +154,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
                 'template' => ['field' => 'value']
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('5,7,17;s;c,7,k', $result);
     }
 
@@ -167,7 +167,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
                 'template' => ['field' => 'value'],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals([5, 7, 17], $result);
     }
 
@@ -184,7 +184,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
                 ],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals("5\n7\n17", $result);
     }
 
@@ -203,7 +203,7 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
                 ],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('5-7-17', $result);
     }
 }

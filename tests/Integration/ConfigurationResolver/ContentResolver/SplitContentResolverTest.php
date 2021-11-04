@@ -76,7 +76,7 @@ class SplitContentResolverTest extends AbstractContentResolverTest
                 $config['split']['token'] = $token;
             }
         }
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals($expected, $result);
     }
 

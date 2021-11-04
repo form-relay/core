@@ -25,7 +25,7 @@ class OriginalValueMapperTest extends AbstractValueMapperTest
         $config = [
             'originalValue' => true,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 
@@ -47,7 +47,7 @@ class OriginalValueMapperTest extends AbstractValueMapperTest
                 ],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 }

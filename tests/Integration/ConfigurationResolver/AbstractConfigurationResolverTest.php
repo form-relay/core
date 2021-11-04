@@ -33,12 +33,24 @@ abstract class AbstractConfigurationResolverTest extends TestCase
 
     abstract protected function getGeneralResolverClass(): string;
 
-    protected function processResolver(GeneralConfigurationResolverInterface $resolver)
+    protected function executeResolver(GeneralConfigurationResolverInterface $resolver)
     {
         return $resolver->resolve();
     }
 
-    protected function runResolverTest($config)
+    /**
+     * This is the execution of the actual resolver process
+     *
+     * - build a submission based on the field data from $this->submissionData
+     *   (and $this->submissionConfiguration and $this->>submissionContext)
+     * - instantiate the general resolver
+     * - let the general resolver process the given configuration array $config
+     * - return the processed result so that it can be compared to the expected outcome
+     *
+     * @param $config
+     * @return mixed
+     */
+    protected function runResolverProcess($config)
     {
         $submission = $this->getSubmission();
         $context = new ConfigurationResolverContext($submission, $this->configurationResolverContext, $this->fieldTracker);
@@ -46,6 +58,6 @@ abstract class AbstractConfigurationResolverTest extends TestCase
         $resolverClass = $this->getGeneralResolverClass();
         $resolver = new $resolverClass($this->registry, $config, $context);
 
-        return $this->processResolver($resolver);
+        return $this->executeResolver($resolver);
     }
 }

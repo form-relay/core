@@ -21,7 +21,7 @@ class InEvaluationTest extends AbstractEvaluationTest
                 'in' => '4,5,6',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -37,7 +37,7 @@ class InEvaluationTest extends AbstractEvaluationTest
                 ]
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -50,7 +50,7 @@ class InEvaluationTest extends AbstractEvaluationTest
                 'in' => '4,5,6',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -68,7 +68,7 @@ class InEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -81,7 +81,7 @@ class InEvaluationTest extends AbstractEvaluationTest
                 'in' => '4,6,7',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -98,7 +98,7 @@ class InEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 }

@@ -22,7 +22,7 @@ abstract class AbstractValueMapperTest extends AbstractConfigurationResolverTest
         return GeneralValueMapper::class;
     }
 
-    protected function processResolver(GeneralConfigurationResolverInterface $resolver)
+    protected function executeResolver(GeneralConfigurationResolverInterface $resolver)
     {
         /** @var GeneralValueMapper $resolver */
         return $resolver->resolve($this->fieldValue);

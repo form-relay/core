@@ -35,7 +35,7 @@ class SwitchValueMapperTest extends AbstractValueMapperTest
                 ],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1b', $result);
     }
 
@@ -55,7 +55,7 @@ class SwitchValueMapperTest extends AbstractValueMapperTest
                 ],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 
@@ -75,7 +75,7 @@ class SwitchValueMapperTest extends AbstractValueMapperTest
                 ],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1b', $result);
     }
 
@@ -95,7 +95,7 @@ class SwitchValueMapperTest extends AbstractValueMapperTest
                 ],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 
@@ -114,7 +114,7 @@ class SwitchValueMapperTest extends AbstractValueMapperTest
                 ],
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('ifb', $result);
     }
 
@@ -136,7 +136,7 @@ class SwitchValueMapperTest extends AbstractValueMapperTest
                 ]
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1b', $result);
     }
 }

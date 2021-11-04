@@ -42,7 +42,7 @@ class RequiredEvaluationTest extends AbstractEvaluationTest
         $config = [
             'required' => $required,
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         if ($expected) {
             $this->assertTrue($result);
         } else {
@@ -65,7 +65,7 @@ class RequiredEvaluationTest extends AbstractEvaluationTest
         $config = [
             'required' => $required,
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         if ($expected) {
             $this->assertTrue($result);
         } else {

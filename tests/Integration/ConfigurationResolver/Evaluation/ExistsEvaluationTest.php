@@ -21,7 +21,7 @@ class ExistsEvaluationTest extends AbstractEvaluationTest
                 'exists' => true,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -33,7 +33,7 @@ class ExistsEvaluationTest extends AbstractEvaluationTest
                 'exists' => true,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -45,7 +45,7 @@ class ExistsEvaluationTest extends AbstractEvaluationTest
                 'exists' => false,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -57,7 +57,7 @@ class ExistsEvaluationTest extends AbstractEvaluationTest
                 'exists' => false,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 }

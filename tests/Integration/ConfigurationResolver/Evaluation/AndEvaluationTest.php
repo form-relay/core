@@ -11,7 +11,7 @@ class AndEvaluationTest extends AbstractEvaluationTest
     {
         parent::setUp();
         $this->registry->registerEvaluation(AndEvaluation::class);
-        $this->setupDummyData();
+        $this->setupDummyData(3);
     }
 
     /** @test */
@@ -24,7 +24,7 @@ class AndEvaluationTest extends AbstractEvaluationTest
                 'field3' => 'value3',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -38,7 +38,7 @@ class AndEvaluationTest extends AbstractEvaluationTest
                 'field3' => 'value6',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -52,7 +52,7 @@ class AndEvaluationTest extends AbstractEvaluationTest
                 'field3' => 'value3',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -76,7 +76,7 @@ class AndEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -100,7 +100,7 @@ class AndEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 }

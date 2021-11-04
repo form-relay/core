@@ -132,7 +132,7 @@ class GateEvaluationTest extends AbstractEvaluationTest
                 'pass' => $routePass,
             ];
         }
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         if ($expected) {
             $this->assertTrue($result);
         } else {

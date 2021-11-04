@@ -20,7 +20,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
         $config = [
             'default' => 'default1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('default1', $result);
     }
 
@@ -30,7 +30,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
         $config = [
             'default' => 'default1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('default1', $result);
     }
 
@@ -41,7 +41,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => '',
             'default' => 'default1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('default1', $result);
     }
 
@@ -54,7 +54,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
             'trim' => true,
             'default' => 'default1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('default1', $result);
     }
 
@@ -65,7 +65,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => 'value1',
             'default' => 'default1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 
@@ -76,7 +76,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
             'multiValue' => ['value1', 'value2'],
             'default' => 'default1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1','value2'], $result);
     }
 
@@ -87,7 +87,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
             'multiValue' => [],
             'default' => 'default1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('default1', $result);
     }
 
@@ -101,7 +101,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
             'multiValue' => [''],
             'default' => 'default1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals([''], $result);
     }
 
@@ -112,7 +112,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
             'multiValue' => ['', ''],
             'default' => 'default1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['',''], $result);
     }
 
@@ -124,7 +124,7 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
                 'multiValue' => ['value1', 'value2'],
             ]
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1','value2'], $result);
     }
 }

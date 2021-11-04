@@ -33,7 +33,7 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
         $config = [
             'fieldCollector' => true,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('', $result);
     }
 
@@ -43,7 +43,7 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
         $config = [
             'fieldCollector' => true,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals("field1 = value1\nfield2 = value2\nfield3 = value3\n", $result);
     }
 
@@ -80,7 +80,7 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
         if ($unprocessedOnly !== null) {
             $config['fieldCollector']['unprocessedOnly'] = $unprocessedOnly;
         }
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals($expected, $result);
     }
 
@@ -115,7 +115,7 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
         } else {
             $config['fieldCollector']['ignoreIfEmpty'] = $ignoreIfEmpty;
         }
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals($expected, $result);
     }
 
@@ -152,7 +152,7 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
         $config = [
             'fieldCollector' => $config,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals($expected, $result);
     }
 
@@ -182,7 +182,7 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
         if ($exclude !== null) {
             $config['fieldCollector']['exclude'] = $exclude;
         }
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals($expected, $result);
     }
 }

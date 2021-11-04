@@ -26,7 +26,7 @@ abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
                 static::KEYWORD => $modifiedValue,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -47,7 +47,7 @@ abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 }

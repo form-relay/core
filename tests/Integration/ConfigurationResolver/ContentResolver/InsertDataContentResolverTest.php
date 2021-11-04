@@ -37,7 +37,7 @@ class InsertDataContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => $template,
             'insertData' => $enabled
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         if ($expected === null) {
             $this->assertNull($result);
         } else {
@@ -66,7 +66,7 @@ class InsertDataContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => '{field1}',
             'insertData' => true,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals([5, 7, 17], $result);
     }
 
@@ -78,7 +78,7 @@ class InsertDataContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => 'field1: {field1}',
             'insertData' => true,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('field1: 5,7,17', $result);
     }
 }

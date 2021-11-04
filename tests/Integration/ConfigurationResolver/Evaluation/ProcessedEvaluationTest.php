@@ -24,7 +24,7 @@ class ProcessedEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -39,7 +39,7 @@ class ProcessedEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -54,7 +54,7 @@ class ProcessedEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -69,7 +69,7 @@ class ProcessedEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -82,7 +82,7 @@ class ProcessedEvaluationTest extends AbstractEvaluationTest
                 'processed' => true,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -95,7 +95,7 @@ class ProcessedEvaluationTest extends AbstractEvaluationTest
                 'processed' => false,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -108,7 +108,7 @@ class ProcessedEvaluationTest extends AbstractEvaluationTest
                 'processed' => false,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -121,7 +121,7 @@ class ProcessedEvaluationTest extends AbstractEvaluationTest
                 'processed' => true,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 }

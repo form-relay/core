@@ -17,7 +17,7 @@ class SelfValueMapperTest extends AbstractValueMapperTest
         $this->markTestSkipped();
         $this->fieldValue = null;
         $config = 'value1';
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertNull($result);
     }
 
@@ -26,7 +26,7 @@ class SelfValueMapperTest extends AbstractValueMapperTest
     {
         $this->fieldValue = 'value1';
         $config = 'value1b';
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1b', $result);
     }
 }

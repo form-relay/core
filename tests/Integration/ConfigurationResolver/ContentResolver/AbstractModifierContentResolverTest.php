@@ -19,7 +19,7 @@ abstract class AbstractModifierContentResolverTest extends AbstractContentResolv
             SubmissionConfigurationInterface::KEY_SELF => $value,
             static::KEYWORD => $enabled,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         if ($expected === null) {
             $this->assertNull($result);
         } else {
@@ -45,7 +45,7 @@ abstract class AbstractModifierContentResolverTest extends AbstractContentResolv
             'multiValue' => $value,
             static::KEYWORD => $enabled,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         if (empty($expected)) {
             $this->assertMultiValueEmpty($result);
         } else {
@@ -77,7 +77,7 @@ abstract class AbstractModifierContentResolverTest extends AbstractContentResolv
             static::KEYWORD => $enabled,
         ];
         /** @var MultiValueField $result */
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValue($result);
         $result = $result->toArray()[0];
         $this->assertMultiValueEquals($expected, $result);

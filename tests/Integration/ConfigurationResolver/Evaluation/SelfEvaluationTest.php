@@ -12,14 +12,14 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalFalseReturnsFalse()
     {
         $config = false;
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
     /** @test */
     public function evalSelfFalseReturnsFalse()
     {
         $config = [static::KEY_SELF => false];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -27,7 +27,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalTrueReturnsTrue()
     {
         $config = true;
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -35,7 +35,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalSelfTrueReturnsTrue()
     {
         $config = [static::KEY_SELF => true];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -43,7 +43,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalEmptyStringReturnsFalse()
     {
         $config = '';
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -51,7 +51,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalSelfEmptyStringReturnsFalse()
     {
         $config = [static::KEY_SELF => ''];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -59,7 +59,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalNonEmptyStringReturnsTrue()
     {
         $config = 'value1';
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -67,7 +67,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalSelfNonEmptyStringReturnsTrue()
     {
         $config = [static::KEY_SELF => 'value1'];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -75,7 +75,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalNullReturnsFalse()
     {
         $config = null;
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -83,7 +83,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalSelfNullReturnsFalse()
     {
         $config = [static::KEY_SELF => null];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -91,7 +91,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalStringZeroReturnsFalse()
     {
         $config = '0';
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -99,7 +99,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalSelfStringZeroReturnsFalse()
     {
         $config = [static::KEY_SELF => '0'];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -107,7 +107,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalStringOneReturnsTrue()
     {
         $config = '1';
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -115,7 +115,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalSelfStringOneReturnsTrue()
     {
         $config = [static::KEY_SELF => '1'];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -123,7 +123,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalIntZeroReturnsFalse()
     {
         $config = 0;
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -131,7 +131,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalSelfIntZeroReturnsFalse()
     {
         $config = [static::KEY_SELF => 0];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -139,7 +139,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalIntOneReturnsTrue()
     {
         $config = 1;
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -147,7 +147,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalSelfIntOneReturnsTrue()
     {
         $config = [static::KEY_SELF => 1];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -155,7 +155,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalIntPositiveReturnsTrue()
     {
         $config = 42;
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -163,7 +163,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     public function evalSelfIntPositiveReturnsTrue()
     {
         $config = [static::KEY_SELF => 42];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -176,7 +176,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
                 static::KEY_SELF => 'value1',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -189,7 +189,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
                 static::KEY_SELF => 'value2',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -202,7 +202,7 @@ class SelfEvaluationTest extends AbstractEvaluationTest
                 static::KEY_SELF => 'value1',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 }

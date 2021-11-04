@@ -22,25 +22,25 @@ abstract class AbstractEvaluationTest extends AbstractConfigurationResolverTest
         return GeneralEvaluation::class;
     }
 
-    protected function processResolver(GeneralConfigurationResolverInterface $resolver)
+    protected function executeResolver(GeneralConfigurationResolverInterface $resolver)
     {
         if ($this->eval) {
             /** @var GeneralEvaluation $resolver */
             return $resolver->eval();
         } else {
-            return parent::processResolver($resolver);
+            return parent::executeResolver($resolver);
         }
     }
 
-    protected function runResolverTest($config)
+    protected function runResolverProcess($config)
     {
         $this->eval = false;
-        return parent::runResolverTest($config);
+        return parent::runResolverProcess($config);
     }
 
-    protected function runEvaluationTest($config)
+    protected function runEvaluationProcess($config)
     {
         $this->eval = true;
-        return parent::runResolverTest($config);
+        return parent::runResolverProcess($config);
     }
 }

@@ -92,7 +92,7 @@ class NegateContentResolverTest extends AbstractContentResolverTest
         if ($false !== null || $useNullOnFalse) {
             $config['negate']['false'] = $false;
         }
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         if ($expected === null) {
             $this->assertNull($result);
         } else {
@@ -174,7 +174,7 @@ class NegateContentResolverTest extends AbstractContentResolverTest
         if ($false !== null || $useNullOnFalse) {
             $config['negate']['false'] = $false;
         }
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         if (empty($expected)) {
             $this->assertMultiValueEmpty($result);
         } else {
@@ -241,7 +241,7 @@ class NegateContentResolverTest extends AbstractContentResolverTest
             'discreteMultiValue' => ['0', '1', '0'],
             'negate' => true,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['1', '0', '1'], $result, DiscreteMultiValueField::class);
     }
 }

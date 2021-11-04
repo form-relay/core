@@ -19,7 +19,7 @@ class FieldContentResolverTest extends AbstractContentResolverTest
         $config = [
             'field' => 'field1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertNull($result);
     }
 
@@ -30,7 +30,7 @@ class FieldContentResolverTest extends AbstractContentResolverTest
         $config = [
             'field' => 'field1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 
@@ -41,7 +41,7 @@ class FieldContentResolverTest extends AbstractContentResolverTest
         $config = [
             'field' => 'field1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertNotNull($result);
         $this->assertEquals('', $result);
     }
@@ -53,7 +53,7 @@ class FieldContentResolverTest extends AbstractContentResolverTest
         $config = [
             'field' => 'field1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1','value2'], $result);
     }
 
@@ -64,7 +64,7 @@ class FieldContentResolverTest extends AbstractContentResolverTest
         $config = [
             'field' => 'field1',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEmpty($result);
     }
 }

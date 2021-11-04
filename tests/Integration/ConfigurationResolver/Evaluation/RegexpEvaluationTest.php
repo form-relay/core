@@ -54,7 +54,7 @@ class RegexpEvaluationTest extends AbstractEvaluationTest
                 'regexp' => $regexp,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         if ($match) {
             $this->assertTrue($result);
         } else {
@@ -77,7 +77,7 @@ class RegexpEvaluationTest extends AbstractEvaluationTest
                 'regexp' => $regexp,
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         if ($match) {
             $this->assertTrue($result);
         } else {

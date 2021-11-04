@@ -35,7 +35,7 @@ class IgnoreContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => 'value1',
             static::KEYWORD => $ignore,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         if ($ignored) {
             $this->assertNull($result);
         } else {
@@ -55,7 +55,7 @@ class IgnoreContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => '',
             static::KEYWORD => $ignore,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         if ($ignored) {
             $this->assertNull($result);
         } else {
@@ -74,7 +74,7 @@ class IgnoreContentResolverTest extends AbstractContentResolverTest
         $config = [
             static::KEYWORD => $ignore,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertNull($result);
     }
 
@@ -90,7 +90,7 @@ class IgnoreContentResolverTest extends AbstractContentResolverTest
             'multiValue' => [5, 7, 13],
             static::KEYWORD => $ignore,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         if ($ignored) {
             $this->assertNull($result);
         } else {
@@ -110,7 +110,7 @@ class IgnoreContentResolverTest extends AbstractContentResolverTest
             'multiValue' => [],
             static::KEYWORD => $ignore,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         if ($ignored) {
             $this->assertNull($result);
         } else {

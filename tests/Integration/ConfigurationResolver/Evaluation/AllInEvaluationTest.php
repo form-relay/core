@@ -15,14 +15,14 @@ class AllInEvaluationTest extends AbstractEvaluationTest
     }
 
     /** @test */
-    public function allInNull()
+    public function allInNotExistingFieldReturnsFalse()
     {
         $config = [
             'field1' => [
                 'allIn' => '4,5,6,7,8,16,17,18',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -35,7 +35,7 @@ class AllInEvaluationTest extends AbstractEvaluationTest
                 'allIn' => '4,5,6,7,8,16,17,18',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -53,7 +53,7 @@ class AllInEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -66,7 +66,7 @@ class AllInEvaluationTest extends AbstractEvaluationTest
                 'allIn' => '4,5,6,7,8,16,18',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -83,7 +83,7 @@ class AllInEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -96,7 +96,7 @@ class AllInEvaluationTest extends AbstractEvaluationTest
                 'allIn' => '4,6,8,16,18',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -113,7 +113,7 @@ class AllInEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 }

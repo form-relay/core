@@ -23,7 +23,7 @@ class GeneralValueMapperTest extends AbstractValueMapperTest
             'value1' => 'value1b',
             'value2' => 'value2b',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertNull($result);
     }
 
@@ -36,7 +36,7 @@ class GeneralValueMapperTest extends AbstractValueMapperTest
             'value1' => 'value1b',
             'value2' => 'value2b',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1b', $result);
     }
 
@@ -48,7 +48,7 @@ class GeneralValueMapperTest extends AbstractValueMapperTest
             'value0' => 'value0b',
             'value2' => 'value2b',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 
@@ -61,7 +61,7 @@ class GeneralValueMapperTest extends AbstractValueMapperTest
             'value2' => 'value2b',
             'value3' => 'value3b',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1b', 'value2b', 'value3b'], $result);
     }
 
@@ -73,7 +73,7 @@ class GeneralValueMapperTest extends AbstractValueMapperTest
             'value1' => 'value1b',
             'value3' => 'value3b',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1b', 'value2', 'value3b'], $result);
     }
 
@@ -86,7 +86,7 @@ class GeneralValueMapperTest extends AbstractValueMapperTest
             'value5' => 'value5b',
             'value6' => 'value6b',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1', 'value2', 'value3'], $result);
     }
 
@@ -98,7 +98,7 @@ class GeneralValueMapperTest extends AbstractValueMapperTest
             'value1' => 'value1b',
             'value3' => 'value3b',
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1b', 'value2', 'value3b'], $result, DiscreteMultiValueField::class);
     }
 }

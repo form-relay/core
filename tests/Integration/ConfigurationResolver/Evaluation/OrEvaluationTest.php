@@ -24,7 +24,7 @@ class OrEvaluationTest extends AbstractEvaluationTest
                 'field3' => 'value3',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -38,7 +38,7 @@ class OrEvaluationTest extends AbstractEvaluationTest
                 'field3' => 'value6',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -52,7 +52,7 @@ class OrEvaluationTest extends AbstractEvaluationTest
                 'field3' => 'value3',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -76,7 +76,7 @@ class OrEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -100,7 +100,7 @@ class OrEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 }

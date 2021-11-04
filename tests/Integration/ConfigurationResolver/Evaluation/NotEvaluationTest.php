@@ -19,7 +19,7 @@ class NotEvaluationTest extends AbstractEvaluationTest
         $config = [
             'not' => '0',
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -32,7 +32,7 @@ class NotEvaluationTest extends AbstractEvaluationTest
         $config = [
             'not' => '1',
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -44,7 +44,7 @@ class NotEvaluationTest extends AbstractEvaluationTest
                 'field1' => 'value2',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -56,7 +56,7 @@ class NotEvaluationTest extends AbstractEvaluationTest
                 'field1' => 'value1',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -68,7 +68,7 @@ class NotEvaluationTest extends AbstractEvaluationTest
                 'not' => 'value2',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -80,7 +80,7 @@ class NotEvaluationTest extends AbstractEvaluationTest
                 'not' => 'value1',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 }

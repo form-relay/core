@@ -33,7 +33,7 @@ class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => 'value1',
             'ignoreIfEmpty' => $ignore,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 
@@ -49,7 +49,7 @@ class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
             SubmissionConfigurationInterface::KEY_SELF => '',
             'ignoreIfEmpty' => $ignore,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         if ($enabled) {
             $this->assertNull($result);
         } else {
@@ -68,7 +68,7 @@ class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
         $config = [
             'ignoreIfEmpty' => $ignore,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertNull($result);
     }
 
@@ -84,7 +84,7 @@ class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
             'multiValue' => [5, 7, 13],
             'ignoreIfEmpty' => $ignore,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals([5, 7, 13], $result);
     }
 
@@ -100,7 +100,7 @@ class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
             'multiValue' => [],
             'ignoreIfEmpty' => $ignore,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         if ($enabled) {
             $this->assertNull($result);
         } else {
@@ -120,7 +120,7 @@ class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
             'multiValue' => ['', ''],
             'ignoreIfEmpty' => $ignore,
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['', ''], $result);
     }
 }

@@ -27,7 +27,7 @@ class RawValueMapperTest extends AbstractValueMapperTest
                 'value1' => 'value1b'
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1b', $result);
     }
 
@@ -40,7 +40,7 @@ class RawValueMapperTest extends AbstractValueMapperTest
                 'value2' => 'value2b'
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 
@@ -56,7 +56,7 @@ class RawValueMapperTest extends AbstractValueMapperTest
                 'if' => 'ifb',
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('ifb', $result);
     }
 
@@ -72,7 +72,7 @@ class RawValueMapperTest extends AbstractValueMapperTest
                 'if' => 'ifb',
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 }

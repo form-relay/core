@@ -27,7 +27,7 @@ class MapContentResolverTest extends AbstractContentResolverTest
                 'value2' => 'value2b',
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1b', $result);
     }
 
@@ -41,7 +41,7 @@ class MapContentResolverTest extends AbstractContentResolverTest
                 'value3' => 'value3b',
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('value1', $result);
     }
 
@@ -56,7 +56,7 @@ class MapContentResolverTest extends AbstractContentResolverTest
                 'value3' => 'value3b',
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1b', 'value2b', 'value3b'], $result);
     }
 
@@ -71,7 +71,7 @@ class MapContentResolverTest extends AbstractContentResolverTest
                 'value6' => 'value6b',
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1', 'value2', 'value3'], $result);
     }
 
@@ -85,7 +85,7 @@ class MapContentResolverTest extends AbstractContentResolverTest
                 'value3' => 'value3b',
             ],
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1b', 'value2', 'value3b'], $result);
     }
 }

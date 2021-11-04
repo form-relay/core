@@ -48,7 +48,7 @@ class IfContentResolverTest extends AbstractContentResolverTest
         if ($useNullOnElse || $else !== null) {
             $config['if']['else'] = $else;
         }
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         if ($expected === null) {
             $this->assertNull($result);
         } else {
@@ -92,7 +92,7 @@ class IfContentResolverTest extends AbstractContentResolverTest
                 ],
             ]
         ];
-        $result = $this->runResolverTest($config);
+        $result = $this->runResolverProcess($config);
         $this->assertEquals('expected-value', $result);
     }
 }

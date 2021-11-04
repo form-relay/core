@@ -21,7 +21,7 @@ class KeyEvaluationTest extends AbstractEvaluationTest
                 'key' => 'field1',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -34,7 +34,7 @@ class KeyEvaluationTest extends AbstractEvaluationTest
                 'key' => 'field2',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
@@ -46,7 +46,7 @@ class KeyEvaluationTest extends AbstractEvaluationTest
                 'key' => 'field1',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
@@ -58,7 +58,7 @@ class KeyEvaluationTest extends AbstractEvaluationTest
                 'key' => 'field2',
             ],
         ];
-        $result = $this->runEvaluationTest($config);
+        $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 }
