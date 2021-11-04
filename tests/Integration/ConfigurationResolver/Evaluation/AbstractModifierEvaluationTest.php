@@ -31,6 +31,9 @@ abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
         $this->assertTrue($result);
     }
 
+    // TODO the equals comparison should check if it has to compare two multi values
+    //      and if it does, it should check if the values are equal
+    //      once this is implemented, we can here use the "equals" evaluation instead of "in"
     /**
      * @param $value
      * @param $modifiedValue

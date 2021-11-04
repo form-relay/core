@@ -197,7 +197,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
         }
         $key = $this->getKeyFromContext();
         if ($key) {
-            if ($context['useKey']) {
+            if ($context['useKey'] ?? false) {
                 return $key;
             } else {
                 return $this->getFieldValue($key);
