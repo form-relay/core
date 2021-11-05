@@ -238,4 +238,61 @@ class RelayTest extends TestCase
 
         $this->subject->processFromQueue(1);
     }
+
+    /** @test */
+    public function processFromQueuePendingJobWithoutData()
+    {
+        $job = $this->createMock(JobInterface::class);
+        $job->expects($this->any())->method('getData')->willReturn([]);
+        $this->queue->expects($this->once())->method('fetchPending')->with(1)->willReturn([$job]);
+        $this->queue->expects($this->once())->method('markAsRunning')->with($job);
+        $this->queue->expects($this->once())->method('markAsFailed')->with($job, 'job data is empty');
+        $this->queue->expects($this->never())->method('markAsDone');
+        $this->subject->processFromQueue(1);
+    }
+
+    /** @test */
+    public function processFromQueuePendingJobWithoutSubmissionData()
+    {
+        $job = $this->createMock(JobInterface::class);
+        $job->expects($this->any())->method('getData')->willReturn([
+            'configuration' => [],
+            'context' => [],
+        ]);
+        $this->queue->expects($this->once())->method('fetchPending')->with(1)->willReturn([$job]);
+        $this->queue->expects($this->once())->method('markAsRunning')->with($job);
+        $this->queue->expects($this->once())->method('markAsFailed')->with($job, 'job has no valid submission data');
+        $this->queue->expects($this->never())->method('markAsDone');
+        $this->subject->processFromQueue(1);
+    }
+
+    /** @test */
+    public function processFromQueuePendingJobWithoutSubmissionConfiguration()
+    {
+        $job = $this->createMock(JobInterface::class);
+        $job->expects($this->any())->method('getData')->willReturn([
+            'data' => [],
+            'context' => [],
+        ]);
+        $this->queue->expects($this->once())->method('fetchPending')->with(1)->willReturn([$job]);
+        $this->queue->expects($this->once())->method('markAsRunning')->with($job);
+        $this->queue->expects($this->once())->method('markAsFailed')->with($job, 'job has no valid submission configuration');
+        $this->queue->expects($this->never())->method('markAsDone');
+        $this->subject->processFromQueue(1);
+    }
+
+    /** @test */
+    public function processFromQueuePendingJobWithoutSubmissionContext()
+    {
+        $job = $this->createMock(JobInterface::class);
+        $job->expects($this->any())->method('getData')->willReturn([
+            'data' => [],
+            'configuration' => [],
+        ]);
+        $this->queue->expects($this->once())->method('fetchPending')->with(1)->willReturn([$job]);
+        $this->queue->expects($this->once())->method('markAsRunning')->with($job);
+        $this->queue->expects($this->once())->method('markAsFailed')->with($job, 'job has no valid submission context');
+        $this->queue->expects($this->never())->method('markAsDone');
+        $this->subject->processFromQueue(1);
+    }
 }

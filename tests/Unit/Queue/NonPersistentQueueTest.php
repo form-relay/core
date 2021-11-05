@@ -383,22 +383,13 @@ class NonPersistentQueueTest extends TestCase
         $this->assertCount(5, $remainingJobs);
     }
 
-    protected function markAs($status, $otherStatus, $method, $arguments = [], $expectedStatusMessage = '')
+    protected function markAs($status, $initialStatus, $method, $arguments = [], $expectedStatusMessage = '')
     {
-        $this->subject->addJob(['value1'], $otherStatus);
-        $jobs = $this->subject->fetch();
-        $this->assertCount(1, $jobs);
         /** @var JobInterface $job */
-        $job = $jobs[0];
-        $this->assertEquals($otherStatus, $job->getStatus());
+        $job = $this->subject->addJob(['value1'], $initialStatus);
+        $this->assertEquals($initialStatus, $job->getStatus());
 
         $this->subject->$method($job, ...$arguments);
-        $this->assertEquals($status, $job->getStatus());
-        $this->assertEquals($expectedStatusMessage, $job->getStatusMessage());
-
-        $jobs = $this->subject->fetch();
-        $this->assertCount(1, $jobs);
-        $job = $jobs[0];
         $this->assertEquals($status, $job->getStatus());
         $this->assertEquals($expectedStatusMessage, $job->getStatusMessage());
     }
@@ -456,13 +447,13 @@ class NonPersistentQueueTest extends TestCase
         );
     }
 
-    protected function markListAs($status, $otherStatus, $thirdStatus, $method, $arguments=[], $expectedStatusMessage = '')
+    protected function markListAs($status, $initialStatus, $unrelatedStatus, $method, $arguments=[], $expectedStatusMessage = '')
     {
-        $this->subject->addJob(['value1'], $otherStatus);
-        $this->subject->addJob(['value2'], $thirdStatus);
-        $this->subject->addJob(['value3'], $otherStatus);
+        $this->subject->addJob(['value1'], $initialStatus);
+        $this->subject->addJob(['value2'], $unrelatedStatus);
+        $this->subject->addJob(['value3'], $initialStatus);
 
-        $jobs = $this->subject->fetch([$otherStatus]);
+        $jobs = $this->subject->fetch([$initialStatus]);
         $this->assertCount(2, $jobs);
 
         $this->subject->$method($jobs, ...$arguments);
