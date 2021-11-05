@@ -2,7 +2,9 @@
 
 namespace FormRelay\Core\Tests\Integration\Service;
 
+use FormRelay\Core\Exception\FormRelayException;
 use FormRelay\Core\Service\Relay;
+use FormRelay\Core\Service\RelayInterface;
 use FormRelay\Core\Tests\Integration\RelayTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -13,21 +15,25 @@ class RelayTest extends TestCase
 {
     use RelayTestTrait;
 
+    /** @var RelayInterface */
+    protected $subject;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->initRelay();
+        $this->subject = new Relay($this->registry);
     }
 
     /** @test */
-    public function syncOneRouteOnePassWithStorage() {
+    public function processSyncOneRouteOnePassWithStorage() {
         $this->setSubmissionAsync(false);
         $this->setStorageDisabled(false);
         $this->addRouteSpy([
             'enabled' => true,
             'fields' => [
-                'field1' => [ 'field' => 'field1' ],
-                'field2' => [ 'field' => 'field2' ],
+                'field1ext' => [ 'field' => 'field1' ],
+                'field2ext' => [ 'field' => 'field2' ],
             ],
         ]);
         $this->submissionData = [
@@ -36,8 +42,8 @@ class RelayTest extends TestCase
         ];
 
         $this->routeSpy->expects($this->once())->method('send')->with([
-            'field1' => 'value1',
-            'field2' => 'value2',
+            'field1ext' => 'value1',
+            'field2ext' => 'value2',
         ]);
 
         $this->queue->expects($this->once())->method('addJob')->with([
@@ -52,8 +58,8 @@ class RelayTest extends TestCase
                     'generic' => [
                         'enabled' => true,
                         'fields' => [
-                            'field1' => ['field' => 'field1'],
-                            'field2' => ['field' => 'field2'],
+                            'field1ext' => ['field' => 'field1'],
+                            'field2ext' => ['field' => 'field2'],
                         ],
                     ],
                 ],
@@ -63,28 +69,27 @@ class RelayTest extends TestCase
                 'job' => [
                     'route' => 'generic',
                     'pass' => 0,
-                    'label' => '08441#generic',
+                    'label' => '50CEF#generic',
                 ],
                 'submission' => [
-                    'hash' => '08441D5F547F10021A71D5BC4F7A6B0A',
-                    'short-hash' => '08441',
+                    'hash' => '50CEF9072ACFDD594497CE1CB1FDF0DC',
+                    'short-hash' => '50CEF',
                 ],
             ],
         ]);
 
-        $relay = new Relay($this->registry);
-        $relay->process($this->getSubmission());
+        $this->subject->process($this->getSubmission());
     }
 
     /** @test */
-    public function syncOneRouteOnePassWithoutStorage() {
+    public function processSyncOneRouteOnePassWithoutStorage() {
         $this->setSubmissionAsync(false);
         $this->setStorageDisabled(true);
         $this->addRouteSpy([
             'enabled' => true,
             'fields' => [
-                'field1' => [ 'field' => 'field1' ],
-                'field2' => [ 'field' => 'field2' ],
+                'field1ext' => [ 'field' => 'field1' ],
+                'field2ext' => [ 'field' => 'field2' ],
             ],
         ]);
         $this->submissionData = [
@@ -95,23 +100,22 @@ class RelayTest extends TestCase
         $this->queue->expects($this->never())->method('addJob');
 
         $this->routeSpy->expects($this->once())->method('send')->with([
-            'field1' => 'value1',
-            'field2' => 'value2',
+            'field1ext' => 'value1',
+            'field2ext' => 'value2',
         ]);
 
-        $relay = new Relay($this->registry);
-        $relay->process($this->getSubmission());
+        $this->subject->process($this->getSubmission());
     }
 
     /** @test */
-    public function asyncOneRouteOnePassWithStorage() {
+    public function processAsyncOneRouteOnePassWithStorage() {
         $this->setSubmissionAsync(true);
         $this->setStorageDisabled(false);
         $this->addRouteSpy([
             'enabled' => true,
             'fields' => [
-                'field1' => [ 'field' => 'field1' ],
-                'field2' => [ 'field' => 'field2' ],
+                'field1ext' => [ 'field' => 'field1' ],
+                'field2ext' => [ 'field' => 'field2' ],
             ],
         ]);
         $this->submissionData = [
@@ -131,8 +135,8 @@ class RelayTest extends TestCase
                     'generic' => [
                         'enabled' => true,
                         'fields' => [
-                            'field1' => ['field' => 'field1'],
-                            'field2' => ['field' => 'field2'],
+                            'field1ext' => ['field' => 'field1'],
+                            'field2ext' => ['field' => 'field2'],
                         ],
                     ],
                 ],
@@ -142,23 +146,96 @@ class RelayTest extends TestCase
                 'job' => [
                     'route' => 'generic',
                     'pass' => 0,
-                    'label' => '27AAE#generic',
+                    'label' => '92543#generic',
                 ],
                 'submission' => [
-                    'hash' => '27AAE32C5E158859A2D7801669DE167B',
-                    'short-hash' => '27AAE',
+                    'hash' => '925430A836721A34415C7A50E2179AAD',
+                    'short-hash' => '92543',
                 ],
             ],
         ]);
         $this->routeSpy->expects($this->never())->method('send');
 
-        $relay = new Relay($this->registry);
-        $relay->process($this->getSubmission());
+        $this->subject->process($this->getSubmission());
     }
 
-    // TODO implement more tests
+    // TODO implement more tests (process and processFromQueue)
     //      - multiple passes
     //      - gate
     //        - gate referencing foreign route
     //      - data providers
+
+    /** @test */
+    public function processFromQueueEmpty()
+    {
+        $this->queue->expects($this->once())->method('fetchPending')->with(1)->willReturn([]);
+        $this->subject->processFromQueue(1);
+        $this->queue->expects($this->never())->method('markAsDone');
+        $this->queue->expects($this->never())->method('markAsFailed');
+    }
+
+    /** @test */
+    public function processFromQueuePendingJobThatSucceeds()
+    {
+        $this->routeSpy = $this->registerRouteSpy();
+
+        $job = $this->createJob(
+            [
+                'field1' => ['type' => 'string', 'value' => 'value1'],
+            ],
+            [
+                'enabled' => true,
+                'fields' => [
+                    'field1ext' => ['field' => 'field1'],
+                ],
+            ],
+            0
+        );
+
+        $this->queue->expects($this->once())->method('fetchPending')->with(1)->willReturn([$job]);
+        $this->queue->expects($this->once())->method('markAsRunning')->with($job);
+
+        $this->routeSpy->expects($this->once())->method('send')->with([
+            'field1ext' => 'value1'
+        ]);
+
+        $this->queue->expects($this->once())->method('markAsDone')->with($job);
+        $this->queue->expects($this->never())->method('markAsFailed');
+
+        $this->subject->processFromQueue(1);
+    }
+
+    /** @test */
+    public function processFromQueuePendingJobThatFails()
+    {
+        $errorMessage = 'my error message';
+        $this->routeSpy = $this->registerRouteSpy();
+
+        $job = $this->createJob(
+            [
+                'field1' => ['type' => 'string', 'value' => 'value1'],
+            ],
+            [
+                'enabled' => true,
+                'fields' => [
+                    'field1ext' => ['field' => 'field1'],
+                ],
+            ],
+            0
+        );
+
+        $this->queue->expects($this->once())->method('fetchPending')->with(1)->willReturn([$job]);
+        $this->queue->expects($this->once())->method('markAsRunning')->with($job);
+
+        $this->routeSpy->expects($this->once())->method('send'
+            )->with([
+                'field1ext' => 'value1'
+            ])
+            ->willThrowException(new FormRelayException($errorMessage));
+
+        $this->queue->expects($this->once())->method('markAsFailed')->with($job, $errorMessage);
+        $this->queue->expects($this->never())->method('markAsDone');
+
+        $this->subject->processFromQueue(1);
+    }
 }
