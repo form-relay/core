@@ -44,6 +44,12 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
         return $default;
     }
 
+    public function getWithRoutePassOverride(string $key, string $route, int $pass, $default = null)
+    {
+        return $this->getRoutePassConfiguration($route, $pass)[$key]
+            ?? $this->get($key, $default);
+    }
+
     public function getDataProviderConfiguration(string $dataProviderName)
     {
         return $this->get('dataProviders', [])[$dataProviderName] ?? [];
@@ -72,6 +78,7 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
             $configuration[$key] = ConfigurationUtility::mergeConfiguration($passBaseConfiguration, $passConfiguration, false);
         }
         $configuration = ConfigurationUtility::resolveNullInMergedConfiguration($configuration);
+        ksort($configuration);
         ksort($configuration, SORT_NUMERIC);
         return $configuration;
     }
@@ -89,7 +96,7 @@ class SubmissionConfiguration implements SubmissionConfigurationInterface
     {
         $label = $routeName;
         $passName = $this->getRoutePassName($routeName, $pass);
-        if (!is_numeric($passName) || $this->getRoutePassCount($routeName) > 1) {
+        if (!is_numeric($passName) || $this->getRoutePassCount($routeName) > 1 || $pass > 0) {
             $label .= '#' . $passName;
         }
         return $label;

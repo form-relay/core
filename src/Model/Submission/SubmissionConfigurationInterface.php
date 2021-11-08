@@ -9,6 +9,7 @@ interface SubmissionConfigurationInterface
     public function toArray(): array;
 
     public function get(string $key, $default = null);
+    public function getWithRoutePassOverride(string $key, string $route, int $pass, $default = null);
 
     public function dataProviderExists(string $dataProviderName): bool;
     public function getDataProviderConfiguration(string $dataProviderName);

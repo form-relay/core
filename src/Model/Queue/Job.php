@@ -3,25 +3,47 @@
 namespace FormRelay\Core\Model\Queue;
 
 use DateTime;
-use FormRelay\Core\Queue\JobInterface;
 use FormRelay\Core\Queue\QueueInterface;
 
-class SubmissionJob implements JobInterface
+class Job implements JobInterface
 {
+    /** @var int */
     protected $id;
+
+    /** @var DateTime */
     protected $created;
-    protected $status;
-    protected $statusMessage;
+
+    /** @var DateTime  */
     protected $changed;
+
+    /** @var int */
+    protected $status;
+
+    /** @var bool */
+    protected $skipped;
+
+    /** @var string */
+    protected $statusMessage;
+
+    /** @var array */
     protected $data;
+
+    /** @var string */
+    protected $hash;
+
+    /** @var string */
+    protected $label;
 
     public function __construct()
     {
         $this->created = new DateTime();
         $this->changed = new DateTime();
         $this->status = QueueInterface::STATUS_PENDING;
+        $this->skipped = false;
         $this->statusMessage = '';
         $this->data = [];
+        $this->hash = '';
+        $this->label = '';
     }
 
     public function getId(): int
@@ -54,6 +76,16 @@ class SubmissionJob implements JobInterface
         $this->status = $status;
     }
 
+    public function getSkipped(): bool
+    {
+        return $this->skipped;
+    }
+
+    public function setSkipped(bool $skipped)
+    {
+        $this->skipped = $skipped;
+    }
+
     public function getStatusMessage(): string
     {
         return $this->statusMessage;
@@ -82,5 +114,25 @@ class SubmissionJob implements JobInterface
     public function setData(array $data)
     {
         $this->data = $data;
+    }
+
+    public function getHash(): string
+    {
+        return $this->hash;
+    }
+
+    public function setHash(string $hash)
+    {
+        $this->hash = $hash;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(string $label)
+    {
+        $this->label = $label;
     }
 }

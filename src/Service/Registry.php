@@ -17,6 +17,9 @@ use FormRelay\Core\Factory\QueueDataFactoryInterface;
 use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Queue\NonPersistentQueue;
 use FormRelay\Core\Queue\QueueInterface;
+use FormRelay\Core\Queue\QueueProcessor;
+use FormRelay\Core\Queue\QueueProcessorInterface;
+use FormRelay\Core\Queue\WorkerInterface;
 use FormRelay\Core\Request\DefaultRequest;
 use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Route\RouteInterface;
@@ -33,17 +36,20 @@ class Registry implements RegistryInterface
     protected $request;
     protected $loggerFactory;
     protected $queue;
+    protected $temporaryQueue;
     protected $queueDataFactory;
 
     public function __construct(
         RequestInterface $request = null,
         LoggerFactoryInterface $loggerFactory = null,
         QueueInterface $queue = null,
+        QueueInterface $temporaryQueue = null,
         QueueDataFactoryInterface $queueDataFactory = null
     ) {
         $this->request = $request ?? new DefaultRequest();
         $this->loggerFactory = $loggerFactory ?? new NullLoggerFactory();
         $this->queue = $queue ?? new NonPersistentQueue();
+        $this->temporaryQueue = $temporaryQueue ?? new NonPersistentQueue();
         $this->queueDataFactory = $queueDataFactory ?? new QueueDataFactory();
     }
 
@@ -62,9 +68,19 @@ class Registry implements RegistryInterface
         return $this->queue;
     }
 
+    public function getTemporaryQueue(): QueueInterface
+    {
+        return $this->temporaryQueue;
+    }
+
     public function getQueueDataFactory(): QueueDataFactoryInterface
     {
         return $this->queueDataFactory;
+    }
+
+    public function getQueueProcessor(QueueInterface $queue, WorkerInterface $worker): QueueProcessorInterface
+    {
+        return new QueueProcessor($queue, $worker);
     }
 
     protected function get(string $class, array $arguments = [])

@@ -2,6 +2,8 @@
 
 namespace FormRelay\Core\Queue;
 
+use FormRelay\Core\Model\Queue\JobInterface;
+
 interface QueueInterface
 {
     const STATUS_PENDING = 1;
@@ -17,14 +19,14 @@ interface QueueInterface
 
     public function markAsPending(JobInterface $job);
     public function markAsRunning(JobInterface $job);
-    public function markAsDone(JobInterface $job);
+    public function markAsDone(JobInterface $job, bool $skipped = false);
     public function markAsFailed(JobInterface $job, string $message = '');
 
     public function markListAsRunning(array $jobs);
-    public function markListAsDone(array $jobs);
+    public function markListAsDone(array $jobs, bool $skipped = false);
     public function markListAsFailed(array $jobs, string $message = '');
 
-    public function addJob(array $data, $status = self::STATUS_PENDING): JobInterface;
+    public function addJob(JobInterface $job);
     public function removeJob(JobInterface $job);
 
     public function removeOldJobs(int $minAgeInSeconds, array $status = []);

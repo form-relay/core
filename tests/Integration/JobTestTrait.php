@@ -2,7 +2,7 @@
 
 namespace FormRelay\Core\Tests\Integration;
 
-use FormRelay\Core\Queue\JobInterface;
+use FormRelay\Core\Model\Queue\JobInterface;
 
 trait JobTestTrait //  extends \PHPUnit\Framework\TestCase
 {

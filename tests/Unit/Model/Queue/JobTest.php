@@ -3,12 +3,12 @@
 namespace FormRelay\Core\Tests\Unit\Model\Queue;
 
 use DateTime;
-use FormRelay\Core\Model\Queue\SubmissionJob;
-use FormRelay\Core\Queue\JobInterface;
+use FormRelay\Core\Model\Queue\Job;
+use FormRelay\Core\Model\Queue\JobInterface;
 use FormRelay\Core\Queue\QueueInterface;
 use PHPUnit\Framework\TestCase;
 
-class SubmissionJobTest extends TestCase
+class JobTest extends TestCase
 {
     /** @var JobInterface */
     protected $subject;
@@ -16,7 +16,7 @@ class SubmissionJobTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->subject = new SubmissionJob();
+        $this->subject = new Job();
     }
 
     /** @test */
@@ -64,6 +64,20 @@ class SubmissionJobTest extends TestCase
     {
         $this->subject->setStatus($value);
         $this->assertEquals($value, $this->subject->getStatus());
+    }
+
+    /** @test */
+    public function setGetSkippedTrue()
+    {
+        $this->subject->setSkipped(true);
+        $this->assertTrue($this->subject->getSkipped());
+    }
+
+    /** @test */
+    public function setGetSkippedFalse()
+    {
+        $this->subject->setSkipped(false);
+        $this->assertFalse($this->subject->getSkipped());
     }
 
     /** @test */

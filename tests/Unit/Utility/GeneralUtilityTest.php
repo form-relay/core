@@ -98,13 +98,9 @@ class GeneralUtilityTest extends TestCase
             [' ', ""],
             [' value1 ', "value1"],
             ['\\s', " "],
-
-            // TODO replacement for tab doesn't work currently
-            //['\\t', "\t"],
+            ['\\t', "\t"],
             ['\\n', "\n"],
-
-            // TODO replacement for tab doesn't work currently
-            //['\\s\\t\\n\\t\\s', " \t\n\t "],
+            ['\\s\\t\\n\\t\\s', " \t\n\t "],
         ];
     }
 
@@ -219,6 +215,23 @@ class GeneralUtilityTest extends TestCase
      */
     public function calculateHash($submission, $short, $expected)
     {
+        $result = GeneralUtility::calculateHash($submission, $short);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @param $submission
+     * @param $short
+     * @param $expected
+     * @dataProvider calculateHashProvider
+     * @test
+     */
+    public function calculateHashWithIgnoredConfigurationObject($submission, $short, $expected)
+    {
+        $submission['configuration'] = [
+            'confKey1' => 'confValue1',
+            'confKey2' => 'confValue2',
+        ];
         $result = GeneralUtility::calculateHash($submission, $short);
         $this->assertEquals($expected, $result);
     }

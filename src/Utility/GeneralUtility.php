@@ -9,7 +9,7 @@ final class GeneralUtility
     const CHARACTER_MAP = [
         '\\n' => PHP_EOL,
         '\\s' => ' ',
-        '\\t' => '  ',
+        '\\t' => "\t",
     ];
 
     public static function isEmpty($value)
@@ -71,14 +71,9 @@ final class GeneralUtility
 
     public static function calculateHash(array $submission, bool $short = false): string
     {
+        unset($submission['configuration']);
         if (empty($submission)) {
             return 'undefined';
-        }
-        if (isset($submission['context']['job'])) {
-            unset($submission['context']['job']);
-        }
-        if (isset($submission['context']['submission'])) {
-            unset($submission['context']['submission']);
         }
         $serialized = serialize($submission);
         if (!$serialized) {
