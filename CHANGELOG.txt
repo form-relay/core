@@ -1,4 +1,10 @@
 
+2.1.0
+
+[FEATURE] Job Attributes "skipped" and "hash" (MEDO-566)
+
+[FEATURE] Synchronous Submissions use Storage too (MEDO-570)
+
 2.0.2
 
 [BUGFIX] empty submission caused error during unpacking (LMSM21-188)
