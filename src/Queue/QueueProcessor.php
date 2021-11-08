@@ -2,7 +2,7 @@
 
 namespace FormRelay\Core\Queue;
 
-class QueueProcessor
+class QueueProcessor implements QueueProcessorInterface
 {
     protected $queue;
     protected $worker;
@@ -13,19 +13,28 @@ class QueueProcessor
         $this->worker = $worker;
     }
 
-    public function processBatch(int $batchSize = 1)
+    public function processJobs(array $jobs)
     {
-        $batch = $this->queue->fetchPending($batchSize);
-        if (!empty($batch)) {
-            $this->queue->markListAsRunning($batch);
-            foreach ($batch as $job) {
+        if (!empty($jobs)) {
+            $this->queue->markListAsRunning($jobs);
+            foreach ($jobs as $job) {
                 try {
-                    $this->worker->doJob($job);
-                    $this->queue->markAsDone($job);
+                    $processed = $this->worker->processJob($job);
+                    $this->queue->markAsDone($job, !$processed);
                 } catch (QueueException $e) {
                     $this->queue->markAsFailed($job, $e->getMessage());
                 }
             }
         }
+    }
+
+    public function processBatch(int $batchSize = 1)
+    {
+        $this->processJobs($this->queue->fetchPending($batchSize));
+    }
+
+    public function processAll()
+    {
+        $this->processJobs($this->queue->fetchPending());
     }
 }

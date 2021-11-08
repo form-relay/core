@@ -98,13 +98,9 @@ class GeneralUtilityTest extends TestCase
             [' ', ""],
             [' value1 ', "value1"],
             ['\\s', " "],
-
-            // TODO replacement for tab doesn't work currently
-            //['\\t', "\t"],
+            ['\\t', "\t"],
             ['\\n', "\n"],
-
-            // TODO replacement for tab doesn't work currently
-            //['\\s\\t\\n\\t\\s', " \t\n\t "],
+            ['\\s\\t\\n\\t\\s', " \t\n\t "],
         ];
     }
 
@@ -197,6 +193,69 @@ class GeneralUtilityTest extends TestCase
         } else {
             $result = GeneralUtility::castValueToArray($value, $token, $trim);
         }
+        $this->assertEquals($expected, $result);
+    }
+
+    public function calculateHashProvider(): array
+    {
+        return [
+            [[], false, 'undefined'],
+            [[], true, 'undefined'],
+            [['key1' => 'value1'], false, 'E2E517365FFE6FEDD279364E3FA74786'],
+            [['key1' => 'value1'], true, 'E2E51'],
+        ];
+    }
+
+    /**
+     * @param $submission
+     * @param $short
+     * @param $expected
+     * @dataProvider calculateHashProvider
+     * @test
+     */
+    public function calculateHash($submission, $short, $expected)
+    {
+        $result = GeneralUtility::calculateHash($submission, $short);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @param $submission
+     * @param $short
+     * @param $expected
+     * @dataProvider calculateHashProvider
+     * @test
+     */
+    public function calculateHashWithIgnoredConfigurationObject($submission, $short, $expected)
+    {
+        $submission['configuration'] = [
+            'confKey1' => 'confValue1',
+            'confKey2' => 'confValue2',
+        ];
+        $result = GeneralUtility::calculateHash($submission, $short);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function shortenHashProvider(): array
+    {
+        return [
+            ['', ''],
+            ['A', 'A'],
+            ['ABCDE', 'ABCDE'],
+            ['ABCDEF', 'ABCDE'],
+            ['ABCDEFGHIJKLM', 'ABCDE'],
+        ];
+    }
+
+    /**
+     * @param $hash
+     * @param $expected
+     * @dataProvider shortenHashProvider
+     * @test
+     */
+    public function shortenHash($hash, $expected)
+    {
+        $result = GeneralUtility::shortenHash($hash);
         $this->assertEquals($expected, $result);
     }
 }

@@ -57,4 +57,9 @@ trait SubmissionTestTrait //  extends \PHPUnit\Framework\TestCase
     {
         $this->submissionConfiguration[$index]['async'] = $async;
     }
+
+    protected function setStorageDisabled(bool $disableStorage = false, int $index = 0)
+    {
+        $this->submissionConfiguration[$index]['disableStorage'] = $disableStorage;
+    }
 }

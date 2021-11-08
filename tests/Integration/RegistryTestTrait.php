@@ -37,6 +37,9 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
     /** @var QueueInterface */
     protected $queue;
 
+    /** @var QueueInterface */
+    protected $temporaryQueue;
+
     /** @var QueueDataFactoryInterface */
     protected $queueDataFactory;
 
@@ -49,11 +52,12 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
         $this->request = $this->createMock(RequestInterface::class);
         $this->loggerFactory = $this->createMock(LoggerFactoryInterface::class);
         $this->queue = $this->createMock(QueueInterface::class);
+        $this->temporaryQueue = $this->createMock(QueueInterface::class);
 
         // initialize the rest regularly
         $this->queueDataFactory = new QueueDataFactory();
 
-        $this->registry = new Registry($this->request, $this->loggerFactory, $this->queue, $this->queueDataFactory);
+        $this->registry = new Registry($this->request, $this->loggerFactory, $this->queue, $this->temporaryQueue, $this->queueDataFactory);
     }
 
     protected function registerAllDefaults()
