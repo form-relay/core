@@ -2,11 +2,13 @@
 
 namespace FormRelay\Core\Tests\Integration\Factory;
 
+use FormRelay\Core\Exception\FormRelayException;
 use FormRelay\Core\Factory\QueueDataFactory;
 use FormRelay\Core\Model\File\FileInterface;
 use FormRelay\Core\Model\Form\DiscreteMultiValueField;
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Form\UploadField;
+use FormRelay\Core\Model\Queue\Job;
 use FormRelay\Core\Model\Submission\Submission;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +25,14 @@ class QueueDataFactoryTest extends TestCase
     {
         parent::setUp();
         $this->subject = new QueueDataFactory();
+    }
+
+    protected function routePassProvider(): array
+    {
+        return [
+            ['route1', 0],
+            ['route2', 5],
+        ];
     }
 
     protected function packDataProvider(): array
@@ -80,16 +90,24 @@ class QueueDataFactoryTest extends TestCase
         foreach ($this->packDataProvider() as list($data, $packedData)) {
             foreach ($this->packConfigurationProvider() as list($configuration, $packedConfiguration)) {
                 foreach ($this->packContextProvider() as list($context, $packedContext)) {
-                    $result[] = [
-                        $data,
-                        $configuration,
-                        $context,
-                        [
-                            'data' => $packedData,
-                            'configuration' => $packedConfiguration,
-                            'context' => $packedContext,
-                        ],
-                    ];
+                    foreach ($this->routePassProvider() as list($route, $pass)) {
+                        $result[] = [
+                            $data,
+                            [$configuration],
+                            $context,
+                            $route,
+                            $pass,
+                            [
+                                'route' => $route,
+                                'pass' => $pass,
+                                'submission' => [
+                                    'data' => $packedData,
+                                    'configuration' => [$packedConfiguration],
+                                    'context' => $packedContext,
+                                ],
+                            ],
+                        ];
+                    }
                 }
             }
         }
@@ -100,52 +118,60 @@ class QueueDataFactoryTest extends TestCase
      * @param $data
      * @param $configuration
      * @param $context
-     * @param $packed
+     * @param $route
+     * @param $pass
+     * @param $jobData
      * @dataProvider packProvider
      * @test
      */
-    public function pack($data, $configuration, $context, $packed)
+    public function pack($data, $configuration, $context, $route, $pass, $jobData)
     {
         $submission = new Submission($data, $configuration, $context);
-        $result = $this->subject->pack($submission);
-        $this->assertEquals($packed, $result);
+        $job = $this->subject->convertSubmissionToJob($submission, $route, $pass);
+        $this->assertEquals($jobData, $job->getData());
     }
 
     /**
      * @param $data
      * @param $configuration
      * @param $context
-     * @param $packed
+     * @param $route
+     * @param $pass
+     * @param $jobData
+     * @throws FormRelayException
      * @dataProvider packProvider
      * @test
      */
-    public function unpack($data, $configuration, $context, $packed)
+    public function unpack($data, $configuration, $context, $route, $pass, $jobData)
     {
-        /** @var SubmissionInterface $result */
-        $result = $this->subject->unpack($packed);
-        $this->assertInstanceOf(SubmissionInterface::class, $result);
-        $this->assertEquals($data, $result->getData()->toArray());
-        $this->assertEquals($configuration, $result->getConfiguration()->toArray());
-        $this->assertEquals($context, $result->getContext()->toArray());
+        $job = new Job();
+        $job->setData($jobData);
+        $submission = $this->subject->convertJobToSubmission($job);
+
+        $this->assertEquals($data, $submission->getData()->toArray());
+        $this->assertEquals($configuration, $submission->getConfiguration()->toArray());
+        $this->assertEquals($context, $submission->getContext()->toArray());
     }
 
     /**
      * @param $data
      * @param $configuration
      * @param $context
-     * @param $packed
+     * @param $route
+     * @param $pass
+     * @param $jobData
+     * @throws FormRelayException
      * @dataProvider packProvider
      * @test
      */
-    public function packUnpack($data, $configuration, $context, $packed)
+    public function packUnpack($data, $configuration, $context, $route, $pass, $jobData)
     {
         $submission = new Submission($data, $configuration, $context);
-        $actualPacked = $this->subject->pack($submission);
-        $this->assertEquals($packed, $actualPacked);
+        $job = $this->subject->convertSubmissionToJob($submission, $route, $pass);
+        $this->assertEquals($jobData, $job->getData());
 
         /** @var SubmissionInterface $result */
-        $result = $this->subject->unpack($actualPacked);
-        $this->assertInstanceOf(SubmissionInterface::class, $result);
+        $result = $this->subject->convertJobToSubmission($job);
         $this->assertEquals($data, $result->getData()->toArray());
         $this->assertEquals($configuration, $result->getConfiguration()->toArray());
         $this->assertEquals($context, $result->getContext()->toArray());

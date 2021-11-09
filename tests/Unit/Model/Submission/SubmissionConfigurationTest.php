@@ -149,6 +149,44 @@ class SubmissionConfigurationTest extends TestCase
     }
 
     /** @test */
+    public function dataProviderExistsOnExistingDataProvider()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+        ];
+        $configList = [
+            [
+                'dataProviders' => [
+                    'dataProvider1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $result = $this->subject->dataProviderExists('dataProvider1');
+        $this->assertTrue($result);
+    }
+
+    /** @test */
+    public function dataProviderExistsOnNonExistentDataProvider()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+        ];
+        $configList = [
+            [
+                'dataProviders' => [
+                    'dataProvider1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $result = $this->subject->dataProviderExists('dataProvider2');
+        $this->assertFalse($result);
+    }
+
+    /** @test */
     public function routeFound()
     {
         $conf = [
@@ -163,6 +201,7 @@ class SubmissionConfigurationTest extends TestCase
             ],
         ];
         $this->subject = new SubmissionConfiguration($configList);
+
         $result = $this->subject->getRoutePassConfiguration('route1', 0);
         $this->assertEquals($conf, $result);
     }
@@ -205,13 +244,9 @@ class SubmissionConfigurationTest extends TestCase
         $this->assertEquals(1, $result);
     }
 
-    // TODO if a route is not found, it should return 0 passes, not 1
-    //      this is due to an empty array being returned
-    //      which is a valid though trivial route configuration
     /** @test */
     public function routePassCountRouteNotFound()
     {
-        $this->markTestSkipped();
         $conf = [
             'conf1' => 'val1',
             'conf2' => 'val2',
@@ -403,8 +438,6 @@ class SubmissionConfigurationTest extends TestCase
     /** @test */
     public function routePassConfigurationOrder()
     {
-        // TODO the pass indices should be sorted numerical
-        $this->markTestSkipped();
         $configList = [
             [
                 'routes' => [
@@ -430,5 +463,333 @@ class SubmissionConfigurationTest extends TestCase
 
         $pass2 = $this->subject->getRoutePassConfiguration('route1', 1);
         $this->assertEquals('value1.2', $pass2['key1']);
+    }
+
+    /** @test */
+    public function routeExistsOnNonExistingRoute()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+
+        $result = $this->subject->routeExists('route2');
+        $this->assertFalse($result);
+    }
+
+    /** @test */
+    public function routeExistsOnExistingRoute()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+
+        $result = $this->subject->routeExists('route1');
+        $this->assertTrue($result);
+    }
+
+    /** @test */
+    public function routePassExistsOnNonExistingRoute()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+
+        $this->assertFalse($this->subject->routePassExists('route2', 0));
+        $this->assertFalse($this->subject->routePassExists('route2', 1));
+    }
+
+    /** @test */
+    public function routePassExistsOnExistingRouteWithoutPasses()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+
+        $this->assertTrue($this->subject->routePassExists('route1', 0));
+        $this->assertFalse($this->subject->routePassExists('route1', 1));
+    }
+
+    /** @test */
+    public function routePassExistsOnExistingRouteButNonExistentPass()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+            'passes' => [
+                0 => [
+                    'conf1' => 'val1.1',
+                ],
+                1 => [
+                    'conf2' => 'val2.2',
+                ],
+            ],
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $this->assertFalse($this->subject->routePassExists('route1', 2));
+    }
+
+    /** @test */
+    public function routePassExistsOnExistingRouteAndExistingPass()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+            'passes' => [
+                0 => [
+                    'conf1' => 'val1.1',
+                ],
+                1 => [
+                    'conf2' => 'val2.2',
+                ],
+            ],
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $this->assertTrue($this->subject->routePassExists('route1', 0));
+        $this->assertTrue($this->subject->routePassExists('route1', 1));
+    }
+
+    /** @test */
+    public function getRoutePassLabelOnNonExistingRouteBehavesLikeEmptyRoute()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $result = $this->subject->getRoutePassLabel('route2', 0);
+        $this->assertEquals('route2', $result);
+    }
+
+    /** @test */
+    public function getRoutePassLabelOnExistingRouteWithoutPasses()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $result = $this->subject->getRoutePassLabel('route1', 0);
+        $this->assertEquals('route1', $result);
+    }
+
+    /** @test */
+    public function getRoutePassLabelOnExistingRouteWithOnePass()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+            'passes' => [
+                0 => [
+                    'conf1' => 'val1.1',
+                ],
+            ],
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $result = $this->subject->getRoutePassLabel('route1', 0);
+        $this->assertEquals('route1', $result);
+    }
+
+    /** @test */
+    public function getRoutePassLabelOnExistingRouteWithOnePassOfWhichTheKeyIsNotNumeric()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+            'passes' => [
+                'pass1' => [
+                    'conf1' => 'val1.1',
+                ],
+            ],
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $result = $this->subject->getRoutePassLabel('route1', 0);
+        $this->assertEquals('route1#pass1', $result);
+    }
+
+    /** @test */
+    public function getRoutePassLabelOnExistingRouteWithOnePassOfWhichTheKeyIsNumericAndBiggerThanZero()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+            'passes' => [
+                10 => [
+                    'conf1' => 'val1.1',
+                ],
+            ],
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $result = $this->subject->getRoutePassLabel('route1', 0);
+        $this->assertEquals('route1', $result);
+    }
+
+    /** @test */
+    public function getRoutePassLabelOnExistingRouteWithMultiplePassesWithNumericKeys()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+            'passes' => [
+                0 => [
+                    'conf1' => 'val1.1',
+                ],
+                1 => [
+                    'conf2' => 'val2.2',
+                ],
+            ],
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $this->assertEquals('route1#1', $this->subject->getRoutePassLabel('route1', 0));
+        $this->assertEquals('route1#2', $this->subject->getRoutePassLabel('route1', 1));
+    }
+
+    /** @test */
+    public function getRoutePassLabelOnExistingRouteWithMultiplePassesWithNonNumericKeys()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+            'passes' => [
+                'pass1' => [
+                    'conf1' => 'val1.1',
+                ],
+                'pass2' => [
+                    'conf2' => 'val2.2',
+                ],
+            ],
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $this->assertEquals('route1#pass1', $this->subject->getRoutePassLabel('route1', 0));
+        $this->assertEquals('route1#pass2', $this->subject->getRoutePassLabel('route1', 1));
+    }
+
+    /** @test */
+    public function getRoutePassLabelOnExistingRouteWithMultiplePassesWithMixedKeys()
+    {
+        $conf = [
+            'conf1' => 'val1',
+            'conf2' => 'val2',
+            'passes' => [
+                'pass1' => [
+                    'conf1' => 'val1.1',
+                ],
+                10 => [
+                    'conf1' => 'val1.2',
+                ],
+                'pass2' => [
+                    'conf1' => 'val1.3',
+                ],
+            ],
+        ];
+        $configList = [
+            [
+                'routes' => [
+                    'route1' => $conf,
+                ],
+            ],
+        ];
+        $this->subject = new SubmissionConfiguration($configList);
+        $this->assertEquals('route1#pass1', $this->subject->getRoutePassLabel('route1', 0));
+        $this->assertEquals('route1#pass2', $this->subject->getRoutePassLabel('route1', 1));
+        $this->assertEquals('route1#3', $this->subject->getRoutePassLabel('route1', 2));
     }
 }
