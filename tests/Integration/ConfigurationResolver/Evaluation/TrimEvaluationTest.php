@@ -1,6 +1,6 @@
 <?php
 
-namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
+namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\TrimEvaluation;
@@ -37,7 +37,6 @@ class TrimEvaluationTest extends AbstractModifierEvaluationTest
     public function modifyMultiValueProvider(): array
     {
         return [
-            [[], []],
             [[' value3 ', 'value4'], ['value3', 'value4']],
         ];
     }
