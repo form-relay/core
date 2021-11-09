@@ -106,4 +106,7 @@ class AndEvaluationTest extends AbstractEvaluationTest
         $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
+
+    // TODO test static keyword field (=> scalarValue)
+    // TODO test static keyword modify
 }
