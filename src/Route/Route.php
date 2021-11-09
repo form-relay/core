@@ -144,7 +144,8 @@ abstract class Route implements RouteInterface
             throw new FormRelayException('no dispatcher found for route "' . static::getKeyword() . '" in pass ' . $pass . '.');
         }
 
-        return $dataDispatcher->send($data);
+        $dataDispatcher->send($data);
+        return true;
     }
 
     public function getPassCount(SubmissionInterface $submission): int

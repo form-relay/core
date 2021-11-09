@@ -3,7 +3,7 @@
 namespace FormRelay\Core\Queue;
 
 use DateTime;
-use FormRelay\Core\Model\Queue\SubmissionJob;
+use FormRelay\Core\Model\Queue\JobInterface;
 
 class NonPersistentQueue implements QueueInterface
 {
@@ -30,7 +30,7 @@ class NonPersistentQueue implements QueueInterface
             if ($count > $offset) {
                 $result[] = $job;
             }
-            if ($count >= $limit) {
+            if ($limit > 0 && ($count - $offset) >= $limit) {
                 break;
             }
         }
@@ -62,11 +62,12 @@ class NonPersistentQueue implements QueueInterface
         return $this->fetchWhere([QueueInterface::STATUS_FAILED], $limit, $offset);
     }
 
-    public function markAs(JobInterface $job, int $status, string $message = '')
+    public function markAs(JobInterface $job, int $status, string $message = '', bool $skipped = false)
     {
         $job->setStatus($status);
         $job->setChanged(new DateTime());
         $job->setStatusMessage($message);
+        $job->setSkipped($skipped);
     }
 
     public function markAsPending(JobInterface $job)
@@ -79,9 +80,9 @@ class NonPersistentQueue implements QueueInterface
         $this->markAs($job, QueueInterface::STATUS_RUNNING);
     }
 
-    public function markAsDone(JobInterface $job)
+    public function markAsDone(JobInterface $job, bool $skipped = false)
     {
-        $this->markAs($job, QueueInterface::STATUS_DONE);
+        $this->markAs($job, QueueInterface::STATUS_DONE, '', $skipped);
     }
 
     public function markAsFailed(JobInterface $job, string $message = '')
@@ -96,27 +97,26 @@ class NonPersistentQueue implements QueueInterface
         }
     }
 
-    public function markListAsDone(array $jobs)
+    public function markListAsDone(array $jobs, bool $skipped = false)
     {
         foreach ($jobs as $job) {
-            $this->markAsDone($job);
+            $this->markAsDone($job, $skipped);
         }
     }
 
-    public function markListAsFailed(array $jobs)
+    public function markListAsFailed(array $jobs, string $message = '')
     {
         foreach ($jobs as $job) {
-            $this->markAsFailed($job);
+            $this->markAsFailed($job, $message);
         }
     }
 
-    public function addJob(array $data, $status = QueueInterface::STATUS_PENDING)
+    public function addJob(JobInterface $job)
     {
-        $job = new SubmissionJob();
-        $job->setId($this->index++);
-        $job->setData($data);
-        $job->setStatus($status);
-        $this->queue[] = $job;
+        if (array_search($job, $this->queue) === false) {
+            $job->setId($this->index++);
+            $this->queue[] = $job;
+        }
     }
 
     public function removeJob(JobInterface $job)
