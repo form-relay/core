@@ -118,4 +118,46 @@ class FieldEvaluationTest extends AbstractEvaluationTest
         $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
+
+    /** @test */
+    public function fieldKeywordEqualsEvalTrue()
+    {
+        $this->registry->registerEvaluation(NotEvaluation::class);
+        $this->submissionData['not'] = 'value1';
+        $config = [
+            'field' => [
+                'not' => 'value1',
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /** @test */
+    public function fieldKeywordEqualsEvalFalse()
+    {
+        $this->registry->registerEvaluation(NotEvaluation::class);
+        $this->submissionData['not'] = 'value1';
+        $config = [
+            'field' => [
+                'not' => 'value2',
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    /** @test */
+    public function fieldKeywordDoesNotExistEqualsEvalFalse()
+    {
+        $this->registry->registerEvaluation(NotEvaluation::class);
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'not' => 'value1',
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
 }
