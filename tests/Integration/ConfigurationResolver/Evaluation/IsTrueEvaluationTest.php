@@ -34,15 +34,10 @@ class IsTrueEvaluationTest extends IsFalseEvaluationTest
     {
         return [
             // value, is, => expected
-            // TODO multiValue fields with no items will cause disjunctive evaluations to be always false
-            //      and conjunctive evaluations to be always true
-            //      we may need an additional check on the whole field (in eval()), not just on evalValue()
-            // [[],           true,  /* => */ false],
-            // [[],           false, /* => */ true],
-
+            [[],           true,  /* => */ false],
+            [[],           false, /* => */ true],
             [['value1'], true,  /* => */ true],
             [['value1'], false, /* => */ false],
-
             [['', 'value2'], true,  /* => */ true],
             [['', 'value2'], false, /* => */ false],
             [['value1', ''], true,  /* => */ true],
