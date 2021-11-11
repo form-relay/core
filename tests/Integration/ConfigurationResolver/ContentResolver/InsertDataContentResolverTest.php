@@ -25,10 +25,7 @@ class InsertDataContentResolverTest extends AbstractContentResolverTest
             ['{value1},value2',              ',value2'],
             ['{field9}',                     null],
             ['\\s',                          ' '],
-
-            // TODO currently the tab replacement does not work!
-            //['\\t',                          "\t"],
-
+            ['\\t',                          "\t"],
             ['\\n',                          "\n"],
             ['field1\\s=\\s{field1}\\n{field2}\\n{field9}', "field1 = value1\nvalue2\n"],
         ];
