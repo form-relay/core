@@ -5,6 +5,7 @@ namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 abstract class AbstractClauseEvaluation extends Evaluation
 {
     const KEY_FIELD = 'field';
+    const KEY_INDEX = 'index';
     const KEY_MODIFY = 'modify';
 
     protected function getConfigurationBehaviour(): int
@@ -25,6 +26,10 @@ abstract class AbstractClauseEvaluation extends Evaluation
                 $this->addKeyToContext($value);
                 continue;
             }
+            if ($key === static::KEY_INDEX && !is_array($value)) {
+                $this->addIndexToContext($value);
+                continue;
+            }
             if ($key === static::KEY_MODIFY) {
                 $this->addModifierToContext($value);
                 continue;
@@ -36,7 +41,7 @@ abstract class AbstractClauseEvaluation extends Evaluation
                 if (is_numeric($key)) {
                     $evaluation = $this->resolveKeyword('general', $value);
                 } else {
-                    $this->context['key'] = $key;
+                    $this->addKeyToContext($key);
                     if (is_array($value)) {
                         $evaluation = $this->resolveKeyword('general', $value);
                     } else {

@@ -30,7 +30,6 @@ abstract class AbstractComparisonEvaluation extends Evaluation
 
         $result = true;
         foreach ($fieldValue as $value) {
-            $value = $this->modifyValue($value);
             $key = $this->findInList($value, $compareList);
             if ($key !== false) {
                 unset($compareList[$key]);
@@ -53,7 +52,7 @@ abstract class AbstractComparisonEvaluation extends Evaluation
         return $this->compareValue($fieldValue, $compareValue);
     }
 
-    protected function findInList($fieldValue, array $list): bool
+    protected function findInList($fieldValue, array $list)
     {
         $fieldValue = $this->modifyValue($fieldValue);
         return array_search($fieldValue, $list);

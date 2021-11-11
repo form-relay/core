@@ -108,5 +108,6 @@ class AndEvaluationTest extends AbstractEvaluationTest
     }
 
     // TODO test static keyword field (=> scalarValue)
+    // TODO test static keyword index (=> scalarValue)
     // TODO test static keyword modify
 }

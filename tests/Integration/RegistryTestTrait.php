@@ -9,6 +9,7 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EqualsEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\FieldEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\IndexEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\SelfEvaluation;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
@@ -79,6 +80,7 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
         $this->registry->registerEvaluation(SelfEvaluation::class);
         $this->registry->registerEvaluation(EqualsEvaluation::class);
         $this->registry->registerEvaluation(FieldEvaluation::class);
+        $this->registry->registerEvaluation(IndexEvaluation::class);
 
         // TODO GeneralEvaluation should just extend AndEvaluation instead of invoking it
         $this->registry->registerEvaluation(AndEvaluation::class);

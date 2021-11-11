@@ -27,11 +27,11 @@ class GeneralEvaluation extends Evaluation implements GeneralConfigurationResolv
     public function resolve(array $keysEvaluated = [])
     {
         if (is_array($this->configuration)) {
-            if (isset($this->configuration['then'])) {
+            if (array_key_exists('then', $this->configuration)) {
                 $this->then = $this->configuration['then'];
                 unset($this->configuration['then']);
             }
-            if (isset($this->configuration['else'])) {
+            if (array_key_exists('else', $this->configuration)) {
                 $this->else = $this->configuration['else'];
                 unset($this->configuration['else']);
             }

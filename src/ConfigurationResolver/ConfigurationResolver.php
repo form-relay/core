@@ -11,6 +11,8 @@ use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
 use FormRelay\Core\Helper\ConfigurationTrait;
 use FormRelay\Core\Helper\RegisterableTrait;
+use FormRelay\Core\Model\Form\FieldInterface;
+use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Service\ClassRegistryInterface;
 use FormRelay\Core\Utility\GeneralUtility;
@@ -153,6 +155,99 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
             ? $this->context->getData()[$key]
             : null;
         return $fieldValue;
+    }
+
+    /**
+     * @param mixed $key
+     * @param ConfigurationResolverContextInterface|null $context
+     */
+    protected function addKeyToContext($key, $context = null)
+    {
+        if ($context === null) {
+            $context = $this->context;
+        }
+        $resolvedKey = $this->resolveContent($key);
+        if (!GeneralUtility::isEmpty($resolvedKey)) {
+            $context['key'] = $resolvedKey;
+        } else {
+            unset($context['key']);
+        }
+        if (array_key_exists('index', $context)) {
+            unset($context['index']);
+        }
+    }
+
+    /**
+     * @param mixed $index
+     * @param ConfigurationResolverContextInterface|null $context
+     */
+    protected function addIndexToContext($index, $context = null)
+    {
+        if ($context === null) {
+            $context = $this->context;
+        }
+        $resolvedKey = $this->resolveContent($index);
+        if (!GeneralUtility::isEmpty($resolvedKey)) {
+            $index = $this->getIndexFromContext($context);
+            $index[] = $resolvedKey;
+            $context['index'] = $index;
+        } else {
+            unset($context['index']);
+        }
+    }
+
+    /**
+     * @param ConfigurationResolverContextInterface|null $context
+     * @return FieldInterface|string|null
+     */
+    protected function getKeyFromContext($context = null)
+    {
+        if ($context === null) {
+            $context = $this->context;
+        }
+        return $context['key'] ?? '';
+    }
+
+    /**
+     * @param ConfigurationResolverContextInterface|null $context
+     * @return array
+     */
+    protected function getIndexFromContext($context = null): array
+    {
+        if ($context === null) {
+            $context = $this->context;
+        }
+        return $context['index'] ?? [];
+    }
+
+    /**
+     * @param ConfigurationResolverContextInterface|null $context
+     * @return FieldInterface|string|null
+     */
+    protected function getSelectedValue($context = null)
+    {
+        if ($context === null) {
+            $context = $this->context;
+        }
+        $key = $this->getKeyFromContext();
+        if ($key) {
+            if ($context['useKey'] ?? false) {
+                return $key;
+            } else {
+                $fieldValue = $this->getFieldValue($key);
+                $indices = $this->getIndexFromContext($context);
+                while (!empty($indices)) {
+                    $index = array_shift($indices);
+                    if ($fieldValue instanceof MultiValueField) {
+                        $fieldValue = $fieldValue[$index] ?? null;
+                    } else {
+                        break;
+                    }
+                }
+                return $fieldValue;
+            }
+        }
+        return null;
     }
 
     protected function resolveContent($config, ConfigurationResolverContextInterface $context = null)
