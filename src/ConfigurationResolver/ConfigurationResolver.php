@@ -172,7 +172,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
         } else {
             unset($context['key']);
         }
-        if (array_key_exists('index', $context)) {
+        if ($context['index'] ?? false) {
             unset($context['index']);
         }
     }
