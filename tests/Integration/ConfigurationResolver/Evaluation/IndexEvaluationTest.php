@@ -429,4 +429,122 @@ class IndexEvaluationTest extends AbstractEvaluationTest
         $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
+
+    /** @test */
+    public function emptyIndexClearsIndexEvalTrue()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field1' => [
+                    'index' => [
+                        'someIndex' => [
+                            'index' => [
+                                '' => 'value1',
+                            ]
+                        ]
+                    ],
+                ],
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /** @test */
+    public function emptyIndexClearsIndexEvalFalse()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field1' => [
+                    'index' => [
+                        'someIndex' => [
+                            'index' => [
+                                '' => 'value2',
+                            ]
+                        ]
+                    ],
+                ],
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    /** @test */
+    public function emptyIndexDoesNothingIfNoIndexWasSetBeforeEvalTrue()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field1' => [
+                    'index' => [
+                        '' => 'value1',
+                    ]
+                ],
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /** @test */
+    public function emptyIndexDoesNothingIfNoIndexWasSetBeforeEvalFalse()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field1' => [
+                    'index' => [
+                        '' => 'value2',
+                    ]
+                ],
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    /** @test */
+    public function newFieldClearsIndexEvalTrue()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field2' => [
+                    'index' => [
+                        'index2' => [
+                            'field' => [
+                                'field1' => 'value1',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /** @test */
+    public function newFieldClearsIndexEvalFalse()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field2' => [
+                    'index' => [
+                        'index2' => [
+                            'field' => [
+                                'field1' => 'value2',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
 }

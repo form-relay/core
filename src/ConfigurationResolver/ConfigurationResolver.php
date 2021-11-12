@@ -169,10 +169,10 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
         $resolvedKey = $this->resolveContent($key);
         if (!GeneralUtility::isEmpty($resolvedKey)) {
             $context['key'] = $resolvedKey;
-        } else {
+        } elseif (isset($context['key'])) {
             unset($context['key']);
         }
-        if ($context['index'] ?? false) {
+        if (isset($context['index'])) {
             unset($context['index']);
         }
     }
@@ -191,7 +191,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
             $index = $this->getIndexFromContext($context);
             $index[] = $resolvedKey;
             $context['index'] = $index;
-        } else {
+        } elseif (isset($context['index'])) {
             unset($context['index']);
         }
     }

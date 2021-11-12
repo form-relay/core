@@ -160,4 +160,70 @@ class FieldEvaluationTest extends AbstractEvaluationTest
         $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
+
+    public function newFieldOverwritesCurrentFieldProvider(): array
+    {
+        return [
+            [false, false],
+            [false, true],
+            [true,  false],
+            [true,  true],
+        ];
+    }
+
+    /**
+     * @param bool $fieldFieldImplicit
+     * @param bool $secondFieldImplicit
+     * @dataProvider newFieldOverwritesCurrentFieldProvider
+     * @test
+     */
+    public function newFieldOverwritesCurrentFieldEvalTrue(bool $fieldFieldImplicit, bool $secondFieldImplicit)
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field2' => [
+                    'field' => [
+                        'field1' => 'value1',
+                    ],
+                ],
+            ],
+        ];
+        if ($secondFieldImplicit) {
+            $config['field']['field2'] = $config['field']['field2']['field'];
+        }
+        if ($fieldFieldImplicit) {
+            $config = $config['field'];
+        }
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @param bool $firstFieldImplicit
+     * @param bool $secondFieldImplicit
+     * @dataProvider newFieldOverwritesCurrentFieldProvider
+     * @test
+     */
+    public function newFieldOverwritesCurrentFieldEvalFalse(bool $firstFieldImplicit, bool $secondFieldImplicit)
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field2' => [
+                    'field' => [
+                        'field1' => 'value2',
+                    ],
+                ],
+            ],
+        ];
+        if ($secondFieldImplicit) {
+            $config['field']['field2'] = $config['field']['field2']['field'];
+        }
+        if ($firstFieldImplicit) {
+            $config = $config['field'];
+        }
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
 }
