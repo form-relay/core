@@ -241,6 +241,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
                     if ($fieldValue instanceof MultiValueField) {
                         $fieldValue = $fieldValue[$index] ?? null;
                     } else {
+                        $fieldValue = null;
                         break;
                     }
                 }

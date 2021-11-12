@@ -412,4 +412,21 @@ class IndexEvaluationTest extends AbstractEvaluationTest
         $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
+
+    /** @test */
+    public function indexOnScalarValueEqualsScalarValueEvalFalse()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field1' => [
+                    'index' => [
+                        'index1' => 'value1',
+                    ],
+                ],
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
 }
