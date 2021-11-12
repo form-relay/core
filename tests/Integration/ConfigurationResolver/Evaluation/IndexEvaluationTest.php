@@ -356,14 +356,23 @@ class IndexEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function nestedMultiValueItemEqualsScalarValueEvalTrue()
     {
-        $this->submissionData['field1'] = new MultiValueField([new MultiValueField(['value1'])]);
+        $this->submissionData['field1'] = new MultiValueField([
+            'index1' => new MultiValueField([
+                'index1_1' => 'value1_1',
+                'index1_2' => 'value1_2',
+            ]),
+            'index2' => new MultiValueField([
+                'index2_1' => 'value2_1',
+                'index2_2' => 'value2_2',
+            ]),
+        ]);
         $config = [
             'field' => [
                 'field1' => [
                     'index' => [
-                        '0' => [
+                        'index2' => [
                             'index' => [
-                                '0' => 'value1',
+                                'index2_1' => 'value2_1',
                             ],
                         ],
                     ],
@@ -377,14 +386,23 @@ class IndexEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function nestedMultiValueItemEqualsScalarValueEvalFalse()
     {
-        $this->submissionData['field1'] = new MultiValueField([new MultiValueField(['value1'])]);
+        $this->submissionData['field1'] = new MultiValueField([
+            'index1' => new MultiValueField([
+                'index1_1' => 'value1_1',
+                'index1_2' => 'value1_2',
+            ]),
+            'index2' => new MultiValueField([
+                'index2_1' => 'value2_1',
+                'index2_2' => 'value2_2',
+            ]),
+        ]);
         $config = [
             'field' => [
                 'field1' => [
                     'index' => [
-                        '0' => [
+                        'index2' => [
                             'index' => [
-                                '0' => 'value2',
+                                'index2_1' => 'value2_2',
                             ],
                         ],
                     ],
