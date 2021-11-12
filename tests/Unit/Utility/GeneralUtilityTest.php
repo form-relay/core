@@ -19,18 +19,14 @@ class GeneralUtilityTest extends TestCase
             ['0', false],
             ['1', false],
             ['value1', false],
-
-            // TODO multi values with empty items should not be considered empty
-            // [new MultiValueField(['']), false],
-
+            [new MultiValueField(['']), false],
             [new MultiValueField([]), true],
             [new MultiValueField([0]), false],
             [new MultiValueField([1]), false],
             [new MultiValueField(['0']), false],
             [new MultiValueField(['1']), false],
             [new MultiValueField(['value1']), false],
-
-            [new DiscreteMultiValueField(), true],
+            [new DiscreteMultiValueField([]), true],
             [new DiscreteMultiValueField(['value1']), false],
         ];
     }
@@ -60,8 +56,12 @@ class GeneralUtilityTest extends TestCase
             ['0', false],
             ['1', true],
             ['value1', true],
-
-            // TODO how should isTrue respond to multi values?
+            [new MultiValueField([]), false],
+            [new MultiValueField([0]), true],
+            [new MultiValueField([1]), true],
+            [new MultiValueField([5]), true],
+            [new MultiValueField(['']), true],
+            [new MultiValueField(['value1']), true],
         ];
     }
 
@@ -154,16 +154,14 @@ class GeneralUtilityTest extends TestCase
     {
         return [
             [[], null, null, []],
-
             [['value1'], null, null, ['value1']],
-
-            // TODO plain arrays currently don't have their items trimmed
-            // [[' value1 '], ',', true, ['value1']],
-
-            [new MultiValueField(), null, null, []],
+            [[' value1 '], ',', true, ['value1']],
+            [new MultiValueField([]), null, null, []],
             [new MultiValueField(['value1', 'value2']), null, null, ['value1', 'value2']],
-            [new DiscreteMultiValueField(), null, null, []],
+            [new MultiValueField([' value1', 'value2 ']), null, null, ['value1', 'value2']],
+            [new DiscreteMultiValueField([]), null, null, []],
             [new DiscreteMultiValueField(['value1', 'value2']), null, null, ['value1', 'value2']],
+            [new DiscreteMultiValueField([' value1', 'value2 ']), null, null, ['value1', 'value2']],
 
             ['', null, null, []],
             ['value1', null, null, ['value1']],

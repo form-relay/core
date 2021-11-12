@@ -54,6 +54,31 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
         }
     }
 
+    protected function evalEmptyMultiValue(): bool
+    {
+        return $this->multiValueIsDisjunctive() ? false : true;
+    }
+
+    protected function evalMultiValue(MultiValueField $fieldValue, array $keysEvaluated = []): bool
+    {
+        if (GeneralUtility::isEmpty($fieldValue)) {
+            $result = $this->evalEmptyMultiValue();
+        } else {
+            if ($this->multiValueIsDisjunctive()) {
+                $result = false;
+                foreach ($fieldValue as $value) {
+                    $result = $this->evalValue($value, $keysEvaluated) || $result;
+                }
+            } else {
+                $result = true;
+                foreach ($fieldValue as $value) {
+                    $result = $this->evalValue($value, $keysEvaluated) && $result;
+                }
+            }
+        }
+        return $result;
+    }
+
     /**
      * the method "eval" is called to evaluate the expression defined in the config
      * it will always return a boolean value
@@ -66,17 +91,7 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
         $fieldValue = $this->getSelectedValue();
 
         if ($fieldValue instanceof MultiValueField) {
-            if ($this->multiValueIsDisjunctive()) {
-                $result = false;
-                foreach ($fieldValue as $value) {
-                    $result = $this->evalValue($value, $keysEvaluated) || $result;
-                }
-            } else {
-                $result = true;
-                foreach ($fieldValue as $value) {
-                    $result = $this->evalValue($value, $keysEvaluated) && $result;
-                }
-            }
+            $result = $this->evalMultiValue($fieldValue, $keysEvaluated);
         } else {
             $result = $this->evalValue($fieldValue, $keysEvaluated);
         }

@@ -55,11 +55,9 @@ abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
         $this->assertTrue($result);
     }
 
-    // TODO: see EmptyEvaluationTest
     /** @test */
     public function modifyEmptyMultiValue()
     {
-        $this->markTestSkipped();
         $this->registry->registerEvaluation(EmptyEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField();
         $config = [

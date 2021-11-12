@@ -75,10 +75,6 @@ class NegateContentResolverTest extends AbstractContentResolverTest
 
     protected function runNegate($value, $true, $false, $negate, $expected, $useNullOnTrue, $useNullOnFalse)
     {
-        if ($useNullOnTrue || $useNullOnFalse) {
-            // TODO null values on true or false options will currently return null, they should be ignored instead
-            return;
-        }
         $config = [
             SubmissionConfigurationInterface::KEY_SELF => $value,
         ];
@@ -125,7 +121,6 @@ class NegateContentResolverTest extends AbstractContentResolverTest
         }
     }
 
-    // TODO disabling negate modifier is not implemented yet
     /**
      * @param $value
      * @param $true
@@ -136,7 +131,6 @@ class NegateContentResolverTest extends AbstractContentResolverTest
      */
     public function negateDisabled($value, $true, $false, $expected)
     {
-        $this->markTestSkipped();
         $this->runNegate($value, $true, $false, false, $value, false, false);
         if ($true === null) {
             $this->runNegate($value, $true, $false, false, $value, true, false);
@@ -151,18 +145,9 @@ class NegateContentResolverTest extends AbstractContentResolverTest
 
     protected function runNegateMultiValue($value, $true, $false, $negate, $expected, $useNullOnTrue, $useNullOnFalse)
     {
-        if ($useNullOnTrue || $useNullOnFalse) {
-            // TODO null values on true or false options will currently return null, they should be ignored instead
-            return;
-        }
-        if ($value === null) {
-            $value = [];
-        }
-        if ($expected === null) {
-            $expected = [];
-        }
+        $expected = $expected === null ? [] : [$expected];
         $config = [
-            'multiValue' => [$value],
+            'multiValue' => $value === null ? [] : [$value],
         ];
         if ($true !== null || $false !== null || $useNullOnTrue || $useNullOnFalse) {
             $config['negate'] = [
@@ -185,7 +170,6 @@ class NegateContentResolverTest extends AbstractContentResolverTest
         }
     }
 
-    // TODO negate modifier does not take multi values into account
     /**
      * @param $value
      * @param $true
@@ -196,7 +180,6 @@ class NegateContentResolverTest extends AbstractContentResolverTest
      */
     public function negateMultiValueEnabled($value, $true, $false, $expected)
     {
-        $this->markTestSkipped();
         $this->runNegateMultiValue($value, $true, $false, true, $expected, false, false);
         if ($true === null) {
             $this->runNegateMultiValue($value, $true, $false, true, $expected, true, false);
@@ -209,8 +192,6 @@ class NegateContentResolverTest extends AbstractContentResolverTest
         }
     }
 
-    // TODO negate modifier does not take multi values into account
-    // TODO disabling negate modifier is not implemented yet
     /**
      * @param $value
      * @param $true
@@ -221,7 +202,6 @@ class NegateContentResolverTest extends AbstractContentResolverTest
      */
     public function negateMultiValueDisabled($value, $true, $false, $expected)
     {
-        $this->markTestSkipped();
         $this->runNegateMultiValue($value, $true, $false, false, $value, false, false);
         if ($true === null) {
             $this->runNegateMultiValue($value, $true, $false, false, $value, true, false);
@@ -234,11 +214,9 @@ class NegateContentResolverTest extends AbstractContentResolverTest
         }
     }
 
-    // TODO negate modifier does not take multi values into account
     /** @test */
     public function negateDiscreteMultiValue()
     {
-        $this->markTestSkipped();
         $this->registry->registerContentResolver(DiscreteMultiValueContentResolver::class);
         $config = [
             'discreteMultiValue' => ['0', '1', '0'],

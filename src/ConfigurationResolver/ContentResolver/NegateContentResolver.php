@@ -2,6 +2,9 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
+use FormRelay\Core\Model\Form\MultiValueField;
+use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
+
 class NegateContentResolver extends ContentResolver
 {
     const KEY_TRUE = 'true';
@@ -12,20 +15,32 @@ class NegateContentResolver extends ContentResolver
 
     protected function getConfigurationBehaviour(): int
     {
-        return static::CONFIGURATION_BEHAVIOUR_IGNORE_SCALAR;
+        return static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE;
+    }
+
+    protected function negateValue($value, $true, $false)
+    {
+        if ($value === $true) {
+            return $false;
+        } elseif ($value === $false) {
+            return $true;
+        } else {
+            return (bool)$value ? $false : $true;
+        }
     }
 
     public function finish(&$result): bool
     {
-        if ($result !== null) {
-            $true = $this->resolveContent($this->getConfig(static::KEY_TRUE));
-            $false = $this->resolveContent($this->getConfig(static::KEY_FALSE));
-            if ($result === $true) {
-                $result = $false;
-            } elseif ($result === $false) {
-                $result = $true;
+        $enabled = $this->configuration[SubmissionConfigurationInterface::KEY_SELF] ?? true;
+        if ($enabled && $result !== null) {
+            $true = $this->resolveContent($this->getConfig(static::KEY_TRUE)) ?? static::DEFAULT_TRUE;
+            $false = $this->resolveContent($this->getConfig(static::KEY_FALSE)) ?? static::DEFAULT_FALSE;
+            if ($result instanceof MultiValueField) {
+                foreach ($result as $key => $value) {
+                    $result[$key] = $this->negateValue($value, $true, $false);
+                }
             } else {
-                $result = (bool)$result ? $false : $true;
+                $result = $this->negateValue($result, $true, $false);
             }
         }
         return false;

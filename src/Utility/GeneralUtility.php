@@ -14,16 +14,28 @@ final class GeneralUtility
 
     public static function isEmpty($value)
     {
+        if (is_array($value)) {
+            return empty($value);
+        }
+        if ($value instanceof MultiValueField) {
+            return empty($value->toArray());
+        }
         return strlen((string)$value) === 0;
     }
 
     public static function isTrue($value)
     {
+        if ($value instanceof MultiValueField) {
+            return (bool)$value->toArray();
+        }
         return (bool)$value;
     }
 
     public static function isFalse($value)
     {
+        if ($value instanceof MultiValueField) {
+            return !$value->toArray();
+        }
         return !$value;
     }
 
@@ -44,15 +56,13 @@ final class GeneralUtility
     public static function castValueToArray($value, $token = ',', $trim = true): array
     {
         if (is_array($value)) {
-            return $value;
+            $array = $value;
+        } elseif ($value instanceof MultiValueField) {
+            $array = $value->toArray();
+        } else {
+            $value = (string)$value;
+            $array = !static::isEmpty($value) ? explode($token, $value) : [];
         }
-
-        if ($value instanceof MultiValueField) {
-            return $value->toArray();
-        }
-
-        $value = (string)$value;
-        $array = !static::isEmpty($value) ? explode($token, $value) : [];
 
         if ($trim) {
             $array = array_map('trim', $array);
