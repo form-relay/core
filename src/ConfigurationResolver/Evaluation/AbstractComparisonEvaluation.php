@@ -23,25 +23,17 @@ abstract class AbstractComparisonEvaluation extends Evaluation
         return (string)$fieldValue === (string)$compareValue;
     }
 
-    private function compareLists($fieldValue, $compareList): bool
+    private function compareLists($fieldValue, $compareList, bool $strict = false): bool
     {
         $fieldValue = GeneralUtility::castValueToArray($fieldValue);
         $compareList = GeneralUtility::castValueToArray($compareList);
 
-        $result = true;
-        foreach ($fieldValue as $value) {
-            $key = $this->findInList($value, $compareList);
-            if ($key !== false) {
-                unset($compareList[$key]);
-            } else {
-                $result = false;
-                break;
-            }
+        if (!$strict) {
+            sort($fieldValue);
+            sort($compareList);
         }
-        if (!empty($compareList)) {
-            $result = false;
-        }
-        return $result;
+
+        return $fieldValue === $compareList;
     }
 
     protected function compare($fieldValue, $compareValue): bool

@@ -38,21 +38,13 @@ abstract class AbstractClauseEvaluation extends Evaluation
             $evaluation = $this->resolveKeyword($key, $value);
 
             if (!$evaluation) {
-                if (is_numeric($key)) {
-                    $evaluation = $this->resolveKeyword('general', $value);
-                } else {
+                if (!is_numeric($key)) {
                     $this->addKeyToContext($key);
-                    if (is_array($value)) {
-                        $evaluation = $this->resolveKeyword('general', $value);
-                    } else {
-                        $evaluation = $this->resolveKeyword('equals', $value);
-                    }
                 }
+                $evaluation = $this->resolveKeyword('general', $value);
             }
 
-            if ($evaluation) {
-                $subEvaluations[] = $evaluation;
-            }
+            $subEvaluations[] = $evaluation;
         }
 
         $this->sortSubResolvers($subEvaluations);
