@@ -36,14 +36,6 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
         return true;
     }
 
-    protected function addKeyToContext($key)
-    {
-        $resolvedKey = $this->resolveContent($key);
-        if (!GeneralUtility::isEmpty($resolvedKey)) {
-            $this->context['key'] = (string)$resolvedKey;
-        }
-    }
-
     protected function addModifierToContext($modifier, $context = null)
     {
         if ($context === null) {
@@ -95,14 +87,7 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
      */
     public function eval(array $keysEvaluated = []): bool
     {
-        $fieldValue = null;
-        if (isset($this->context['key'])) {
-            if ($this->context['useKey'] ?? false) {
-                $fieldValue = $this->context['key'];
-            } else {
-                $fieldValue = $this->getFieldValue($this->context['key']);
-            }
-        }
+        $fieldValue = $this->getSelectedValue();
 
         if ($fieldValue instanceof MultiValueField) {
             $result = $this->evalMultiValue($fieldValue, $keysEvaluated);
