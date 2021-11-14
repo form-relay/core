@@ -206,7 +206,6 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function evalFieldDoesNotExist()
     {
-        $this->markTestSkipped();
         $config = [
             'field1' => [
                 static::KEY_SELF => 'value1',

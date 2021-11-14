@@ -26,7 +26,11 @@ abstract class ValueMapper extends ConfigurationResolver implements ValueMapperI
     {
         // TODO this fallback on fieldValues should not be necessary anymore. confirm and then remove
         if ($fieldValue === null) {
-            $fieldValue = $this->getFieldValue($this->getKeyFromContext());
+            $fieldValue = $this->getSelectedValue();
+        }
+
+        if ($fieldValue === null) {
+            return null;
         }
 
         if ($fieldValue instanceof MultiValueField) {
