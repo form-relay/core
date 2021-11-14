@@ -1,4 +1,8 @@
 
+[TASK] clearly defined multi-value constructor including a default value
+
+[TASK] enabled content resolvers for configurations needing a list of terms
+
 [TASK] minor bugfixes, updates and code cleanup
 * general content resolver does not pass glue to multi-values anymore
 * evaluation: fixed list comparison

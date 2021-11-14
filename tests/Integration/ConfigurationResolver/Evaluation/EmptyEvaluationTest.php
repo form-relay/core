@@ -39,18 +39,18 @@ class EmptyEvaluationTest extends AbstractIsEvaluationTest
     {
         return [
             // value, is, => expected
-            [new MultiValueField([]),             true,  /* => */ true],
-            [new MultiValueField([]),             false, /* => */ false],
-            [new MultiValueField(['value1']),     true,  /* => */ false],
-            [new MultiValueField(['value1']),     false, /* => */ true],
-            [new MultiValueField(['', 'value2']), true,  /* => */ false],
-            [new MultiValueField(['', 'value2']), false, /* => */ true],
-            [new MultiValueField(['value1', '']), true,  /* => */ false],
-            [new MultiValueField(['value1', '']), false, /* => */ true],
-            [new MultiValueField(['']),           true,  /* => */ false],
-            [new MultiValueField(['']),           false, /* => */ true],
-            [new MultiValueField(['', '']),       true,  /* => */ false],
-            [new MultiValueField(['', '']),       false, /* => */ true],
+            [[],             true,  /* => */ true],
+            [[],             false, /* => */ false],
+            [['value1'],     true,  /* => */ false],
+            [['value1'],     false, /* => */ true],
+            [['', 'value2'], true,  /* => */ false],
+            [['', 'value2'], false, /* => */ true],
+            [['value1', ''], true,  /* => */ false],
+            [['value1', ''], false, /* => */ true],
+            [[''],           true,  /* => */ false],
+            [[''],           false, /* => */ true],
+            [['', ''],       true,  /* => */ false],
+            [['', ''],       false, /* => */ true],
 
             // TODO as soon as the evaluations "any" and "all" are imlpemented
             //      that needs additional testing

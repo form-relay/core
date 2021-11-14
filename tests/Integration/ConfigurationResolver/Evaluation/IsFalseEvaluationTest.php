@@ -38,10 +38,10 @@ class IsFalseEvaluationTest extends AbstractIsEvaluationTest
     {
         return [
             // value, is, => expected
-            [[],           true,  /* => */ true],
-            [[],           false, /* => */ false],
-            [['value1'], true,  /* => */ false],
-            [['value1'], false, /* => */ true],
+            [[],             true,  /* => */ true],
+            [[],             false, /* => */ false],
+            [['value1'],     true,  /* => */ false],
+            [['value1'],     false, /* => */ true],
             [['', 'value2'], true,  /* => */ false],
             [['', 'value2'], false, /* => */ true],
             [['value1', ''], true,  /* => */ false],

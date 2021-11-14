@@ -12,13 +12,13 @@ abstract class AbstractIsEvaluationTest extends AbstractEvaluationTest
     abstract public function isMultiValueProvider(): array;
 
     /**
-     * @param $value
-     * @param $is
-     * @param $expected
+     * @param mixed $value
+     * @param bool $is
+     * @param bool $expected
      * @dataProvider isProvider
      * @test
      */
-    public function is($value, $is, $expected)
+    public function is($value, bool $is, bool $expected)
     {
         if ($value !== null) {
             $this->submissionData['field1'] = $value;
@@ -37,13 +37,13 @@ abstract class AbstractIsEvaluationTest extends AbstractEvaluationTest
     }
 
     /**
-     * @param $value
-     * @param $is
-     * @param $expected
+     * @param array $value
+     * @param bool $is
+     * @param bool $expected
      * @dataProvider isMultiValueProvider
      * @test
      */
-    public function isMultiValue($value, $is, $expected)
+    public function isMultiValue(array $value, bool $is, bool $expected)
     {
         $this->submissionData['field1'] = new MultiValueField($value);
         $config = [
