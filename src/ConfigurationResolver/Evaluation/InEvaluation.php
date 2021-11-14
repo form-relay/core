@@ -6,7 +6,7 @@ class InEvaluation extends AbstractComparisonEvaluation
 {
     protected function getConfigurationBehaviour(): int
     {
-        return static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_EXPLODE;
+        return static::CONFIGURATION_BEHAVIOUR_RESOLVE_CONTENT_THEN_CAST_TO_ARRAY;
     }
 
     protected function evalValue($fieldValue, array $keysEvaluated = [])

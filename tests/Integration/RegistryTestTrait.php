@@ -3,6 +3,7 @@
 namespace FormRelay\Core\Tests\Integration;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SelfContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
@@ -73,6 +74,7 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
         $this->registry->registerContentResolver(GeneralContentResolver::class);
         $this->registry->registerContentResolver(SelfContentResolver::class);
         $this->registry->registerContentResolver(MultiValueContentResolver::class);
+        $this->registry->registerContentResolver(ListContentResolver::class);
     }
 
     protected function registerBasicEvaluations()

@@ -37,17 +37,30 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
     const CONFIGURATION_BEHAVIOUR_IGNORE_SCALAR = 1;
 
     /**
-     * the configuration will be converted to an array (explode) if it is a scalar value
+     * the configuration will be used to resolve content
+     * which is then cast to an array afterwards
+     * - multi-values will be cast to an array
+     * - scalar values will be converted (explode)
      * this is useful for configurations like:
      * feature = a,b,c
      * ... which can also be expressed like:
-     * feature {
+     * feature.list {
      *     1 = a
      *     2 = b
      *     3 = c
      * }
+     * ... or even with more complex logic like:
+     * feature.list {
+     *     1 = a
+     *     2.field = field_b
+     *     3.if {
+     *         foo = bar
+     *         then = c
+     *         else = c2
+     *     }
+     * }
      */
-    const CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_EXPLODE = 2;
+    const CONFIGURATION_BEHAVIOUR_RESOLVE_CONTENT_THEN_CAST_TO_ARRAY = 2;
 
     /**
      * the configuration will be converted to an array if it is a scalar value
@@ -86,13 +99,16 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
                     $this->configuration = [];
                 }
                 break;
-            case static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_EXPLODE:
-                $this->configuration = GeneralUtility::castValueToArray($config);
+            case static::CONFIGURATION_BEHAVIOUR_RESOLVE_CONTENT_THEN_CAST_TO_ARRAY:
+                $this->configuration = GeneralUtility::castValueToArray(
+                    $this->resolveContent($this->configuration)
+                );
                 break;
             case static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE:
                 if (!is_array($config)) {
                     $this->configuration = [SubmissionConfigurationInterface::KEY_SELF => $this->configuration];
                 }
+                break;
         }
     }
 
