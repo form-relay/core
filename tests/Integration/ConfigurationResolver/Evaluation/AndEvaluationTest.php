@@ -161,7 +161,10 @@ class AndEvaluationTest extends AbstractEvaluationTest
         $this->registry->registerEvaluation(RegexpEvaluation::class);
         $config = [
             'field' => 'field1',
-            'regexp' => 'value[1]',
+            'and' => [
+                ['regexp' => 'value[12]'],
+                ['regexp' => 'value[0-9]'],
+            ]
         ];
         $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
@@ -173,7 +176,34 @@ class AndEvaluationTest extends AbstractEvaluationTest
         $this->registry->registerEvaluation(RegexpEvaluation::class);
         $config = [
             'field' => 'field1',
-            'regexp' => 'value[23]',
+            'and' => [
+                ['regexp' => 'value[23]'],
+                ['regexp' => 'value[0-9]'],
+            ]
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    /** @test */
+    public function staticKeywordFieldWithSubEvaluationsEvalTrue()
+    {
+        $config = [
+            'field2' => 'value2',
+            'field' => 'field1',
+            'equals' => 'value1',
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /** @test */
+    public function staticKeywordFieldWithSubEvaluationsEvalFalse()
+    {
+        $config = [
+            'field2' => 'value2',
+            'field' => 'field1',
+            'equals' => 'value2',
         ];
         $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);

@@ -40,10 +40,11 @@ abstract class AbstractClauseEvaluation extends Evaluation
             $evaluation = $this->resolveKeyword($key, $value);
 
             if (!$evaluation) {
+                $context = $this->context->copy();
                 if (!is_numeric($key)) {
-                    $this->addKeyToContext($key);
+                    $this->addKeyToContext($key, $context);
                 }
-                $evaluation = $this->resolveKeyword('general', $value);
+                $evaluation = $this->resolveKeyword('general', $value, $context);
             }
 
             $subEvaluations[] = $evaluation;

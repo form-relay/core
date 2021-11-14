@@ -170,7 +170,10 @@ class OrEvaluationTest extends AbstractEvaluationTest
         $config = [
             'or' => [
                 'field' => 'field1',
-                'regexp' => 'value[1]',
+                'and' => [
+                    ['regexp' => 'value[12]'],
+                    ['regexp' => 'value[0-9]'],
+                ]
             ],
         ];
         $result = $this->runEvaluationProcess($config);
@@ -184,7 +187,38 @@ class OrEvaluationTest extends AbstractEvaluationTest
         $config = [
             'or' => [
                 'field' => 'field1',
-                'regexp' => 'value[23]',
+                'and' => [
+                    ['regexp' => 'value[23]'],
+                    ['regexp' => 'value[0-9]'],
+                ]
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    /** @test */
+    public function staticKeywordFieldWithSubEvaluationsEvalTrue()
+    {
+        $config = [
+            'or' => [
+                'field2' => 'value1',
+                'field' => 'field1',
+                'equals' => 'value1',
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /** @test */
+    public function staticKeywordFieldWithSubEvaluationsEvalFalse()
+    {
+        $config = [
+            'or' => [
+                'field2' => 'value1',
+                'field' => 'field1',
+                'equals' => 'value2',
             ],
         ];
         $result = $this->runEvaluationProcess($config);
