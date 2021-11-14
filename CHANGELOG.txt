@@ -1,4 +1,11 @@
 
+[TASK] minor bugfixes, updates and code cleanup
+* general content resolver does not pass glue to multi-values anymore
+* evaluation: fixed list comparison
+* evaluation: fixed findInList comparison
+
+[FEATURE] Evaluations "Field" and "Index" (MEDO-563)
+
 2.1.0
 
 [FEATURE] Job Attributes "skipped" and "hash" (MEDO-566)

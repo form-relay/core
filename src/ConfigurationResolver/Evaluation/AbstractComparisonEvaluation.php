@@ -5,7 +5,7 @@ namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Utility\GeneralUtility;
 
-class AbstractComparisonEvaluation extends Evaluation
+abstract class AbstractComparisonEvaluation extends Evaluation
 {
     protected function modifyValue($fieldValue)
     {
@@ -23,26 +23,17 @@ class AbstractComparisonEvaluation extends Evaluation
         return (string)$fieldValue === (string)$compareValue;
     }
 
-    private function compareLists($fieldValue, $compareList): bool
+    private function compareLists($fieldValue, $compareList, bool $strict = false): bool
     {
         $fieldValue = GeneralUtility::castValueToArray($fieldValue);
         $compareList = GeneralUtility::castValueToArray($compareList);
 
-        $result = true;
-        foreach ($fieldValue as $value) {
-            $value = $this->modifyValue($value);
-            $key = $this->findInList($value, $compareList);
-            if ($key !== false) {
-                unset($compareList[$key]);
-            } else {
-                $result = false;
-                break;
-            }
+        if (!$strict) {
+            sort($fieldValue);
+            sort($compareList);
         }
-        if (!empty($compareList)) {
-            $result = false;
-        }
-        return $result;
+
+        return $fieldValue === $compareList;
     }
 
     protected function compare($fieldValue, $compareValue): bool
@@ -53,7 +44,7 @@ class AbstractComparisonEvaluation extends Evaluation
         return $this->compareValue($fieldValue, $compareValue);
     }
 
-    protected function findInList($fieldValue, array $list): bool
+    protected function findInList($fieldValue, array $list)
     {
         $fieldValue = $this->modifyValue($fieldValue);
         return array_search($fieldValue, $list);
