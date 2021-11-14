@@ -221,6 +221,17 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
     }
 
     /**
+     * Fetching the value of the previously selected field (and index).
+     * Examples:
+     * field.country // === getFieldValue(country)
+     * field.countries.index.0 // === getFieldValue(countries)[0]
+     * field.some_deep_nested_field.index.7.index.5 // === getFieldValue(some_deep_nested_field)[7][5]
+     *
+     * Can also just return the field name instead of its value. In such a case the index is ignored.
+     * Examples:
+     * field.country.key = country // a tautology
+     * loopData.condition.key.in = country,state // loops over the fields "country" and "state" if they exist
+     *
      * @param ConfigurationResolverContextInterface|null $context
      * @return FieldInterface|string|null
      */
