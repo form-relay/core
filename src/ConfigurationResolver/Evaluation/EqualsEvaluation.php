@@ -2,11 +2,13 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
-class EqualsEvaluation extends AbstractComparisonEvaluation
+use FormRelay\Core\Utility\GeneralUtility;
+
+class EqualsEvaluation extends Evaluation
 {
     public function eval(array $keysEvaluated = []): bool
     {
-        return $this->compare(
+        return GeneralUtility::compare(
             $this->getSelectedValue(),
             $this->resolveContent($this->configuration)
         );

@@ -413,8 +413,12 @@ class IndexEvaluationTest extends AbstractEvaluationTest
         $this->assertFalse($result);
     }
 
-    /** @test */
-    public function indexOnScalarValueEqualsScalarValueEvalFalse()
+    /**
+     * @param bool $fieldImplicit
+     * @dataProvider implicitFieldProvider
+     * @test
+     */
+    public function indexOnScalarValueEqualsScalarValueEvalFalse(bool $fieldImplicit)
     {
         $this->submissionData['field1'] = 'value1';
         $config = [
@@ -426,12 +430,19 @@ class IndexEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
+        if ($fieldImplicit) {
+            $config = $config['field'];
+        }
         $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
-    /** @test */
-    public function emptyIndexClearsIndexEvalTrue()
+    /**
+     * @param bool $fieldImplicit
+     * @dataProvider implicitFieldProvider
+     * @test
+     */
+    public function emptyIndexClearsIndexEvalTrue(bool $fieldImplicit)
     {
         $this->submissionData['field1'] = 'value1';
         $config = [
@@ -447,12 +458,19 @@ class IndexEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
+        if ($fieldImplicit) {
+            $config = $config['field'];
+        }
         $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
-    /** @test */
-    public function emptyIndexClearsIndexEvalFalse()
+    /**
+     * @param bool $fieldImplicit
+     * @dataProvider implicitFieldProvider
+     * @test
+     */
+    public function emptyIndexClearsIndexEvalFalse(bool $fieldImplicit)
     {
         $this->submissionData['field1'] = 'value1';
         $config = [
@@ -468,12 +486,19 @@ class IndexEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
+        if ($fieldImplicit) {
+            $config = $config['field'];
+        }
         $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
-    /** @test */
-    public function emptyIndexDoesNothingIfNoIndexWasSetBeforeEvalTrue()
+    /**
+     * @param bool $fieldImplicit
+     * @dataProvider implicitFieldProvider
+     * @test
+     */
+    public function emptyIndexDoesNothingIfNoIndexWasSetBeforeEvalTrue(bool $fieldImplicit)
     {
         $this->submissionData['field1'] = 'value1';
         $config = [
@@ -485,12 +510,19 @@ class IndexEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
+        if ($fieldImplicit) {
+            $config = $config['field'];
+        }
         $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
-    /** @test */
-    public function emptyIndexDoesNothingIfNoIndexWasSetBeforeEvalFalse()
+    /**
+     * @param bool $fieldImplicit
+     * @dataProvider implicitFieldProvider
+     * @test
+     */
+    public function emptyIndexDoesNothingIfNoIndexWasSetBeforeEvalFalse(bool $fieldImplicit)
     {
         $this->submissionData['field1'] = 'value1';
         $config = [
@@ -502,12 +534,30 @@ class IndexEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
+        if ($fieldImplicit) {
+            $config = $config['field'];
+        }
         $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }
 
-    /** @test */
-    public function newFieldClearsIndexEvalTrue()
+    public function newFieldClearsIndexProvider(): array
+    {
+        return [
+            [false, false],
+            [false, true],
+            [true,  false],
+            [true,  true],
+        ];
+    }
+
+    /**
+     * @param bool $firstFieldImplicit
+     * @param bool $secondFieldImplicit
+     * @dataProvider newFieldClearsIndexProvider
+     * @test
+     */
+    public function newFieldClearsIndexEvalTrue(bool $firstFieldImplicit, bool $secondFieldImplicit)
     {
         $this->submissionData['field1'] = 'value1';
         $config = [
@@ -523,12 +573,23 @@ class IndexEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
+        if ($secondFieldImplicit) {
+            $config['field']['field2']['index']['index2'] = $config['field']['field2']['index']['index2']['field'];
+        }
+        if ($firstFieldImplicit) {
+            $config = $config['field'];
+        }
         $result = $this->runEvaluationProcess($config);
         $this->assertTrue($result);
     }
 
-    /** @test */
-    public function newFieldClearsIndexEvalFalse()
+    /**
+     * @param bool $firstFieldImplicit
+     * @param bool $secondFieldImplicit
+     * @dataProvider newFieldClearsIndexProvider
+     * @test
+     */
+    public function newFieldClearsIndexEvalFalse(bool $firstFieldImplicit, bool $secondFieldImplicit)
     {
         $this->submissionData['field1'] = 'value1';
         $config = [
@@ -544,6 +605,12 @@ class IndexEvaluationTest extends AbstractEvaluationTest
                 ],
             ],
         ];
+        if ($secondFieldImplicit) {
+            $config['field']['field2']['index']['index2'] = $config['field']['field2']['index']['index2']['field'];
+        }
+        if ($firstFieldImplicit) {
+            $config = $config['field'];
+        }
         $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }

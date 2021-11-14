@@ -32,19 +32,18 @@ abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
     }
 
     /**
-     * @param $value
-     * @param $modifiedValue
+     * @param array $value
+     * @param array $modifiedValue
      * @dataProvider modifyMultiValueProvider
      * @test
      */
-    public function modifyMultiValue($value, $modifiedValue)
+    public function modifyMultiValue(array $value, array $modifiedValue)
     {
-        $this->registry->registerEvaluation(InEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField($value);
         $config = [
             'field1' => [
                 static::KEYWORD => [
-                    'in' => ['list' => $modifiedValue],
+                    'equals' => ['multiValue' => $modifiedValue],
                 ],
             ],
         ];
