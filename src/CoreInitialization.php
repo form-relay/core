@@ -26,7 +26,6 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\UpperCaseContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\ValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AllEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\AllInEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AnyEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EmptyEvaluation;
@@ -71,7 +70,6 @@ class CoreInitialization extends Initialization
 
     const EVALUATIONS = [
         AllEvaluation::class,
-        AllInEvaluation::class,
         AndEvaluation::class,
         SelfEvaluation::class,
         AnyEvaluation::class,

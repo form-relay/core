@@ -26,12 +26,9 @@ class NotEvaluationTest extends AbstractEvaluationTest
         $this->assertTrue($result);
     }
 
-    // TODO currently scalar values trigger the equals evaluation
-    //      they should just trigger a standard general evaluation instead
     /** @test */
     public function notUnaryEvalFalse()
     {
-        $this->markTestSkipped();
         $config = [
             'not' => '1',
         ];
