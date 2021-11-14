@@ -8,6 +8,10 @@ class MultiValueField extends ArrayObject implements FieldInterface
 {
     protected $glue = ',';
 
+    public function __construct(array $a = []) {
+        parent::__construct($a);
+    }
+
     public function toArray(): array
     {
         return iterator_to_array($this);

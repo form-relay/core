@@ -2,9 +2,24 @@
 
 namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
+use FormRelay\Core\Model\Form\MultiValueField;
+
 abstract class AbstractModifierContentResolver extends ContentResolver
 {
-    abstract protected function modify(&$result);
+    protected function modifyValue(&$result)
+    {
+    }
+
+    protected function modify(&$result)
+    {
+        if ($result instanceof MultiValueField) {
+            foreach ($result as $key => $value) {
+                $this->modify($result[$key]);
+            }
+        } else {
+            $this->modifyValue($result);
+        }
+    }
 
     public function finish(&$result): bool
     {

@@ -35,19 +35,18 @@ abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
     //      and if it does, it should check if the values are equal
     //      once this is implemented, we can here use the "equals" evaluation instead of "in"
     /**
-     * @param $value
-     * @param $modifiedValue
+     * @param array $value
+     * @param array $modifiedValue
      * @dataProvider modifyMultiValueProvider
      * @test
      */
-    public function modifyMultiValue($value, $modifiedValue)
+    public function modifyMultiValue(array $value, array $modifiedValue)
     {
-        $this->registry->registerEvaluation(InEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField($value);
         $config = [
             'field1' => [
                 static::KEYWORD => [
-                    'in' => $modifiedValue,
+                    'equals' => ['multiValue' => $modifiedValue],
                 ],
             ],
         ];

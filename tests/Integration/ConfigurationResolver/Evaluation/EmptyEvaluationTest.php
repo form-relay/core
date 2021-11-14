@@ -39,25 +39,59 @@ class EmptyEvaluationTest extends AbstractIsEvaluationTest
     {
         return [
             // value, is, => expected
-            [new MultiValueField([]),             true,  /* => */ true],
-            [new MultiValueField([]),             false, /* => */ false],
-            [new MultiValueField(['value1']),     true,  /* => */ false],
-            [new MultiValueField(['value1']),     false, /* => */ true],
-            [new MultiValueField(['', 'value2']), true,  /* => */ false],
-            [new MultiValueField(['', 'value2']), false, /* => */ true],
-            [new MultiValueField(['value1', '']), true,  /* => */ false],
-            [new MultiValueField(['value1', '']), false, /* => */ true],
-            [new MultiValueField(['']),           true,  /* => */ false],
-            [new MultiValueField(['']),           false, /* => */ true],
-            [new MultiValueField(['', '']),       true,  /* => */ false],
-            [new MultiValueField(['', '']),       false, /* => */ true],
+            [[],             true,  /* => */ true],
+            [[],             false, /* => */ false],
+            [['value1'],     true,  /* => */ false],
+            [['value1'],     false, /* => */ true],
+            [['', 'value2'], true,  /* => */ false],
+            [['', 'value2'], false, /* => */ true],
+            [['value1', ''], true,  /* => */ false],
+            [['value1', ''], false, /* => */ true],
+            [[''],           true,  /* => */ false],
+            [[''],           false, /* => */ true],
+            [['', ''],       true,  /* => */ false],
+            [['', ''],       false, /* => */ true],
+        ];
+    }
 
-            // TODO as soon as the evaluations "any" and "all" are imlpemented
-            //      that needs additional testing
-            //      because then we do want to test the items inside the multi-value field
-            //      instead of the field as a whole
-            //      this decision has to be made for the isTrue and isFalse evaluations as well
-            //      even though it is not as clear for them as it is for the empty evaluation
+    public function anyIsMultiValueProvider(): array
+    {
+        return [
+            // value, is, => expected
+            [[],                   true,  /* => */ false],
+            [[],                   false, /* => */ false],
+            [['value1'],           true,  /* => */ false],
+            [['value1'],           false, /* => */ true],
+            [['value1', 'value2'], true,  /* => */ false],
+            [['value1', 'value2'], false, /* => */ true],
+            [['', 'value2'],       true,  /* => */ true],
+            [['', 'value2'],       false, /* => */ true],
+            [['value1', ''],       true,  /* => */ true],
+            [['value1', ''],       false, /* => */ true],
+            [[''],                 true,  /* => */ true],
+            [[''],                 false, /* => */ false],
+            [['', ''],             true,  /* => */ true],
+            [['', ''],             false, /* => */ false],
+        ];
+    }
+
+    public function allIsMultiValueProvider(): array
+    {
+        return [
+            [[],                   true,  /* => */ true],
+            [[],                   false, /* => */ true],
+            [['value1'],           true,  /* => */ false],
+            [['value1'],           false, /* => */ true],
+            [['value1', 'value2'], true,  /* => */ false],
+            [['value1', 'value2'], false, /* => */ true],
+            [['', 'value2'],       true,  /* => */ false],
+            [['', 'value2'],       false, /* => */ false],
+            [['value1', ''],       true,  /* => */ false],
+            [['value1', ''],       false, /* => */ false],
+            [[''],                 true,  /* => */ true],
+            [[''],                 false, /* => */ false],
+            [['', ''],             true,  /* => */ true],
+            [['', ''],             false, /* => */ false],
         ];
     }
 }

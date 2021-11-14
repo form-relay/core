@@ -87,7 +87,6 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function singleMultiValueWithGlue()
     {
-        $this->contentResolverClasses['multiValue'] = MultiValueContentResolver::class;
         $config = [
             'glue' => ',',
             1 => [
@@ -101,7 +100,6 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function emptyScalarValueAndNonEmptyMultiValueWithGlue()
     {
-        $this->contentResolverClasses['multiValue'] = MultiValueContentResolver::class;
         $config = [
             'glue' => ',',
             1 => '',
@@ -113,13 +111,9 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
         $this->assertMultiValueEquals(['value1', 'value2'], $result);
     }
 
-    // TODO resolver glue should not be used on multiValue fields
-    //      we have the join resolver for that
     /** @test */
     public function multipleMultiValuesWithGlue()
     {
-        $this->markTestSkipped();
-        $this->contentResolverClasses['multiValue'] = MultiValueContentResolver::class;
         $config = [
             'glue' => ';',
             1 => [

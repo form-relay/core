@@ -24,6 +24,7 @@ abstract class ValueMapper extends ConfigurationResolver implements ValueMapperI
      */
     public function resolve($fieldValue = null)
     {
+        // TODO this fallback on fieldValues should not be necessary anymore. confirm and then remove
         if ($fieldValue === null) {
             $fieldValue = $this->getSelectedValue();
         }

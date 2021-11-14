@@ -92,4 +92,40 @@ final class GeneralUtility
         $hash = strtoupper(md5($serialized));
         return $short ? static::shortenHash($hash) : $hash;
     }
+
+    public static function compareValue($fieldValue, $compareValue): bool
+    {
+        return (string)$fieldValue === (string)$compareValue;
+    }
+
+    public static function compareLists($fieldValue, $compareList, bool $strict = false): bool
+    {
+        $fieldValue = static::castValueToArray($fieldValue);
+        $compareList = static::castValueToArray($compareList);
+
+        if (!$strict) {
+            sort($fieldValue);
+            sort($compareList);
+        }
+
+        return $fieldValue === $compareList;
+    }
+
+    public static function compare($fieldValue, $compareValue): bool
+    {
+        if (static::isList($fieldValue) || static::isList($compareValue)) {
+            return static::compareLists($fieldValue, $compareValue);
+        }
+        return static::compareValue($fieldValue, $compareValue);
+    }
+
+    public static function findInList($fieldValue, array $list)
+    {
+        return array_search($fieldValue, $list);
+    }
+
+    public static function isInList($fieldValue, array $list): bool
+    {
+        return in_array($fieldValue, $list);
+    }
 }
