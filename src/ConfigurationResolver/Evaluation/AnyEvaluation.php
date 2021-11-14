@@ -23,10 +23,9 @@ class AnyEvaluation extends Evaluation
 
     protected function evalMultiValue(MultiValueField $fieldValue, array $keysEvaluated = []): bool
     {
-        $baseContext = $this->context;
         $result = $this->initialValue();
         foreach ($fieldValue as $index => $value) {
-            $context = $baseContext->copy();
+            $context = $this->context->copy();
             $this->addIndexToContext($index, $context);
             $result = $this->calculateResult($this->evaluate($this->configuration, $context), $result);
         }
