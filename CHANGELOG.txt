@@ -1,4 +1,10 @@
 
+[BUGFIX] minor value mapper bugfixes
+* switch value mapper - sorting
+* abstract value mapper - null values
+
+[FEATURE] Multi-Value Evaluation "Any" and "All" (MEDO-564)
+
 [TASK] clearly defined multi-value constructor including a default value
 
 [TASK] enabled content resolvers for configurations needing a list of terms
