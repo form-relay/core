@@ -4,7 +4,6 @@ namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
 use FormRelay\Core\Model\Form\FieldInterface;
-use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Utility\GeneralUtility;
 
 class GeneralContentResolver extends AbstractWrapperContentResolver implements GeneralConfigurationResolverInterface

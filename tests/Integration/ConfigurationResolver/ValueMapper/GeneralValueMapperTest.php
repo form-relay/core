@@ -20,12 +20,9 @@ class GeneralValueMapperTest extends AbstractValueMapperTest
         $this->registry->registerValueMapper(GeneralValueMapper::class);
     }
 
-    // TODO there is legacy code trying to fetch the field value from the context if null is passed
-    //      which doesn't really make sense anymore and also messes up this test
     /** @test */
     public function mapNull()
     {
-        $this->markTestSkipped();
         $this->fieldValue = null;
         $config = [
             'value0' => 'value0b',
@@ -109,5 +106,42 @@ class GeneralValueMapperTest extends AbstractValueMapperTest
         ];
         $result = $this->runResolverProcess($config);
         $this->assertMultiValueEquals(['value1b', 'value2', 'value3b'], $result, DiscreteMultiValueField::class);
+    }
+
+    /** @test */
+    public function mapNestedMultiValue()
+    {
+        $this->fieldValue = new MultiValueField([
+            'key1' => 'value1',
+            'key2' => new MultiValueField(),
+            'key3' => new MultiValueField([
+                'key3_1' => 'value3_1',
+                'key3_2' => new DiscreteMultiValueField([
+                    'key_3_2_1' => 'value3_2_1',
+                    'key_3_2_2' => 'value3_2_2',
+                ]),
+            ]),
+        ]);
+        $config = [
+            'value1' => 'value1b',
+            'value3_1' => 'value3_1b',
+            'value3_2_1' => 'value3_2_1b',
+            'value3_2_2' => 'value3_2_2b',
+        ];
+        $result = $this->runResolverProcess($config);
+
+        $expected = new MultiValueField([
+            'key1' => 'value1b',
+            'key2' => new MultiValueField(),
+            'key3' => new MultiValueField([
+                'key3_1' => 'value3_1b',
+                'key3_2' => new DiscreteMultiValueField([
+                    'key_3_2_1' => 'value3_2_1b',
+                    'key_3_2_2' => 'value3_2_2b',
+                ]),
+            ]),
+        ]);
+
+        $this->assertMultiValueEquals($expected, $result);
     }
 }

@@ -6,6 +6,7 @@ trait RelayTestTrait
 {
     use RegistryTestTrait;
     use SubmissionTestTrait;
+    use JobTestTrait;
 
     protected $routeSpy = null;
     protected $dataProviderSpy = null;

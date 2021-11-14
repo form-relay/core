@@ -2,13 +2,16 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
-class SelfEvaluation extends EqualsEvaluation
+class SelfEvaluation extends Evaluation
 {
-    protected function evalValue($fieldValue, array $keysEvaluated = [])
+    public function eval(array $keysEvaluated = []): bool
     {
-        if ($fieldValue === null) {
+        if (!$this->getKeyFromContext()) {
             return (bool)$this->configuration;
         }
-        return parent::evalValue($fieldValue, $keysEvaluated);
+
+        /** @var EvaluationInterface $evaluation */
+        $evaluation = $this->resolveKeyword('equals', $this->configuration);
+        return $evaluation->eval($keysEvaluated);
     }
 }

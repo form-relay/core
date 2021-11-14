@@ -5,6 +5,7 @@ namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 use FormRelay\Core\ConfigurationResolver\ConfigurationResolver;
 use FormRelay\Core\Model\Form\FieldInterface;
 use FormRelay\Core\Model\Form\MultiValueField;
+use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 use FormRelay\Core\Utility\GeneralUtility;
 
 abstract class Evaluation extends ConfigurationResolver implements EvaluationInterface
@@ -12,36 +13,6 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
     protected static function getResolverInterface(): string
     {
         return EvaluationInterface::class;
-    }
-
-    /**
-     * @param string|FieldInterface|null $fieldValue
-     * @param array $keysEvaluated
-     * @return bool
-     */
-    protected function evalValue($fieldValue, array $keysEvaluated = [])
-    {
-        return true;
-    }
-
-    /**
-     * if a multi-value field is evaluated, a disjunction means that
-     * the whole evaluation is true if at least one evaluation
-     * for one of the values of that field is true (or-condition)
-     *
-     * @return bool
-     */
-    protected function multiValueIsDisjunctive()
-    {
-        return true;
-    }
-
-    protected function addKeyToContext($key)
-    {
-        $resolvedKey = $this->resolveContent($key);
-        if (!GeneralUtility::isEmpty($resolvedKey)) {
-            $this->context['key'] = (string)$resolvedKey;
-        }
     }
 
     protected function addModifierToContext($modifier, $context = null)
@@ -62,6 +33,40 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
     }
 
     /**
+     * @param string|FieldInterface|null $fieldValue
+     * @return string|FieldInterface|null
+     */
+    protected function modifyValue($fieldValue)
+    {
+        $modifierConfig = $this->context['modifier'] ?? null;
+        if ($modifierConfig) {
+            $modifierConfig[SubmissionConfigurationInterface::KEY_SELF] = $fieldValue;
+            $fieldValue = $this->resolveContent($modifierConfig);
+        }
+        return $fieldValue;
+    }
+
+    protected function getSelectedValue($context = null)
+    {
+        return $this->modifyValue(parent::getSelectedValue($context));
+    }
+
+    /**
+     * @param string|FieldInterface|null $fieldValue
+     * @param array $keysEvaluated
+     * @return bool
+     */
+    protected function evalValue($fieldValue, array $keysEvaluated = [])
+    {
+        return true;
+    }
+
+    protected function evalMultiValue(MultiValueField $fieldValue, array $keysEvaluated = []): bool
+    {
+        return $this->evalValue($fieldValue, $keysEvaluated);
+    }
+
+    /**
      * the method "eval" is called to evaluate the expression defined in the config
      * it will always return a boolean value
      *
@@ -70,27 +75,10 @@ abstract class Evaluation extends ConfigurationResolver implements EvaluationInt
      */
     public function eval(array $keysEvaluated = []): bool
     {
-        $fieldValue = null;
-        if (isset($this->context['key'])) {
-            if ($this->context['useKey'] ?? false) {
-                $fieldValue = $this->context['key'];
-            } else {
-                $fieldValue = $this->getFieldValue($this->context['key']);
-            }
-        }
+        $fieldValue = $this->getSelectedValue();
 
         if ($fieldValue instanceof MultiValueField) {
-            if ($this->multiValueIsDisjunctive()) {
-                $result = false;
-                foreach ($fieldValue as $value) {
-                    $result = $this->evalValue($value, $keysEvaluated) || $result;
-                }
-            } else {
-                $result = true;
-                foreach ($fieldValue as $value) {
-                    $result = $this->evalValue($value, $keysEvaluated) && $result;
-                }
-            }
+            $result = $this->evalMultiValue($fieldValue, $keysEvaluated);
         } else {
             $result = $this->evalValue($fieldValue, $keysEvaluated);
         }

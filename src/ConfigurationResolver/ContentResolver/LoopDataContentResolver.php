@@ -53,7 +53,7 @@ class LoopDataContentResolver extends ContentResolver
         foreach ($this->context->getData() as $key => $value) {
             if ($condition) {
                 $context = $this->context->copy();
-                $context['key'] = $key;
+                $this->addKeyToContext($key, $context);
                 if (!$this->evaluate($condition, $context)) {
                     continue;
                 }

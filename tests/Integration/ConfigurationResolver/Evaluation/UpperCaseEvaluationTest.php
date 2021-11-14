@@ -1,6 +1,6 @@
 <?php
 
-namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
+namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\UpperCaseContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\UpperCaseEvaluation;
@@ -31,7 +31,6 @@ class UpperCaseEvaluationTest extends AbstractModifierEvaluationTest
     public function modifyMultiValueProvider(): array
     {
         return [
-            [[], []],
             [['Value1', 'VALUE2', 'value3'], ['VALUE1', 'VALUE2', 'VALUE3']],
         ];
     }

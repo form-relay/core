@@ -143,18 +143,16 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
         $this->assertEquals('value1,value2,value3', $result);
     }
 
-    // TODO: the glue option of the general content resolver should not be used for the multi value when cast to a string
     /** @test */
     public function loopDataFieldTemplateMultiValuesWithLoopGlue()
     {
-        $this->markTestSkipped();
         $this->submissionData['field1'] = new MultiValueField([5, 7, 17]);
         $this->submissionData['field2'] = 's';
         $this->submissionData['field3'] = new MultiValueField(['c', 7, 'k']);
         $config = [
             'loopData' => [
                 'glue' => ';',
-                'template' => ['field' => 'value']
+                'template' => ['field' => 'value'],
             ],
         ];
         $result = $this->runResolverProcess($config);

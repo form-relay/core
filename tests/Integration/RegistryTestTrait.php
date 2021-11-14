@@ -3,11 +3,15 @@
 namespace FormRelay\Core\Tests\Integration;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SelfContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EqualsEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\FieldEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\IndexEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\OrEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\SelfEvaluation;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
@@ -37,6 +41,9 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
     /** @var QueueInterface */
     protected $queue;
 
+    /** @var QueueInterface */
+    protected $temporaryQueue;
+
     /** @var QueueDataFactoryInterface */
     protected $queueDataFactory;
 
@@ -49,11 +56,12 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
         $this->request = $this->createMock(RequestInterface::class);
         $this->loggerFactory = $this->createMock(LoggerFactoryInterface::class);
         $this->queue = $this->createMock(QueueInterface::class);
+        $this->temporaryQueue = $this->createMock(QueueInterface::class);
 
         // initialize the rest regularly
         $this->queueDataFactory = new QueueDataFactory();
 
-        $this->registry = new Registry($this->request, $this->loggerFactory, $this->queue, $this->queueDataFactory);
+        $this->registry = new Registry($this->request, $this->loggerFactory, $this->queue, $this->temporaryQueue, $this->queueDataFactory);
     }
 
     protected function registerAllDefaults()
@@ -66,6 +74,7 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
         $this->registry->registerContentResolver(GeneralContentResolver::class);
         $this->registry->registerContentResolver(SelfContentResolver::class);
         $this->registry->registerContentResolver(MultiValueContentResolver::class);
+        $this->registry->registerContentResolver(ListContentResolver::class);
     }
 
     protected function registerBasicEvaluations()
@@ -73,9 +82,10 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
         $this->registry->registerEvaluation(GeneralEvaluation::class);
         $this->registry->registerEvaluation(SelfEvaluation::class);
         $this->registry->registerEvaluation(EqualsEvaluation::class);
-
-        // TODO GeneralEvaluation should just extend AndEvaluation instead of invoking it
+        $this->registry->registerEvaluation(FieldEvaluation::class);
+        $this->registry->registerEvaluation(IndexEvaluation::class);
         $this->registry->registerEvaluation(AndEvaluation::class);
+        $this->registry->registerEvaluation(OrEvaluation::class);
     }
 
     protected function registerBasicValueMappers()

@@ -2,7 +2,7 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
-class OrEvaluation extends AndEvaluation
+class OrEvaluation extends AbstractClauseEvaluation
 {
     protected function initialValue(): bool
     {

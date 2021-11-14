@@ -1,4 +1,27 @@
 
+[BUGFIX] minor value mapper bugfixes
+* switch value mapper - sorting
+* abstract value mapper - null values
+
+[FEATURE] Multi-Value Evaluation "Any" and "All" (MEDO-564)
+
+[TASK] clearly defined multi-value constructor including a default value
+
+[TASK] enabled content resolvers for configurations needing a list of terms
+
+[TASK] minor bugfixes, updates and code cleanup
+* general content resolver does not pass glue to multi-values anymore
+* evaluation: fixed list comparison
+* evaluation: fixed findInList comparison
+
+[FEATURE] Evaluations "Field" and "Index" (MEDO-563)
+
+2.1.0
+
+[FEATURE] Job Attributes "skipped" and "hash" (MEDO-566)
+
+[FEATURE] Synchronous Submissions use Storage too (MEDO-570)
+
 2.0.2
 
 [BUGFIX] empty submission caused error during unpacking (LMSM21-188)
