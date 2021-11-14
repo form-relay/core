@@ -24,8 +24,7 @@ class IsTrueEvaluationTest extends IsFalseEvaluationTest
     {
         $provided = parent::isProvider();
         foreach ($provided as $index => $arguments) {
-            $arguments[2] = !$arguments[2];
-            $provided[$index] = $arguments;
+            $provided[$index][2] = !$arguments[2];
         }
         return $provided;
     }

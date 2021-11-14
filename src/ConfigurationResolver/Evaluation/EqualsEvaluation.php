@@ -6,9 +6,12 @@ use FormRelay\Core\Model\Form\MultiValueField;
 
 class EqualsEvaluation extends AbstractComparisonEvaluation
 {
-    protected function evalValue($fieldValue, array $keysEvaluated = [])
+    public function eval(array $keysEvaluated = []): bool
     {
-        return $this->compare($fieldValue, $this->resolveContent($this->configuration));
+        return $this->compare(
+            $this->getSelectedValue(),
+            $this->resolveContent($this->configuration)
+        );
     }
 
     protected function evalMultiValue(MultiValueField $fieldValue, array $keysEvaluated = []): bool

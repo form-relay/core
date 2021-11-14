@@ -21,38 +21,33 @@ abstract class AbstractClauseEvaluation extends Evaluation
     {
         $subEvaluations = [];
 
-        foreach ($this->configuration as $key => $value) {
-            if ($key === static::KEY_FIELD && !is_array($value)) {
-                $this->addKeyToContext($value);
-                continue;
-            }
-            if ($key === static::KEY_INDEX && !is_array($value)) {
-                $this->addIndexToContext($value);
-                continue;
-            }
-            if ($key === static::KEY_MODIFY) {
-                $this->addModifierToContext($value);
-                continue;
-            }
+        if (array_key_exists(static::KEY_MODIFY, $this->configuration)) {
+            $this->addModifierToContext($this->configuration[static::KEY_MODIFY]);
+            unset($this->configuration[static::KEY_MODIFY]);
+        }
 
+        if (array_key_exists(static::KEY_FIELD, $this->configuration) && !is_array($this->configuration[static::KEY_FIELD])) {
+            $this->addKeyToContext($this->configuration[static::KEY_FIELD]);
+            unset($this->configuration[static::KEY_FIELD]);
+        }
+
+        if (array_key_exists(static::KEY_INDEX, $this->configuration) && !is_array($this->configuration[static::KEY_INDEX])) {
+            $this->addIndexToContext($this->configuration[static::KEY_INDEX]);
+            unset($this->configuration[static::KEY_INDEX]);
+        }
+
+        foreach ($this->configuration as $key => $value) {
             $evaluation = $this->resolveKeyword($key, $value);
 
             if (!$evaluation) {
-                if (is_numeric($key)) {
-                    $evaluation = $this->resolveKeyword('general', $value);
-                } else {
-                    $this->addKeyToContext($key);
-                    if (is_array($value)) {
-                        $evaluation = $this->resolveKeyword('general', $value);
-                    } else {
-                        $evaluation = $this->resolveKeyword('equals', $value);
-                    }
+                $context = $this->context->copy();
+                if (!is_numeric($key)) {
+                    $this->addKeyToContext($key, $context);
                 }
+                $evaluation = $this->resolveKeyword('general', $value, $context);
             }
 
-            if ($evaluation) {
-                $subEvaluations[] = $evaluation;
-            }
+            $subEvaluations[] = $evaluation;
         }
 
         $this->sortSubResolvers($subEvaluations);

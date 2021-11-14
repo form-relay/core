@@ -356,14 +356,23 @@ class IndexEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function nestedMultiValueItemEqualsScalarValueEvalTrue()
     {
-        $this->submissionData['field1'] = new MultiValueField([new MultiValueField(['value1'])]);
+        $this->submissionData['field1'] = new MultiValueField([
+            'index1' => new MultiValueField([
+                'index1_1' => 'value1_1',
+                'index1_2' => 'value1_2',
+            ]),
+            'index2' => new MultiValueField([
+                'index2_1' => 'value2_1',
+                'index2_2' => 'value2_2',
+            ]),
+        ]);
         $config = [
             'field' => [
                 'field1' => [
                     'index' => [
-                        '0' => [
+                        'index2' => [
                             'index' => [
-                                '0' => 'value1',
+                                'index2_1' => 'value2_1',
                             ],
                         ],
                     ],
@@ -377,20 +386,231 @@ class IndexEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function nestedMultiValueItemEqualsScalarValueEvalFalse()
     {
-        $this->submissionData['field1'] = new MultiValueField([new MultiValueField(['value1'])]);
+        $this->submissionData['field1'] = new MultiValueField([
+            'index1' => new MultiValueField([
+                'index1_1' => 'value1_1',
+                'index1_2' => 'value1_2',
+            ]),
+            'index2' => new MultiValueField([
+                'index2_1' => 'value2_1',
+                'index2_2' => 'value2_2',
+            ]),
+        ]);
         $config = [
             'field' => [
                 'field1' => [
                     'index' => [
-                        '0' => [
+                        'index2' => [
                             'index' => [
-                                '0' => 'value2',
+                                'index2_1' => 'value2_2',
                             ],
                         ],
                     ],
                 ],
             ],
         ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @param bool $fieldImplicit
+     * @dataProvider implicitFieldProvider
+     * @test
+     */
+    public function indexOnScalarValueEqualsScalarValueEvalFalse(bool $fieldImplicit)
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field1' => [
+                    'index' => [
+                        'index1' => 'value1',
+                    ],
+                ],
+            ],
+        ];
+        if ($fieldImplicit) {
+            $config = $config['field'];
+        }
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @param bool $fieldImplicit
+     * @dataProvider implicitFieldProvider
+     * @test
+     */
+    public function emptyIndexClearsIndexEvalTrue(bool $fieldImplicit)
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field1' => [
+                    'index' => [
+                        'someIndex' => [
+                            'index' => [
+                                '' => 'value1',
+                            ]
+                        ]
+                    ],
+                ],
+            ],
+        ];
+        if ($fieldImplicit) {
+            $config = $config['field'];
+        }
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @param bool $fieldImplicit
+     * @dataProvider implicitFieldProvider
+     * @test
+     */
+    public function emptyIndexClearsIndexEvalFalse(bool $fieldImplicit)
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field1' => [
+                    'index' => [
+                        'someIndex' => [
+                            'index' => [
+                                '' => 'value2',
+                            ]
+                        ]
+                    ],
+                ],
+            ],
+        ];
+        if ($fieldImplicit) {
+            $config = $config['field'];
+        }
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @param bool $fieldImplicit
+     * @dataProvider implicitFieldProvider
+     * @test
+     */
+    public function emptyIndexDoesNothingIfNoIndexWasSetBeforeEvalTrue(bool $fieldImplicit)
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field1' => [
+                    'index' => [
+                        '' => 'value1',
+                    ]
+                ],
+            ],
+        ];
+        if ($fieldImplicit) {
+            $config = $config['field'];
+        }
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @param bool $fieldImplicit
+     * @dataProvider implicitFieldProvider
+     * @test
+     */
+    public function emptyIndexDoesNothingIfNoIndexWasSetBeforeEvalFalse(bool $fieldImplicit)
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field1' => [
+                    'index' => [
+                        '' => 'value2',
+                    ]
+                ],
+            ],
+        ];
+        if ($fieldImplicit) {
+            $config = $config['field'];
+        }
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    public function newFieldClearsIndexProvider(): array
+    {
+        return [
+            [false, false],
+            [false, true],
+            [true,  false],
+            [true,  true],
+        ];
+    }
+
+    /**
+     * @param bool $firstFieldImplicit
+     * @param bool $secondFieldImplicit
+     * @dataProvider newFieldClearsIndexProvider
+     * @test
+     */
+    public function newFieldClearsIndexEvalTrue(bool $firstFieldImplicit, bool $secondFieldImplicit)
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field2' => [
+                    'index' => [
+                        'index2' => [
+                            'field' => [
+                                'field1' => 'value1',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        if ($secondFieldImplicit) {
+            $config['field']['field2']['index']['index2'] = $config['field']['field2']['index']['index2']['field'];
+        }
+        if ($firstFieldImplicit) {
+            $config = $config['field'];
+        }
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @param bool $firstFieldImplicit
+     * @param bool $secondFieldImplicit
+     * @dataProvider newFieldClearsIndexProvider
+     * @test
+     */
+    public function newFieldClearsIndexEvalFalse(bool $firstFieldImplicit, bool $secondFieldImplicit)
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field' => [
+                'field2' => [
+                    'index' => [
+                        'index2' => [
+                            'field' => [
+                                'field1' => 'value2',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        if ($secondFieldImplicit) {
+            $config['field']['field2']['index']['index2'] = $config['field']['field2']['index']['index2']['field'];
+        }
+        if ($firstFieldImplicit) {
+            $config = $config['field'];
+        }
         $result = $this->runEvaluationProcess($config);
         $this->assertFalse($result);
     }

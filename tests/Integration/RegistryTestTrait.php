@@ -3,6 +3,7 @@
 namespace FormRelay\Core\Tests\Integration;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SelfContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
@@ -10,6 +11,7 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\EqualsEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\FieldEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\IndexEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\OrEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\SelfEvaluation;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
@@ -72,6 +74,7 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
         $this->registry->registerContentResolver(GeneralContentResolver::class);
         $this->registry->registerContentResolver(SelfContentResolver::class);
         $this->registry->registerContentResolver(MultiValueContentResolver::class);
+        $this->registry->registerContentResolver(ListContentResolver::class);
     }
 
     protected function registerBasicEvaluations()
@@ -81,9 +84,8 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
         $this->registry->registerEvaluation(EqualsEvaluation::class);
         $this->registry->registerEvaluation(FieldEvaluation::class);
         $this->registry->registerEvaluation(IndexEvaluation::class);
-
-        // TODO GeneralEvaluation should just extend AndEvaluation instead of invoking it
         $this->registry->registerEvaluation(AndEvaluation::class);
+        $this->registry->registerEvaluation(OrEvaluation::class);
     }
 
     protected function registerBasicValueMappers()

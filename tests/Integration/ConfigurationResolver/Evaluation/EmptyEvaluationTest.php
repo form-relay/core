@@ -39,18 +39,18 @@ class EmptyEvaluationTest extends AbstractIsEvaluationTest
     {
         return [
             // value, is, => expected
-            [new MultiValueField([]),             true,  /* => */ true],
-            [new MultiValueField([]),             false, /* => */ false],
-            [new MultiValueField(['value1']),     true,  /* => */ false],
-            [new MultiValueField(['value1']),     false, /* => */ true],
-            [new MultiValueField(['', 'value2']), true,  /* => */ false],
-            [new MultiValueField(['', 'value2']), false, /* => */ true],
-            [new MultiValueField(['value1', '']), true,  /* => */ false],
-            [new MultiValueField(['value1', '']), false, /* => */ true],
-            [new MultiValueField(['']),           true,  /* => */ false],
-            [new MultiValueField(['']),           false, /* => */ true],
-            [new MultiValueField(['', '']),       true,  /* => */ false],
-            [new MultiValueField(['', '']),       false, /* => */ true],
+            [[],             true,  /* => */ true],
+            [[],             false, /* => */ false],
+            [['value1'],     true,  /* => */ false],
+            [['value1'],     false, /* => */ true],
+            [['', 'value2'], true,  /* => */ false],
+            [['', 'value2'], false, /* => */ true],
+            [['value1', ''], true,  /* => */ false],
+            [['value1', ''], false, /* => */ true],
+            [[''],           true,  /* => */ false],
+            [[''],           false, /* => */ true],
+            [['', ''],       true,  /* => */ false],
+            [['', ''],       false, /* => */ true],
         ];
     }
 
@@ -58,40 +58,40 @@ class EmptyEvaluationTest extends AbstractIsEvaluationTest
     {
         return [
             // value, is, => expected
-            [new MultiValueField([]),                   true,  /* => */ false],
-            [new MultiValueField([]),                   false, /* => */ false],
-            [new MultiValueField(['value1']),           true,  /* => */ false],
-            [new MultiValueField(['value1']),           false, /* => */ true],
-            [new MultiValueField(['value1', 'value2']), true,  /* => */ false],
-            [new MultiValueField(['value1', 'value2']), false, /* => */ true],
-            [new MultiValueField(['', 'value2']),       true,  /* => */ true],
-            [new MultiValueField(['', 'value2']),       false, /* => */ true],
-            [new MultiValueField(['value1', '']),       true,  /* => */ true],
-            [new MultiValueField(['value1', '']),       false, /* => */ true],
-            [new MultiValueField(['']),                 true,  /* => */ true],
-            [new MultiValueField(['']),                 false, /* => */ false],
-            [new MultiValueField(['', '']),             true,  /* => */ true],
-            [new MultiValueField(['', '']),             false, /* => */ false],
+            [[],                   true,  /* => */ false],
+            [[],                   false, /* => */ false],
+            [['value1'],           true,  /* => */ false],
+            [['value1'],           false, /* => */ true],
+            [['value1', 'value2'], true,  /* => */ false],
+            [['value1', 'value2'], false, /* => */ true],
+            [['', 'value2'],       true,  /* => */ true],
+            [['', 'value2'],       false, /* => */ true],
+            [['value1', ''],       true,  /* => */ true],
+            [['value1', ''],       false, /* => */ true],
+            [[''],                 true,  /* => */ true],
+            [[''],                 false, /* => */ false],
+            [['', ''],             true,  /* => */ true],
+            [['', ''],             false, /* => */ false],
         ];
     }
 
     public function allIsMultiValueProvider(): array
     {
         return [
-            [new MultiValueField([]),                   true,  /* => */ true],
-            [new MultiValueField([]),                   false, /* => */ true],
-            [new MultiValueField(['value1']),           true,  /* => */ false],
-            [new MultiValueField(['value1']),           false, /* => */ true],
-            [new MultiValueField(['value1', 'value2']), true,  /* => */ false],
-            [new MultiValueField(['value1', 'value2']), false, /* => */ true],
-            [new MultiValueField(['', 'value2']),       true,  /* => */ false],
-            [new MultiValueField(['', 'value2']),       false, /* => */ false],
-            [new MultiValueField(['value1', '']),       true,  /* => */ false],
-            [new MultiValueField(['value1', '']),       false, /* => */ false],
-            [new MultiValueField(['']),                 true,  /* => */ true],
-            [new MultiValueField(['']),                 false, /* => */ false],
-            [new MultiValueField(['', '']),             true,  /* => */ true],
-            [new MultiValueField(['', '']),             false, /* => */ false],
+            [[],                   true,  /* => */ true],
+            [[],                   false, /* => */ true],
+            [['value1'],           true,  /* => */ false],
+            [['value1'],           false, /* => */ true],
+            [['value1', 'value2'], true,  /* => */ false],
+            [['value1', 'value2'], false, /* => */ true],
+            [['', 'value2'],       true,  /* => */ false],
+            [['', 'value2'],       false, /* => */ false],
+            [['value1', ''],       true,  /* => */ false],
+            [['value1', ''],       false, /* => */ false],
+            [[''],                 true,  /* => */ true],
+            [[''],                 false, /* => */ false],
+            [['', ''],             true,  /* => */ true],
+            [['', ''],             false, /* => */ false],
         ];
     }
 }

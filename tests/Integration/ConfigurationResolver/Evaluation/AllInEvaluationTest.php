@@ -45,14 +45,11 @@ class AllInEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function allInList()
     {
-        $this->registry->registerContentResolver(ListContentResolver::class);
         $this->submissionData['field1'] = new MultiValueField([5, 7, 17]);
         $config = [
             'field1' => [
                 'allIn' => [
-                    4, 5, 6, 7, 8, 16, 17, 18,
-                    // TODO: a list resolver should be possible here, but currently it isn't
-                    //'list' => [4, 5, 6, 7, 8, 16, 17, 18],
+                    'list' => [4, 5, 6, 7, 8, 16, 17, 18],
                 ],
             ],
         ];
@@ -80,9 +77,7 @@ class AllInEvaluationTest extends AbstractEvaluationTest
         $config = [
             'field1' => [
                 'allIn' => [
-                    4, 5, 6, 7, 8, 16, 18,
-                    // TODO: a list resolver should be possible here, but currently it isn't
-                    //'list' => [4,5,6,7,8,16,18],
+                    'list' => [4,5,6,7,8,16,18],
                 ],
             ],
         ];
@@ -110,9 +105,7 @@ class AllInEvaluationTest extends AbstractEvaluationTest
         $config = [
             'field1' => [
                 'allIn' => [
-                    4, 6, 8, 16, 18,
-                    // TODO: a list resolver should be possible here, but currently it isn't
-                    //'list' => [4, 6, 8, 16, 18,],
+                    'list' => [4, 6, 8, 16, 18,],
                 ],
             ],
         ];

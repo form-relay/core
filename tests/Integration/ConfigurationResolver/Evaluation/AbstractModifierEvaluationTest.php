@@ -44,7 +44,7 @@ abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
         $config = [
             'field1' => [
                 static::KEYWORD => [
-                    'in' => $modifiedValue,
+                    'in' => ['list' => $modifiedValue],
                 ],
             ],
         ];
