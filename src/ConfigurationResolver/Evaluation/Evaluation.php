@@ -3,7 +3,6 @@
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\ConfigurationResolver;
-use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\Model\Form\FieldInterface;
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;

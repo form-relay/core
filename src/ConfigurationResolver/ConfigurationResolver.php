@@ -4,7 +4,6 @@ namespace FormRelay\Core\ConfigurationResolver;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\ContentResolverInterface;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
-use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EvaluationInterface;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
