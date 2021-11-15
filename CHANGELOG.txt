@@ -1,4 +1,6 @@
 
+2.2.0
+
 [TASK] removed deprecated configuration resolvers "raw" content resolver and "negate" value mapper
 
 [FEATURE] Content Resolver "FirstOf" (MEDO-569)
