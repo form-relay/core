@@ -124,6 +124,27 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
     }
 
     /** @test */
+    public function concatenateWhereGlueDoesNotGetPassedToSubResolvers()
+    {
+        $config = [
+            'glue' => ',',
+            1 => 'value1',
+            2 => [
+                1 => 'value2.1',
+                2 => 'value2.2',
+            ],
+            3 => 'value3',
+            4 => [
+                'glue' => ';',
+                1 => 'value4.1',
+                2 => 'value4.2',
+            ],
+        ];
+        $result = $this->runResolverProcess($config);
+        $this->assertEquals('value1,value2.1value2.2,value3,value4.1;value4.2', $result);
+    }
+
+    /** @test */
     public function concatenateWithGlueThatNeedsToBeParsed()
     {
         $config = [
