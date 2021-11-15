@@ -144,7 +144,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
     protected function sortSubResolvers(array &$subResolvers)
     {
         ksort($subResolvers, SORT_NUMERIC);
-        uasort($subResolvers, function (ConfigurationResolverInterface $a, ConfigurationResolverInterface $b) {
+        usort($subResolvers, function (ConfigurationResolverInterface $a, ConfigurationResolverInterface $b) {
             if ($a->getWeight() === $b->getWeight()) {
                 return 0;
             }
