@@ -20,7 +20,6 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\LowerCaseContentResolve
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MapContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\NegateContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\RawContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SelfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SplitContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
@@ -52,7 +51,6 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\UpperCaseEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\ValueEvaluation;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\IfValueMapper;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\NegateValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\OriginalValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\RawValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
@@ -116,7 +114,6 @@ class CoreInitialization extends Initialization
         MapContentResolver::class,
         MultiValueContentResolver::class,
         NegateContentResolver::class,
-        RawContentResolver::class,
         SplitContentResolver::class,
         TrimContentResolver::class,
         UpperCaseContentResolver::class,
@@ -127,7 +124,6 @@ class CoreInitialization extends Initialization
         SelfValueMapper::class,
         GeneralValueMapper::class,
         IfValueMapper::class,
-        NegateValueMapper::class,
         OriginalValueMapper::class,
         RawValueMapper::class,
         SwitchValueMapper::class,
