@@ -49,6 +49,18 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
     }
 
     /** @test */
+    public function concatenatedWithGlueAtTheEnd()
+    {
+        $config = [
+            1 => 'value1',
+            2 => 'value2',
+            'glue' => ',',
+        ];
+        $result = $this->runResolverProcess($config);
+        $this->assertEquals('value1,value2', $result);
+    }
+
+    /** @test */
     public function concatenateWithGlueAndEmptyValues()
     {
         $config = [

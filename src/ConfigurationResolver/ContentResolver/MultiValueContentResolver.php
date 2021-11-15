@@ -4,23 +4,22 @@ namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\Model\Form\MultiValueField;
 
-class MultiValueContentResolver extends AbstractWrapperContentResolver
+class MultiValueContentResolver extends ContentResolver
 {
-    protected function getInitialValue()
+    protected function getMultiValueField(): MultiValueField
     {
         return new MultiValueField([]);
     }
 
-    protected function getSubContentResolver($key, $value)
+    public function build()
     {
-        return parent::getSubContentResolver('general', $value);
-    }
-
-    protected function add(&$result, $content, $key): bool
-    {
-        if ($content !== null) {
-            $result[$key] = $content;
+        $result = $this->getMultiValueField();
+        foreach ($this->configuration as $key => $valueConfiguration) {
+            $value = $this->resolveContent($valueConfiguration);
+            if ($value !== null) {
+                $result[$key] = $value;
+            }
         }
-        return true;
+        return $result;
     }
 }

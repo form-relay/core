@@ -7,7 +7,7 @@ use FormRelay\Core\Model\Form\MultiValueField;
 
 class DiscreteMultiValueContentResolver extends MultiValueContentResolver
 {
-    protected function getInitialValue(): MultiValueField
+    protected function getMultiValueField(): MultiValueField
     {
         return new DiscreteMultiValueField([]);
     }
