@@ -37,7 +37,9 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
     {
         if (array_key_exists(static::KEYWORD_GLUE, $this->configuration)) {
             $glue = $this->resolveContent($this->configuration[static::KEYWORD_GLUE]);
-            $this->glue = GeneralUtility::parseSeparatorString($glue);
+            if ($glue !== null) {
+                $this->glue = GeneralUtility::parseSeparatorString($glue);
+            }
             unset($this->configuration[static::KEYWORD_GLUE]);
         }
 
