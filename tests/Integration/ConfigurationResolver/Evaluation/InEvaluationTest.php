@@ -1,6 +1,6 @@
 <?php
 
-namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
+namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
@@ -34,9 +34,7 @@ class InEvaluationTest extends AbstractEvaluationTest
         $config = [
             'field1' => [
                 'in' => [
-                    4, 5, 6,
-                    // TODO: a list resolver should be possible here, but currently it isn't
-                    //'list' => [4, 5, 6,],
+                    'list' => [4, 5, 6,],
                 ]
             ],
         ];
@@ -60,14 +58,12 @@ class InEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function inList()
     {
-        $this->registry->registerContentResolver(ListContentResolver::class);
         $this->submissionData['field1'] = 5;
         $config = [
             'field1' => [
                 'in' => [
                     4, 5, 6,
-                    // TODO: a list resolver should be possible here, but currently it isn't
-                    //'list' => [4, 5, 6,],
+                    'list' => [4, 5, 6,],
                 ],
             ],
         ];
@@ -95,9 +91,7 @@ class InEvaluationTest extends AbstractEvaluationTest
         $config = [
             'field1' => [
                 'in' => [
-                    4, 6, 7,
-                    // TODO: a list resolver should be possible here, but currently it isn't
-                    //'list' => [4,6,7],
+                    'list' => [4,6,7],
                 ],
             ],
         ];

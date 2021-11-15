@@ -54,7 +54,6 @@ abstract class AbstractModifierContentResolverTest extends AbstractContentResolv
     }
 
 
-    // TODO multi values are not taken into account yet
     /**
      * @param $value
      * @param $expected
@@ -63,7 +62,6 @@ abstract class AbstractModifierContentResolverTest extends AbstractContentResolv
      */
     public function modifyMultiValue($value, $expected)
     {
-        $this->markTestSkipped();
         $this->runModifyMultiValue($value, $expected, true);
         $this->runModifyMultiValue($value, $value, false);
     }
@@ -72,7 +70,7 @@ abstract class AbstractModifierContentResolverTest extends AbstractContentResolv
     {
         $config = [
             'multiValue' => [
-                'multiValue' => $value,
+                ['multiValue' => $value],
             ],
             static::KEYWORD => $enabled,
         ];
@@ -83,7 +81,6 @@ abstract class AbstractModifierContentResolverTest extends AbstractContentResolv
         $this->assertMultiValueEquals($expected, $result);
     }
 
-    // TODO multi values are not taken into account yet
     /**
      * @param $value
      * @param $expected
@@ -92,7 +89,6 @@ abstract class AbstractModifierContentResolverTest extends AbstractContentResolv
      */
     public function modifyNestedMultiValue($value, $expected)
     {
-        $this->markTestSkipped();
         $this->runModifyNestedMultiValue($value, $expected, true);
         $this->runModifyNestedMultiValue($value, $value, false);
     }

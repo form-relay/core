@@ -1,6 +1,6 @@
 <?php
 
-namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
+namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\Evaluation\SelfEvaluation;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
@@ -206,7 +206,6 @@ class SelfEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function evalFieldDoesNotExist()
     {
-        $this->markTestSkipped();
         $config = [
             'field1' => [
                 static::KEY_SELF => 'value1',

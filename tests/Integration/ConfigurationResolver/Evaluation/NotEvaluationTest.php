@@ -1,6 +1,6 @@
 <?php
 
-namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
+namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\Evaluation\NotEvaluation;
 
@@ -26,12 +26,9 @@ class NotEvaluationTest extends AbstractEvaluationTest
         $this->assertTrue($result);
     }
 
-    // TODO currently scalar values trigger the equals evaluation
-    //      they should just trigger a standard general evaluation instead
     /** @test */
     public function notUnaryEvalFalse()
     {
-        $this->markTestSkipped();
         $config = [
             'not' => '1',
         ];

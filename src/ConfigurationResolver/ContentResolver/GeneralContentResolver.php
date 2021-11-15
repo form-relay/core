@@ -4,7 +4,6 @@ namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
 use FormRelay\Core\Model\Form\FieldInterface;
-use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Utility\GeneralUtility;
 
 class GeneralContentResolver extends ContentResolver implements GeneralConfigurationResolverInterface
@@ -28,33 +27,24 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
                 $result = $content;
             } elseif ((string)$content !== '') {
                 $result .= $this->glue ?: '';
-                if ($content instanceof MultiValueField && $this->glue) {
-                    $content->setGlue($this->glue);
-                }
                 $result .= (string)$content;
             }
         }
         return $result;
     }
 
-    /**
-     * @return FieldInterface|string|null
-     */
-    public function resolve()
-    {
-        $result = $this->build();
-        $this->finish($result);
-        return $result;
-    }
-
     public function build()
     {
+        if (array_key_exists(static::KEYWORD_GLUE, $this->configuration)) {
+            $glue = $this->resolveContent($this->configuration[static::KEYWORD_GLUE]);
+            if ($glue !== null) {
+                $this->glue = GeneralUtility::parseSeparatorString($glue);
+            }
+            unset($this->configuration[static::KEYWORD_GLUE]);
+        }
+
         $contentResolvers = [];
         foreach ($this->configuration as $key => $value) {
-            if ($key === static::KEYWORD_GLUE) {
-                $this->glue = GeneralUtility::parseSeparatorString($value);
-                continue;
-            }
             $contentResolver = $this->resolveKeyword(is_numeric($key) ? 'general' : $key, $value);
             if ($contentResolver) {
                 $contentResolvers[] = $contentResolver;
@@ -73,6 +63,16 @@ class GeneralContentResolver extends ContentResolver implements GeneralConfigura
                 break;
             }
         }
+        return $result;
+    }
+
+    /**
+     * @return FieldInterface|string|null
+     */
+    public function resolve()
+    {
+        $result = $this->build();
+        $this->finish($result);
         return $result;
     }
 }

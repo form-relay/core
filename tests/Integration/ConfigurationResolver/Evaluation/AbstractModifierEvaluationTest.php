@@ -1,8 +1,9 @@
 <?php
 
-namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
+namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
+use FormRelay\Core\ConfigurationResolver\Evaluation\EmptyEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 
 abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
@@ -31,19 +32,34 @@ abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
     }
 
     /**
-     * @param $value
-     * @param $modifiedValue
+     * @param array $value
+     * @param array $modifiedValue
      * @dataProvider modifyMultiValueProvider
      * @test
      */
-    public function modifyMultiValue($value, $modifiedValue)
+    public function modifyMultiValue(array $value, array $modifiedValue)
     {
-        $this->registry->registerContentResolver(MultiValueContentResolver::class);
         $this->submissionData['field1'] = new MultiValueField($value);
         $config = [
             'field1' => [
                 static::KEYWORD => [
-                    'in' => $modifiedValue,
+                    'equals' => ['multiValue' => $modifiedValue],
+                ],
+            ],
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /** @test */
+    public function modifyEmptyMultiValue()
+    {
+        $this->registry->registerEvaluation(EmptyEvaluation::class);
+        $this->submissionData['field1'] = new MultiValueField();
+        $config = [
+            'field1' => [
+                static::KEYWORD => [
+                    'empty' => true,
                 ],
             ],
         ];

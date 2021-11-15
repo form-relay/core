@@ -19,12 +19,9 @@ class SelfValueMapperTest extends AbstractValueMapperTest
         $this->registry->registerValueMapper(SelfValueMapper::class);
     }
 
-    // TODO there is legacy code trying to fetch the field value from the context if null is passed
-    //      which doesn't really make sense anymore and also messes up this test
     /** @test */
     public function mapNull()
     {
-        $this->markTestSkipped();
         $this->fieldValue = null;
         $config = 'value1';
         $result = $this->runResolverProcess($config);

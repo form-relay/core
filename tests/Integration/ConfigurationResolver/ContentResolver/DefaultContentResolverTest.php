@@ -94,12 +94,9 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
         $this->assertEquals('default1', $result);
     }
 
-    // TODO GeneralUtility::isEmpty should count the items of multiValue fields
-    //      instead of imploding the whole field
     /** @test */
     public function multiValueOneEmptyItem()
     {
-        $this->markTestSkipped();
         $config = [
             'multiValue' => [''],
             'default' => 'default1',

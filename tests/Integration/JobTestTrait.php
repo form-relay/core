@@ -2,30 +2,24 @@
 
 namespace FormRelay\Core\Tests\Integration;
 
+use FormRelay\Core\Factory\QueueDataFactory;
 use FormRelay\Core\Model\Queue\JobInterface;
 
 trait JobTestTrait //  extends \PHPUnit\Framework\TestCase
 {
-    protected function createJob($data, $genericRouteConfig, $pass = 0, $dataProviderConfig = [], $context = [])
+    protected function createJob($data, $genericRouteConfig, $pass = 0, $config = [], $context = [])
     {
         $job = $this->createMock(JobInterface::class);
         $packed = [
-            'data' => $data,
-            'configuration' => [
-                [
-                    'routes' => [
-                        'generic' => $genericRouteConfig,
-                    ],
-                    'dataProviders' => $dataProviderConfig,
-                ],
-            ],
-            'context' => $context,
+            QueueDataFactory::KEY_ROUTE => 'generic',
+            QueueDataFactory::KEY_PASS => $pass,
+            QueueDataFactory::KEY_SUBMISSION => [
+                'data' => $data,
+                'configuration' => $config,
+                'context' => $context,
+            ]
         ];
-        $packed['context']['job'] = [
-            'route' => 'generic',
-            'pass' => $pass,
-        ];
-
+        $packed[QueueDataFactory::KEY_SUBMISSION]['configuration'][0]['routes']['generic'] = $genericRouteConfig;
         $job->expects($this->any())->method('getData')->willReturn($packed);
         return $job;
     }

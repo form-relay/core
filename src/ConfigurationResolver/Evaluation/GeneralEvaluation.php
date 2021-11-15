@@ -2,12 +2,34 @@
 
 namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
+use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
 use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
+use FormRelay\Core\Service\ClassRegistryInterface;
 
 class GeneralEvaluation extends Evaluation implements GeneralConfigurationResolverInterface
 {
     protected $then;
     protected $else;
+
+    public function __construct(ClassRegistryInterface $registry, $config, ConfigurationResolverContextInterface $context)
+    {
+        parent::__construct($registry, $config, $context);
+        $this->initThenElseParts();
+    }
+
+    protected function initThenElseParts()
+    {
+        if (is_array($this->configuration)) {
+            if (array_key_exists('then', $this->configuration)) {
+                $this->then = $this->configuration['then'];
+                unset($this->configuration['then']);
+            }
+            if (array_key_exists('else', $this->configuration)) {
+                $this->else = $this->configuration['else'];
+                unset($this->configuration['else']);
+            }
+        }
+    }
 
     public function eval(array $keysEvaluated = []): bool
     {
@@ -26,16 +48,6 @@ class GeneralEvaluation extends Evaluation implements GeneralConfigurationResolv
      */
     public function resolve(array $keysEvaluated = [])
     {
-        if (is_array($this->configuration)) {
-            if (isset($this->configuration['then'])) {
-                $this->then = $this->configuration['then'];
-                unset($this->configuration['then']);
-            }
-            if (isset($this->configuration['else'])) {
-                $this->else = $this->configuration['else'];
-                unset($this->configuration['else']);
-            }
-        }
         $result = $this->eval($keysEvaluated);
         return $result ? $this->then : $this->else;
     }

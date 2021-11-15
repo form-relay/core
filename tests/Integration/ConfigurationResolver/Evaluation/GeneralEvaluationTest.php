@@ -1,6 +1,6 @@
 <?php
 
-namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
+namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
@@ -103,5 +103,94 @@ class GeneralEvaluationTest extends AbstractEvaluationTest
         if ($then === null && $else === null) {
             $this->runThenElse($then, $else, $eval, $expected, true, true);
         }
+    }
+
+    /** @test */
+    public function generalEvaluationActsAsAndEvaluationTrueTrueEvalTrue()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $this->submissionData['field2'] = 'value2';
+        $config = [
+            'field1' => 'value1',
+            'field2' => 'value2',
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /** @test */
+    public function generalEvaluationActsAsAndEvaluationTrueFalseEvalFalse()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $this->submissionData['field2'] = 'value2';
+        $config = [
+            'field1' => 'value1',
+            'field2' => 'value3',
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    /** @test */
+    public function generalEvaluationActsAsAndEvaluationFalseTrueEvalFalse()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $this->submissionData['field2'] = 'value2';
+        $config = [
+            'field1' => 'value3',
+            'field2' => 'value2',
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    /** @test */
+    public function generalEvaluationActsAsAndEvaluationFalseFalseEvalFalse()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $this->submissionData['field2'] = 'value2';
+        $config = [
+            'field1' => 'value3',
+            'field2' => 'value4',
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    /** @test */
+    public function thenElseIsFilteredOnEvaluationEvalTrue()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field1' => 'value1',
+            'then' => 'thenValue',
+            'else' => 'elseValue',
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
+    }
+
+    /** @test */
+    public function thenElseIsFilteredOnEvaluationEvalFalse()
+    {
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'field1' => 'value2',
+            'then' => 'thenValue',
+            'else' => 'elseValue',
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertFalse($result);
+    }
+
+    /** @test */
+    public function thenElseIsFilteredOnEvaluationNoConditionEvalTrue()
+    {
+        $config = [
+            'then' => 'thenValue',
+            'else' => 'elseValue',
+        ];
+        $result = $this->runEvaluationProcess($config);
+        $this->assertTrue($result);
     }
 }

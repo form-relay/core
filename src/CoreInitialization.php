@@ -6,6 +6,7 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\DefaultContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\DiscreteMultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldCollectorContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\FirstOfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreContentResolver;
@@ -19,19 +20,21 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\LowerCaseContentResolve
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MapContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\NegateContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\RawContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SelfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SplitContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\UpperCaseContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\ValueContentResolver;
-use FormRelay\Core\ConfigurationResolver\Evaluation\AllInEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\AllEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\AnyEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EmptyEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\EqualsEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\ExistsEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\FieldEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GateEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
+use FormRelay\Core\ConfigurationResolver\Evaluation\IndexEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\IsFalseEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\IsTrueEvaluation;
@@ -48,7 +51,6 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\UpperCaseEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\ValueEvaluation;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\IfValueMapper;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\NegateValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\OriginalValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\RawValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
@@ -66,14 +68,17 @@ class CoreInitialization extends Initialization
     ];
 
     const EVALUATIONS = [
-        AllInEvaluation::class,
+        AllEvaluation::class,
         AndEvaluation::class,
         SelfEvaluation::class,
+        AnyEvaluation::class,
         EmptyEvaluation::class,
         EqualsEvaluation::class,
         ExistsEvaluation::class,
+        FieldEvaluation::class,
         GateEvaluation::class,
         GeneralEvaluation::class,
+        IndexEvaluation::class,
         InEvaluation::class,
         IsFalseEvaluation::class,
         IsTrueEvaluation::class,
@@ -95,6 +100,7 @@ class CoreInitialization extends Initialization
         DiscreteMultiValueContentResolver::class,
         FieldCollectorContentResolver::class,
         FieldContentResolver::class,
+        FirstOfContentResolver::class,
         GeneralContentResolver::class,
         IfContentResolver::class,
         IgnoreContentResolver::class,
@@ -108,7 +114,6 @@ class CoreInitialization extends Initialization
         MapContentResolver::class,
         MultiValueContentResolver::class,
         NegateContentResolver::class,
-        RawContentResolver::class,
         SplitContentResolver::class,
         TrimContentResolver::class,
         UpperCaseContentResolver::class,
@@ -119,7 +124,6 @@ class CoreInitialization extends Initialization
         SelfValueMapper::class,
         GeneralValueMapper::class,
         IfValueMapper::class,
-        NegateValueMapper::class,
         OriginalValueMapper::class,
         RawValueMapper::class,
         SwitchValueMapper::class,
