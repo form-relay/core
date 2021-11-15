@@ -10,11 +10,6 @@ class GeneralContentResolver extends AbstractWrapperContentResolver implements G
 {
     protected $glue = '';
 
-    protected function getConfigurationBehaviour(): int
-    {
-        return static::CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE;
-    }
-
     protected function getGlue(): string
     {
         return $this->glue;
