@@ -3,6 +3,7 @@
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\IfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\Model\Form\MultiValueField;
 
@@ -46,6 +47,113 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
         ];
         $result = $this->runResolverProcess($config);
         $this->assertEquals('value1,value2', $result);
+    }
+
+    /** @test */
+    public function concatenatedWithGlueAtTheEnd()
+    {
+        $config = [
+            1 => 'value1',
+            2 => 'value2',
+            'glue' => ',',
+        ];
+        $result = $this->runResolverProcess($config);
+        $this->assertEquals('value1,value2', $result);
+    }
+
+    /** @test */
+    public function concatenateWithGlueThatNeedsToBeResolvedUsingIfThen()
+    {
+        $this->registry->registerContentResolver(IfContentResolver::class);
+        $this->registerBasicEvaluations();
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'glue' => [
+                'if' => [
+                    'field1' => 'value1',
+                    'then' => '-',
+                    'else' => '+',
+                ],
+            ],
+            1 => 'value1',
+            2 => 'value2',
+        ];
+        $result = $this->runResolverProcess($config);
+        $this->assertEquals('value1-value2', $result);
+    }
+
+    /** @test */
+    public function concatenateWithGlueThatNeedsToBeResolvedUsingIfElse()
+    {
+        $this->registry->registerContentResolver(IfContentResolver::class);
+        $this->registerBasicEvaluations();
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'glue' => [
+                'if' => [
+                    'field1' => 'value2',
+                    'then' => '-',
+                    'else' => '+',
+                ],
+            ],
+            1 => 'value1',
+            2 => 'value2',
+        ];
+        $result = $this->runResolverProcess($config);
+        $this->assertEquals('value1+value2', $result);
+    }
+
+    /** @test */
+    public function concatenateWithGlueThatResolvesToNull()
+    {
+        $this->registry->registerContentResolver(IfContentResolver::class);
+        $this->registerBasicEvaluations();
+        $this->submissionData['field1'] = 'value1';
+        $config = [
+            'glue' => [
+                'if' => [
+                    'field1' => 'value1',
+                    'else' => ';',
+                ],
+            ],
+            1 => 'value1',
+            2 => 'value2',
+        ];
+        $result = $this->runResolverProcess($config);
+        $this->assertEquals('value1value2', $result);
+    }
+
+    /** @test */
+    public function concatenateWhereGlueDoesNotGetPassedToSubResolvers()
+    {
+        $config = [
+            'glue' => ',',
+            1 => 'value1',
+            2 => [
+                1 => 'value2.1',
+                2 => 'value2.2',
+            ],
+            3 => 'value3',
+            4 => [
+                'glue' => ';',
+                1 => 'value4.1',
+                2 => 'value4.2',
+            ],
+        ];
+        $result = $this->runResolverProcess($config);
+        $this->assertEquals('value1,value2.1value2.2,value3,value4.1;value4.2', $result);
+    }
+
+    /** @test */
+    public function concatenateWithGlueThatNeedsToBeParsed()
+    {
+        $config = [
+            'glue' => '\\s',
+            1 => 'value1',
+            2 => 'value2',
+        ];
+        $result = $this->runResolverProcess($config);
+        $this->assertEquals("value1 value2", $result);
     }
 
     /** @test */

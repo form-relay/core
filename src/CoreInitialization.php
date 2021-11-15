@@ -6,6 +6,7 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\DefaultContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\DiscreteMultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldCollectorContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\FirstOfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreContentResolver;
@@ -101,6 +102,7 @@ class CoreInitialization extends Initialization
         DiscreteMultiValueContentResolver::class,
         FieldCollectorContentResolver::class,
         FieldContentResolver::class,
+        FirstOfContentResolver::class,
         GeneralContentResolver::class,
         IfContentResolver::class,
         IgnoreContentResolver::class,

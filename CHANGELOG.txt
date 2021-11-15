@@ -1,4 +1,6 @@
 
+[FEATURE] Content Resolver "FirstOf" (MEDO-569)
+
 [BUGFIX] minor value mapper bugfixes
 * switch value mapper - sorting
 * abstract value mapper - null values
