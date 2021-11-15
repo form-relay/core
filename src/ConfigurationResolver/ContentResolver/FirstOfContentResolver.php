@@ -5,7 +5,7 @@ namespace FormRelay\Core\ConfigurationResolver\ContentResolver;
 use FormRelay\Core\Model\Form\FieldInterface;
 use FormRelay\Core\Utility\GeneralUtility;
 
-class FirstContentResolver extends AbstractWrapperContentResolver
+class FirstOfContentResolver extends AbstractWrapperContentResolver
 {
     /**
      * @param string|FieldInterface|null $result
