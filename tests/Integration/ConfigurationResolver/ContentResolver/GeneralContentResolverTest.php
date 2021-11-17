@@ -3,7 +3,6 @@
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\IfContentResolver;
 use FormRelay\Core\Model\Form\MultiValueField;
 
 /**

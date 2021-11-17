@@ -10,7 +10,6 @@ use FormRelay\Core\Model\Form\MultiValueField;
  */
 class EqualsEvaluationTest extends AbstractEvaluationTest
 {
-
     public function implicitEqualsProvider(): array
     {
         return [[true], [false]];
