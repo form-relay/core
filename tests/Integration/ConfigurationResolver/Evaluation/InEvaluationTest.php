@@ -2,7 +2,6 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
 
 /**
@@ -10,12 +9,6 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
  */
 class InEvaluationTest extends AbstractEvaluationTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(InEvaluation::class);
-    }
-
     /** @test */
     public function nullIn()
     {

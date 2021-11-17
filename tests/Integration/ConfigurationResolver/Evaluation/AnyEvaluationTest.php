@@ -3,7 +3,6 @@
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\Evaluation\AnyEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\NotEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 
 /**
@@ -11,12 +10,6 @@ use FormRelay\Core\Model\Form\MultiValueField;
  */
 class AnyEvaluationTest extends AbstractEvaluationTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(AnyEvaluation::class);
-    }
-
     /** @test */
     public function anyOfMultiValueEqualsEvalTrue()
     {
@@ -98,7 +91,6 @@ class AnyEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function anyOfMultiValueEqualsNotMatchesNoneEvalTrue()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField([5, 7, 13]);
         $config = [
             'field1' => [
@@ -114,7 +106,6 @@ class AnyEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function anyOfMultiValueEqualsNotMatchesOneEvalTrue()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField([5, 7, 13]);
         $config = [
             'field1' => [
@@ -130,7 +121,6 @@ class AnyEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function anyOfMultiValueEqualsNotMatchesAllEvalFalse()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField([7, 7, 7]);
         $config = [
             'field1' => [

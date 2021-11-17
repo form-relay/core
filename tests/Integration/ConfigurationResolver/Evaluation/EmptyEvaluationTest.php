@@ -3,7 +3,6 @@
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\Evaluation\EmptyEvaluation;
-use FormRelay\Core\Model\Form\MultiValueField;
 
 /**
  * @covers EmptyEvaluation
@@ -11,12 +10,6 @@ use FormRelay\Core\Model\Form\MultiValueField;
 class EmptyEvaluationTest extends AbstractIsEvaluationTest
 {
     const KEYWORD = 'empty';
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(EmptyEvaluation::class);
-    }
 
     public function isProvider(): array
     {

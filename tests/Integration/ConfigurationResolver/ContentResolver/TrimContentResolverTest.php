@@ -11,12 +11,6 @@ class TrimContentResolverTest extends AbstractModifierContentResolverTest
 {
     const KEYWORD = 'trim';
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(TrimContentResolver::class);
-    }
-
     public function modifyProvider(): array
     {
         return [

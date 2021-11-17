@@ -2,7 +2,6 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\TrimEvaluation;
 
 /**
@@ -11,13 +10,6 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\TrimEvaluation;
 class TrimEvaluationTest extends AbstractModifierEvaluationTest
 {
     const KEYWORD = 'trim';
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(TrimEvaluation::class);
-        $this->registry->registerContentResolver(TrimContentResolver::class);
-    }
 
     public function modifyProvider(): array
     {

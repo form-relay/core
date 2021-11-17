@@ -12,12 +12,6 @@ class SelfEvaluationTest extends AbstractEvaluationTest
 {
     const KEY_SELF = SubmissionConfigurationInterface::KEY_SELF;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(SelfEvaluation::class);
-    }
-
     /** @test */
     public function evalFalseReturnsFalse()
     {

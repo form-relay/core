@@ -2,8 +2,6 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\IgnoreIfContentResolver;
-
 /**
  * @covers IgnoreIfEmptyContentResolver
  */
@@ -14,8 +12,6 @@ class IgnoreIfContentResolverTest extends IgnoreContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->registerBasicEvaluations();
-        $this->registry->registerContentResolver(IgnoreIfContentResolver::class);
         $this->submissionData['field1'] = 'value1';
     }
 

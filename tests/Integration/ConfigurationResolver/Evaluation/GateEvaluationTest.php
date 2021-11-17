@@ -2,9 +2,7 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GateEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\OrEvaluation;
 
 /**
  * @covers GateEvaluation
@@ -14,9 +12,6 @@ class GateEvaluationTest extends AbstractEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->registry->registerEvaluation(GateEvaluation::class);
-        $this->registry->registerEvaluation(AndEvaluation::class);
-        $this->registry->registerEvaluation(OrEvaluation::class);
         $this->setupDummyData();
         $this->createRouteConfig('routeGateSucceeds', true);
         $this->createRouteConfig('routeGateSucceeds2', true);
