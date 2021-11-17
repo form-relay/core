@@ -12,8 +12,6 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->registry->registerContentResolver(FieldCollectorContentResolver::class);
-        $this->registerBasicEvaluations();
         $this->submissionData['field1'] = 'value1';
         $this->submissionData['field2'] = 'value2';
         $this->submissionData['field3'] = 'value3';

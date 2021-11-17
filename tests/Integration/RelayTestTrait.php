@@ -14,7 +14,6 @@ trait RelayTestTrait
     protected function initRelay()
     {
         $this->initRegistry();
-        $this->registerAllDefaults();
         $this->initSubmission();
         $this->routeSpy = null;
         $this->dataProviderSpy = null;

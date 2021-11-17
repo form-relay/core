@@ -2,25 +2,13 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ValueMapper;
 
-use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\IfValueMapper;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\OriginalValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\RawValueMapper;
-use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
-use FormRelay\Core\Tests\Integration\ConfigurationResolver\AbstractConfigurationResolverTest;
 
 /**
  * @covers RawValueMapper
  */
 class RawValueMapperTest extends AbstractValueMapperTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerValueMapper(RawValueMapper::class);
-    }
-
     /** @test */
     public function rawMatches()
     {
@@ -50,9 +38,6 @@ class RawValueMapperTest extends AbstractValueMapperTest
     /** @test */
     public function rawKeywordMatches()
     {
-        $this->registerBasicEvaluations();
-        $this->registerBasicContentResolvers();
-        $this->registry->registerValueMapper(IfValueMapper::class);
         $this->fieldValue = 'if';
         $config = [
             'raw' => [
@@ -66,9 +51,6 @@ class RawValueMapperTest extends AbstractValueMapperTest
     /** @test */
     public function rawKeywordDoesNotMatch()
     {
-        $this->registerBasicEvaluations();
-        $this->registerBasicContentResolvers();
-        $this->registry->registerValueMapper(IfValueMapper::class);
         $this->fieldValue = 'value1';
         $config = [
             'raw' => [

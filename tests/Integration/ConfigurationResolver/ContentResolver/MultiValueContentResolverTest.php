@@ -14,12 +14,6 @@ class MultiValueContentResolverTest extends AbstractContentResolverTest
     const MULTI_VALUE_CLASS = MultiValueField::class;
     const KEYWORD = 'multiValue';
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(static::RESOLVER_CLASS);
-    }
-
     /** @test */
     public function multiValueField()
     {

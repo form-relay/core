@@ -2,9 +2,7 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\FieldEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\IndexEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\NotEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 
 /**
@@ -12,13 +10,6 @@ use FormRelay\Core\Model\Form\MultiValueField;
  */
 class IndexEvaluationTest extends AbstractEvaluationTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(FieldEvaluation::class);
-        $this->registry->registerEvaluation(IndexEvaluation::class);
-    }
-
     public function implicitFieldProvider(): array
     {
         return [
@@ -130,7 +121,6 @@ class IndexEvaluationTest extends AbstractEvaluationTest
      */
     public function fieldWithExistingIndexEqualsNotEvalFalse(bool $fieldImplicit)
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField(['index1' => 'value1.1']);
         $config = [
             'field' => [
@@ -157,7 +147,6 @@ class IndexEvaluationTest extends AbstractEvaluationTest
      */
     public function fieldWithNonExistentIndexEqualsNotEvalTrue(bool $fieldImplicit)
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField(['index1' => 'value1.1']);
         $config = [
             'field' => [
@@ -184,7 +173,6 @@ class IndexEvaluationTest extends AbstractEvaluationTest
      */
     public function fieldWithExistingIndexEqualsNotEvalTrue(bool $fieldImplicit)
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField(['index1' => 'value1.1']);
         $config = [
             'field' => [
@@ -211,7 +199,6 @@ class IndexEvaluationTest extends AbstractEvaluationTest
      */
     public function fieldWithExistingIndexNotEqualsEvalFalse(bool $fieldImplicit)
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField(['index1' => 'value1.1']);
         $config = [
             'not' => [
@@ -238,7 +225,6 @@ class IndexEvaluationTest extends AbstractEvaluationTest
      */
     public function fieldWithNonExistentIndexNotEqualsEvalTrue(bool $fieldImplicit)
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField(['index1' => 'value1.1']);
         $config = [
             'not' => [
@@ -265,7 +251,6 @@ class IndexEvaluationTest extends AbstractEvaluationTest
      */
     public function fieldWithExistingIndexNotEqualsEvalTrue(bool $fieldImplicit)
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField(['index1' => 'value1.1']);
         $config = [
             'not' => [
@@ -288,7 +273,6 @@ class IndexEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function fieldKeywordWithExistingIndexEqualsEvalTrue()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['not'] = new MultiValueField(['index1' => 'value1.1']);
         $config = [
             'field' => [
@@ -306,7 +290,6 @@ class IndexEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function fieldKeywordWithNonExistentIndexEqualsEvalFalse()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['not'] = new MultiValueField(['index1' => 'value1.1']);
         $config = [
             'field' => [
@@ -324,7 +307,6 @@ class IndexEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function fieldKeywordEqualsEvalFalse()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['not'] = 'value1';
         $config = [
             'field' => [
@@ -338,7 +320,6 @@ class IndexEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function fieldKeywordDoesNotExistEqualsEvalFalse()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = 'value1';
         $config = [
             'field' => [

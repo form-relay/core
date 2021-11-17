@@ -11,12 +11,6 @@ class IsFalseEvaluationTest extends AbstractIsEvaluationTest
 {
     const KEYWORD = 'isFalse';
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(IsFalseEvaluation::class);
-    }
-
     public function isProvider(): array
     {
         return [

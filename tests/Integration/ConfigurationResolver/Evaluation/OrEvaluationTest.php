@@ -17,7 +17,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->registry->registerEvaluation(OrEvaluation::class);
         $this->setupDummyData();
     }
 
@@ -66,7 +65,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function complexNestedConditionEvalTrue()
     {
-        $this->registry->registerEvaluation(AndEvaluation::class);
         $config = [
             'or' => [
                 1 => [

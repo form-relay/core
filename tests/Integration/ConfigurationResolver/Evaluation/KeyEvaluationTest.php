@@ -9,12 +9,6 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\KeyEvaluation;
  */
 class KeyEvaluationTest extends AbstractEvaluationTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(KeyEvaluation::class);
-    }
-
     /** @test */
     public function keyWithFieldEvalTrue()
     {

@@ -10,12 +10,6 @@ use FormRelay\Core\Model\Form\MultiValueField;
  */
 class FieldContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(FieldContentResolver::class);
-    }
-
     /** @test */
     public function fieldDoesNotExist()
     {

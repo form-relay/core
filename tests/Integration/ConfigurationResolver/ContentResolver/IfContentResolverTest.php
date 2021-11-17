@@ -2,9 +2,7 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IfContentResolver;
-use FormRelay\Core\Model\Form\MultiValueField;
 
 /**
  * @covers IfContentResolver
@@ -14,8 +12,6 @@ class IfContentResolverTest extends AbstractContentResolverTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->registerBasicEvaluations();
-        $this->registry->registerContentResolver(IfContentResolver::class);
         $this->submissionData['field1'] = 'value1';
         $this->submissionData['field2'] = 'value2';
     }

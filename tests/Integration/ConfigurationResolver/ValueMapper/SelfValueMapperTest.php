@@ -2,23 +2,13 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ValueMapper;
 
-use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
-use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
-use FormRelay\Core\Tests\Integration\ConfigurationResolver\AbstractConfigurationResolverTest;
 
 /**
  * @covers SelfValueMapper
  */
 class SelfValueMapperTest extends AbstractValueMapperTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerValueMapper(SelfValueMapper::class);
-    }
-
     /** @test */
     public function mapNull()
     {
