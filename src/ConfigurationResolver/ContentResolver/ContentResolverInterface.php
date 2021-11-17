@@ -7,8 +7,6 @@ use FormRelay\Core\Model\Form\FieldInterface;
 
 interface ContentResolverInterface extends ConfigurationResolverInterface
 {
-    const RESOLVER_TYPE = 'ContentResolver';
-
     /**
      * @return string|FieldInterface|null
      */

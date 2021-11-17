@@ -2,11 +2,7 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\UpperCaseContentResolver;
-use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\OrEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\RegexpEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 
 /**
@@ -17,7 +13,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->registry->registerEvaluation(OrEvaluation::class);
         $this->setupDummyData();
     }
 
@@ -66,7 +61,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function complexNestedConditionEvalTrue()
     {
-        $this->registry->registerEvaluation(AndEvaluation::class);
         $config = [
             'or' => [
                 1 => [
@@ -90,7 +84,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function complexNestedConditionEvalFalse()
     {
-        $this->registry->registerEvaluation(AndEvaluation::class);
         $config = [
             'or' => [
                 1 => [
@@ -166,7 +159,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function staticKeyWordFieldWithComplexEvaluationEvalTrue()
     {
-        $this->registry->registerEvaluation(RegexpEvaluation::class);
         $config = [
             'or' => [
                 'field' => 'field1',
@@ -183,7 +175,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function staticKeyWordFieldWithComplexEvaluationEvalFalse()
     {
-        $this->registry->registerEvaluation(RegexpEvaluation::class);
         $config = [
             'or' => [
                 'field' => 'field1',
@@ -332,8 +323,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function staticKeyWordFirstModifyScalarEvalTrue()
     {
-        $this->registry->registerContentResolver(UpperCaseContentResolver::class);
-        $this->registry->registerContentResolver(TrimContentResolver::class);
         $this->submissionData['field1'] = ' value1 ';
         $config = [
             'or' => [
@@ -348,8 +337,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function staticKeyWordFirstModifyScalarEvalFalse()
     {
-        $this->registry->registerContentResolver(UpperCaseContentResolver::class);
-        $this->registry->registerContentResolver(TrimContentResolver::class);
         $this->submissionData['field1'] = ' value1 ';
         $config = [
             'or' => [
@@ -364,8 +351,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function staticKeyWordLastModifyScalarEvalTrue()
     {
-        $this->registry->registerContentResolver(UpperCaseContentResolver::class);
-        $this->registry->registerContentResolver(TrimContentResolver::class);
         $this->submissionData['field1'] = ' value1 ';
         $config = [
             'or' => [
@@ -380,8 +365,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function staticKeyWordLastModifyScalarEvalFalse()
     {
-        $this->registry->registerContentResolver(UpperCaseContentResolver::class);
-        $this->registry->registerContentResolver(TrimContentResolver::class);
         $this->submissionData['field1'] = ' value1 ';
         $config = [
             'or' => [
@@ -396,8 +379,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function staticKeyWordFirstModifyArrayEvalTrue()
     {
-        $this->registry->registerContentResolver(UpperCaseContentResolver::class);
-        $this->registry->registerContentResolver(TrimContentResolver::class);
         $this->submissionData['field1'] = ' value1 ';
         $config = [
             'or' => [
@@ -415,8 +396,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function staticKeyWordFirstModifyArrayEvalFalse()
     {
-        $this->registry->registerContentResolver(UpperCaseContentResolver::class);
-        $this->registry->registerContentResolver(TrimContentResolver::class);
         $this->submissionData['field1'] = ' value1 ';
         $config = [
             'or' => [
@@ -434,8 +413,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function staticKeyWordLastModifyArrayEvalTrue()
     {
-        $this->registry->registerContentResolver(UpperCaseContentResolver::class);
-        $this->registry->registerContentResolver(TrimContentResolver::class);
         $this->submissionData['field1'] = ' value1 ';
         $config = [
             'or' => [
@@ -453,8 +430,6 @@ class OrEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function staticKeyWordLastModifyArrayEvalFalse()
     {
-        $this->registry->registerContentResolver(UpperCaseContentResolver::class);
-        $this->registry->registerContentResolver(TrimContentResolver::class);
         $this->submissionData['field1'] = ' value1 ';
         $config = [
             'or' => [

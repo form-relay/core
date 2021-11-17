@@ -11,12 +11,6 @@ use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
  */
 class InsertDataContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(InsertDataContentResolver::class);
-    }
-
     public function insertDataProvider(): array
     {
         return [

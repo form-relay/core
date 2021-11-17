@@ -14,7 +14,6 @@ trait RelayTestTrait
     protected function initRelay()
     {
         $this->initRegistry();
-        $this->registerAllDefaults();
         $this->initSubmission();
         $this->routeSpy = null;
         $this->dataProviderSpy = null;
@@ -22,14 +21,14 @@ trait RelayTestTrait
 
     protected function addRouteSpy($configuration)
     {
-        $this->routeSpy = $this->registerRouteSpy();
+        $this->registerRouteSpy();
         $this->addRouteConfiguration('generic', $configuration);
         return $this->routeSpy;
     }
 
     protected function addDataProviderSpy($configuration)
     {
-        $this->dataProviderSpy = $this->registerDataProviderSpy();
+        $this->registerDataProviderSpy();
         $this->addDataProviderConfiguration('generic', $configuration);
         return $this->dataProviderSpy;
     }

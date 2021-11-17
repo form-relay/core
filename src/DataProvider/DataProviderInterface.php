@@ -4,9 +4,9 @@ namespace FormRelay\Core\DataProvider;
 
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\Request\RequestInterface;
-use FormRelay\Core\Service\RegisterableInterface;
+use FormRelay\Core\Plugin\PluginInterface;
 
-interface DataProviderInterface extends RegisterableInterface
+interface DataProviderInterface extends PluginInterface
 {
     public function addContext(SubmissionInterface $submission, RequestInterface $request);
     public function addData(SubmissionInterface $submission);

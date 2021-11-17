@@ -3,9 +3,9 @@
 namespace FormRelay\Core\DataDispatcher;
 
 use FormRelay\Core\Exception\FormRelayException;
-use FormRelay\Core\Service\RegisterableInterface;
+use FormRelay\Core\Plugin\PluginInterface;
 
-interface DataDispatcherInterface extends RegisterableInterface
+interface DataDispatcherInterface extends PluginInterface
 {
     /**
      * @param array $data

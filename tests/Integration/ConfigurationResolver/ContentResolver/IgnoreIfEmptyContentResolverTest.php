@@ -10,12 +10,6 @@ use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
  */
 class IgnoreIfEmptyContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(IgnoreIfEmptyContentResolver::class);
-    }
-
     public function trueFalseProvider(): array
     {
         return [

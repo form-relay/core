@@ -9,7 +9,7 @@ use FormRelay\Core\Queue\QueueProcessorInterface;
 use FormRelay\Core\Queue\WorkerInterface;
 use FormRelay\Core\Request\RequestInterface;
 
-interface RegistryInterface extends ClassRegistryInterface
+interface RegistryInterface extends PluginRegistryInterface
 {
     public function getLogger(string $forClass): LoggerInterface;
     public function getRequest(): RequestInterface;

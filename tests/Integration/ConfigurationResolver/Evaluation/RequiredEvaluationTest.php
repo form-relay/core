@@ -10,12 +10,6 @@ use FormRelay\Core\Model\Form\MultiValueField;
  */
 class RequiredEvaluationTest extends AbstractEvaluationTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(RequiredEvaluation::class);
-    }
-
     public function requiredProvider(): array
     {
         return [

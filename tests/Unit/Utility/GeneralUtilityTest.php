@@ -394,4 +394,32 @@ class GeneralUtilityTest extends TestCase
             $this->assertTrue($result);
         }
     }
+
+    public function getPluginKeywordProvider(): array
+    {
+        return [
+            'class matches interface' => ['SomeRoute', 'RouteInterface', 'some'],
+            'camel case class matches interface' => ['SomeThingRoute', 'RouteInterface', 'someThing'],
+            'class does not match interface' => ['SomeRoute', 'DataProviderInterface', ''],
+            'class with namespace matches interface' => ['Some\\Name\\Space\\SomeThingRoute', 'RouteInterface', 'someThing'],
+            'class matches interface with namespace' => ['SomeThingRoute', 'Another\\Name\\Space\\RouteInterface', 'someThing'],
+            'class with namespace matches interface with namespace' => ['Some\\Name\\Space\\SomeThingRoute', 'Another\\Name\\Space\\RouteInterface', 'someThing'],
+            'class with namespace does not match interface with namespace' => ['Some\\Name\\Space\\SomeThingDataProvider', 'Another\\Name\\Space\\RouteInterface', ''],
+            'interface name does not end on Interface' => ['SomeRoute', 'Route', ''],
+            'class matches interface both consist of multiple terms' => ['SomeLongClassNameEndingOnSomeLongInterfaceName', 'SomeLongInterfaceNameInterface', 'someLongClassNameEndingOn'],
+        ];
+    }
+
+    /**
+     * @param $class
+     * @param $interface
+     * @param $expected
+     * @dataProvider getPluginKeywordProvider
+     * @test
+     */
+    public function getPluginKeyword($class, $interface, $expected)
+    {
+        $result = GeneralUtility::getPluginKeyword($class, $interface);
+        $this->assertEquals($expected, $result);
+    }
 }

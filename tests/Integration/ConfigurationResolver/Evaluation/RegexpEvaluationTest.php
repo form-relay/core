@@ -10,12 +10,6 @@ use FormRelay\Core\Model\Form\MultiValueField;
  */
 class RegexpEvaluationTest extends AbstractEvaluationTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(RegexpEvaluation::class);
-    }
-
     public function regexpProvider(): array
     {
         return [

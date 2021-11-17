@@ -4,7 +4,6 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\IfContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
 use FormRelay\Core\Model\Form\MultiValueField;
 
 /**
@@ -12,12 +11,6 @@ use FormRelay\Core\Model\Form\MultiValueField;
  */
 class GeneralContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(GeneralContentResolver::class);
-    }
-
     /** @test */
     public function singleValue()
     {
@@ -64,8 +57,6 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function concatenateWithGlueThatNeedsToBeResolvedUsingIfThen()
     {
-        $this->registry->registerContentResolver(IfContentResolver::class);
-        $this->registerBasicEvaluations();
         $this->submissionData['field1'] = 'value1';
         $config = [
             'glue' => [
@@ -85,8 +76,6 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function concatenateWithGlueThatNeedsToBeResolvedUsingIfElse()
     {
-        $this->registry->registerContentResolver(IfContentResolver::class);
-        $this->registerBasicEvaluations();
         $this->submissionData['field1'] = 'value1';
         $config = [
             'glue' => [
@@ -106,8 +95,6 @@ class GeneralContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function concatenateWithGlueThatResolvesToNull()
     {
-        $this->registry->registerContentResolver(IfContentResolver::class);
-        $this->registerBasicEvaluations();
         $this->submissionData['field1'] = 'value1';
         $config = [
             'glue' => [

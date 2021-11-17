@@ -2,19 +2,6 @@
 
 namespace FormRelay\Core\Tests\Integration;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\GeneralContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\ListContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\SelfContentResolver;
-use FormRelay\Core\ConfigurationResolver\Evaluation\AndEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\EqualsEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\FieldEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\IndexEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\OrEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\SelfEvaluation;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\SelfValueMapper;
 use FormRelay\Core\CoreInitialization;
 use FormRelay\Core\Factory\LoggerFactoryInterface;
 use FormRelay\Core\Factory\QueueDataFactory;
@@ -62,49 +49,20 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
         $this->queueDataFactory = new QueueDataFactory();
 
         $this->registry = new Registry($this->request, $this->loggerFactory, $this->queue, $this->temporaryQueue, $this->queueDataFactory);
-    }
-
-    protected function registerAllDefaults()
-    {
         CoreInitialization::initialize($this->registry);
-    }
-
-    protected function registerBasicContentResolvers()
-    {
-        $this->registry->registerContentResolver(GeneralContentResolver::class);
-        $this->registry->registerContentResolver(SelfContentResolver::class);
-        $this->registry->registerContentResolver(MultiValueContentResolver::class);
-        $this->registry->registerContentResolver(ListContentResolver::class);
-    }
-
-    protected function registerBasicEvaluations()
-    {
-        $this->registry->registerEvaluation(GeneralEvaluation::class);
-        $this->registry->registerEvaluation(SelfEvaluation::class);
-        $this->registry->registerEvaluation(EqualsEvaluation::class);
-        $this->registry->registerEvaluation(FieldEvaluation::class);
-        $this->registry->registerEvaluation(IndexEvaluation::class);
-        $this->registry->registerEvaluation(AndEvaluation::class);
-        $this->registry->registerEvaluation(OrEvaluation::class);
-    }
-
-    protected function registerBasicValueMappers()
-    {
-        $this->registry->registerValueMapper(GeneralValueMapper::class);
-        $this->registry->registerValueMapper(SelfValueMapper::class);
     }
 
     protected function registerRouteSpy()
     {
-        $spy = $this->createMock(RouteSpyInterface::class);
-        $this->registry->registerRoute(SpiedOnGenericRoute::class, [$spy]);
-        return $spy;
+        $this->routeSpy = $this->createMock(RouteSpyInterface::class);
+        $this->registry->registerRoute(SpiedOnGenericRoute::class, [$this->routeSpy], 'generic');
+        return $this->routeSpy;
     }
 
     protected function registerDataProviderSpy()
     {
-        $spy = $this->createMock(DataProviderSpyInterface::class);
-        $this->registry->registerDataProvider(SpiedOnGenericDataProvider::class, [$spy]);
-        return $spy;
+        $this->dataProviderSpy = $this->createMock(DataProviderSpyInterface::class);
+        $this->registry->registerDataProvider(SpiedOnGenericDataProvider::class, [$this->dataProviderSpy], 'generic');
+        return $this->dataProviderSpy;
     }
 }

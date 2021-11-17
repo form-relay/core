@@ -3,10 +3,8 @@
 namespace FormRelay\Core\Tests\Integration\Service;
 
 use FormRelay\Core\Exception\FormRelayException;
-use FormRelay\Core\Model\Queue\JobInterface;
 use FormRelay\Core\Queue\QueueException;
 use FormRelay\Core\Service\Relay;
-use FormRelay\Core\Service\RelayInterface;
 use FormRelay\Core\Tests\Integration\RelayTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -59,7 +57,8 @@ class RelayTest extends TestCase
     }
 
     /** @test */
-    public function processSyncOneRouteOnePassWithoutStorage() {
+    public function processSyncOneRouteOnePassWithoutStorage()
+    {
         $this->setSubmissionAsync(false);
         $this->setStorageDisabled(true);
         $this->addRouteSpy([
@@ -90,7 +89,8 @@ class RelayTest extends TestCase
     }
 
     /** @test */
-    public function processAsyncOneRouteOnePassWithStorage() {
+    public function processAsyncOneRouteOnePassWithStorage()
+    {
         $this->setSubmissionAsync(true);
         $this->setStorageDisabled(false);
         $this->addRouteSpy([

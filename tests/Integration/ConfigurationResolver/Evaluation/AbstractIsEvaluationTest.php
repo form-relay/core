@@ -2,8 +2,6 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\AllEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\AnyEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 
 abstract class AbstractIsEvaluationTest extends AbstractEvaluationTest
@@ -72,7 +70,6 @@ abstract class AbstractIsEvaluationTest extends AbstractEvaluationTest
      */
     public function anyIsMultiValue(array $value, bool $is, bool $expected)
     {
-        $this->registry->registerEvaluation(AnyEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField($value);
         $config = [
             'field1' => [
@@ -98,7 +95,6 @@ abstract class AbstractIsEvaluationTest extends AbstractEvaluationTest
      */
     public function allIsMultiValue(array $value, bool $is, bool $expected)
     {
-        $this->registry->registerEvaluation(AllEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField($value);
         $config = [
             'field1' => [

@@ -7,12 +7,6 @@ use FormRelay\Core\Tests\Integration\ConfigurationResolver\AbstractConfiguration
 
 abstract class AbstractContentResolverTest extends AbstractConfigurationResolverTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registerBasicContentResolvers();
-    }
-
     protected function getGeneralResolverClass(): string
     {
         return GeneralContentResolver::class;

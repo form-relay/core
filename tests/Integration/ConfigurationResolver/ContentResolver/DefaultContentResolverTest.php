@@ -3,7 +3,6 @@
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
 use FormRelay\Core\ConfigurationResolver\ContentResolver\DefaultContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
 /**
@@ -11,12 +10,6 @@ use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
  */
 class DefaultContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(DefaultContentResolver::class);
-    }
-
     /** @test */
     public function defaultOnly()
     {
@@ -51,7 +44,6 @@ class DefaultContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function emptyStringWhenTrimmed()
     {
-        $this->registry->registerContentResolver(TrimContentResolver::class);
         $config = [
             SubmissionConfigurationInterface::KEY_SELF => ' ',
             'trim' => true,

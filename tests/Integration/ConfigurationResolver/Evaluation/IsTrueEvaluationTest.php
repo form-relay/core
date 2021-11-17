@@ -2,10 +2,7 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\EmptyEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\IsFalseEvaluation;
 use FormRelay\Core\ConfigurationResolver\Evaluation\IsTrueEvaluation;
-use FormRelay\Core\Model\Form\MultiValueField;
 
 /**
  * @covers IsTrueEvaluation
@@ -13,12 +10,6 @@ use FormRelay\Core\Model\Form\MultiValueField;
 class IsTrueEvaluationTest extends IsFalseEvaluationTest
 {
     const KEYWORD = 'isTrue';
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(IsTrueEvaluation::class);
-    }
 
     public function isProvider(): array
     {

@@ -12,12 +12,6 @@ class IgnoreContentResolverTest extends AbstractContentResolverTest
 {
     const KEYWORD = 'ignore';
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(IgnoreContentResolver::class);
-    }
-
     public function trueFalseProvider(): array
     {
         return [

@@ -15,23 +15,23 @@ abstract class Initialization
 
     public static function initialize(RegistryInterface $registry)
     {
-        foreach (static::DATA_PROVIDERS as $dataProvider) {
-            $registry->registerDataProvider($dataProvider);
+        foreach (static::DATA_PROVIDERS as $keyword => $dataProvider) {
+            $registry->registerDataProvider($dataProvider, [], $keyword);
         }
-        foreach (static::EVALUATIONS as $evaluation) {
-            $registry->registerEvaluation($evaluation);
+        foreach (static::EVALUATIONS as $keyword => $evaluation) {
+            $registry->registerEvaluation($evaluation, [], $keyword);
         }
-        foreach (static::CONTENT_RESOLVERS as $contentResolver) {
-            $registry->registerContentResolver($contentResolver);
+        foreach (static::CONTENT_RESOLVERS as $keyword => $contentResolver) {
+            $registry->registerContentResolver($contentResolver, [], $keyword);
         }
-        foreach (static::VALUE_MAPPERS as $valueMapper) {
-            $registry->registerValueMapper($valueMapper);
+        foreach (static::VALUE_MAPPERS as $keyword => $valueMapper) {
+            $registry->registerValueMapper($valueMapper, [], $keyword);
         }
-        foreach (static::ROUTES as $route) {
-            $registry->registerRoute($route);
+        foreach (static::ROUTES as $keyword => $route) {
+            $registry->registerRoute($route, [], $keyword);
         }
-        foreach (static::DATA_DISPATCHERS as $dataDispatcher) {
-            $registry->registerDataDispatcher($dataDispatcher);
+        foreach (static::DATA_DISPATCHERS as $keyword => $dataDispatcher) {
+            $registry->registerDataDispatcher($dataDispatcher, [], $keyword);
         }
     }
 }

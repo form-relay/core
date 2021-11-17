@@ -13,13 +13,6 @@ use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
  */
 class MapContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(MapContentResolver::class);
-        $this->registerBasicValueMappers();
-    }
-
     /** @test */
     public function map()
     {

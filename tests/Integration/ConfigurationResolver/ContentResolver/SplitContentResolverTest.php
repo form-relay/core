@@ -10,12 +10,6 @@ use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
  */
 class SplitContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(SplitContentResolver::class);
-    }
-
     public function splitByIndexProvider(): array
     {
         return [

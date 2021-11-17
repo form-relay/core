@@ -12,7 +12,6 @@ class NotEvaluationTest extends AbstractEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->setupDummyData();
     }
 

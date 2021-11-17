@@ -2,12 +2,7 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\InsertDataContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\JoinContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\LoopDataContentResolver;
-use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\KeyEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
 
@@ -16,15 +11,6 @@ use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
  */
 class LoopDataContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registerBasicEvaluations();
-        $this->registry->registerContentResolver(LoopDataContentResolver::class);
-        $this->registry->registerContentResolver(InsertDataContentResolver::class);
-        $this->registry->registerContentResolver(FieldContentResolver::class);
-    }
-
     /** @test */
     public function loopData()
     {
@@ -88,7 +74,6 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function loopDataWithValueCondition()
     {
-        $this->registry->registerEvaluation(InEvaluation::class);
         $this->setupDummyData();
         $config = [
             'loopData' => [
@@ -106,8 +91,6 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function loopDataWithKeyCondition()
     {
-        $this->registry->registerEvaluation(KeyEvaluation::class);
-        $this->registry->registerEvaluation(InEvaluation::class);
         $this->setupDummyData();
         $config = [
             'loopData' => [
@@ -127,8 +110,6 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function loopDataWithOtherCondition()
     {
-        $this->registry->registerEvaluation(KeyEvaluation::class);
-        $this->registry->registerEvaluation(InEvaluation::class);
         $this->setupDummyData();
         $config = [
             'loopData' => [
@@ -175,7 +156,6 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function loopDataFieldTemplateOneMultiValueJoined()
     {
-        $this->registry->registerContentResolver(JoinContentResolver::class);
         $this->submissionData['field1'] = new MultiValueField([5, 7, 17]);
         $config = [
             'loopData' => [
@@ -192,7 +172,6 @@ class LoopDataContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function loopDataFieldTemplateOneMultiValueJoinedWithGlue()
     {
-        $this->registry->registerContentResolver(JoinContentResolver::class);
         $this->submissionData['field1'] = new MultiValueField([5, 7, 17]);
         $config = [
             'loopData' => [

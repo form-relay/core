@@ -5,16 +5,13 @@ namespace FormRelay\Core\DataProvider;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\Helper\ConfigurationTrait;
-use FormRelay\Core\Helper\RegisterableTrait;
-use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\Request\RequestInterface;
-use FormRelay\Core\Service\ClassRegistryInterface;
+use FormRelay\Core\Plugin\Plugin;
 use FormRelay\Core\Utility\GeneralUtility;
 
-abstract class DataProvider implements DataProviderInterface
+abstract class DataProvider extends Plugin implements DataProviderInterface
 {
-    use RegisterableTrait;
     use ConfigurationTrait;
 
     const KEY_ENABLED = 'enabled';
@@ -26,24 +23,7 @@ abstract class DataProvider implements DataProviderInterface
     const KEY_MUST_BE_EMPTY= 'mustBeEmpty';
     const DEFAULT_MUST_BE_EMPTY = true;
 
-    /** @var ClassRegistryInterface */
-    protected $registry;
-
-    /** @var LoggerInterface */
-    protected $logger;
-
     protected $configuration;
-
-    public static function getClassType(): string
-    {
-        return 'DataProvider';
-    }
-
-    public function __construct(ClassRegistryInterface $registry, LoggerInterface $logger)
-    {
-        $this->registry = $registry;
-        $this->logger = $logger;
-    }
 
     abstract protected function processContext(SubmissionInterface $submission, RequestInterface $request);
     abstract protected function process(SubmissionInterface $submission);
@@ -185,7 +165,7 @@ abstract class DataProvider implements DataProviderInterface
 
     public function addData(SubmissionInterface $submission)
     {
-        $this->configuration = $submission->getConfiguration()->getDataProviderConfiguration(static::getKeyword());
+        $this->configuration = $submission->getConfiguration()->getDataProviderConfiguration($this->getKeyword());
         if ($this->proceed($submission)) {
             $this->process($submission);
         }
@@ -198,7 +178,7 @@ abstract class DataProvider implements DataProviderInterface
 
     public function addContext(SubmissionInterface $submission, RequestInterface $request)
     {
-        $this->configuration = $submission->getConfiguration()->getDataProviderConfiguration(static::getKeyword());
+        $this->configuration = $submission->getConfiguration()->getDataProviderConfiguration($this->getKeyword());
         if ($this->proceed($submission)) {
             $this->processContext($submission, $request);
         }

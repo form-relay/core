@@ -43,6 +43,12 @@ class LoopDataContentResolver extends ContentResolver
 
         // don't allow overrides of form data
         if ($this->fieldExists($varKey) || $this->fieldExists($varValue)) {
+            if ($this->fieldExists($varKey)) {
+                $this->logger->error('content-resolver "loop-data": key name "' . $varKey .'" exists as field.');
+            }
+            if ($this->fieldExists($varValue)) {
+                $this->logger->error('content-resolver "loop-data": value name "' . $varValue .'" exists as field.');
+            }
             return '';
         }
 

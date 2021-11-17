@@ -10,12 +10,6 @@ use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
  */
 class JoinContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(JoinContentResolver::class);
-    }
-
     /** @test */
     public function joinNull()
     {

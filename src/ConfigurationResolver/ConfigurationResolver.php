@@ -10,16 +10,16 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\GeneralEvaluation;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\ValueMapperInterface;
 use FormRelay\Core\Helper\ConfigurationTrait;
-use FormRelay\Core\Helper\RegisterableTrait;
+use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Form\FieldInterface;
 use FormRelay\Core\Model\Form\MultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
-use FormRelay\Core\Service\ClassRegistryInterface;
+use FormRelay\Core\Service\PluginRegistryInterface;
+use FormRelay\Core\Plugin\Plugin;
 use FormRelay\Core\Utility\GeneralUtility;
 
-abstract class ConfigurationResolver implements ConfigurationResolverInterface
+abstract class ConfigurationResolver extends Plugin implements ConfigurationResolverInterface
 {
-    use RegisterableTrait;
     use ConfigurationTrait;
 
     /**
@@ -73,7 +73,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
      */
     const CONFIGURATION_BEHAVIOUR_CONVERT_SCALAR_TO_ARRAY_WITH_SELF_VALUE = 3;
 
-    /** @var ClassRegistryInterface */
+    /** @var PluginRegistryInterface */
     protected $registry;
 
     /** @var array|string */
@@ -83,13 +83,15 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
 
     /**
      * ConfigurationResolver constructor.
-     * @param ClassRegistryInterface $registry
+     * @param string $keyword
+     * @param PluginRegistryInterface $registry
+     * @param LoggerInterface $logger
      * @param array|string $config
      * @param ConfigurationResolverContextInterface $context
      */
-    public function __construct(ClassRegistryInterface $registry, $config, ConfigurationResolverContextInterface $context)
+    public function __construct(string $keyword, PluginRegistryInterface $registry, LoggerInterface $logger, $config, ConfigurationResolverContextInterface $context)
     {
-        $this->registry = $registry;
+        parent::__construct($keyword, $registry, $logger);
         $this->context = $context;
         $this->configuration = $config;
 
@@ -117,7 +119,7 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
         if ($context === null) {
             $context = $this->context->copy();
         }
-        return $this->registry->getConfigurationResolver($resolverInterface, $keyword, $config, $context);
+        return $this->registry->getConfigurationResolver($keyword, $resolverInterface, $config, $context);
     }
 
     /**
@@ -132,14 +134,6 @@ abstract class ConfigurationResolver implements ConfigurationResolverInterface
     }
 
     abstract protected static function getResolverInterface(): string;
-
-    public static function getClassType(): string
-    {
-        if (defined(static::class . '::RESOLVER_TYPE')) {
-            return static::RESOLVER_TYPE;
-        }
-        return '';
-    }
 
     protected function sortSubResolvers(array &$subResolvers)
     {

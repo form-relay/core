@@ -2,24 +2,15 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ValueMapper;
 
-use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\Model\Form\DiscreteMultiValueField;
 use FormRelay\Core\Model\Form\MultiValueField;
-use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
-use FormRelay\Core\Tests\Integration\ConfigurationResolver\AbstractConfigurationResolverTest;
 
 /**
  * @covers GeneralValueMapper
  */
 class GeneralValueMapperTest extends AbstractValueMapperTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerValueMapper(GeneralValueMapper::class);
-    }
-
     /** @test */
     public function mapNull()
     {

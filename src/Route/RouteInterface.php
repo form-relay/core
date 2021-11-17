@@ -5,9 +5,9 @@ namespace FormRelay\Core\Route;
 use FormRelay\Core\Exception\FormRelayException;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\Request\RequestInterface;
-use FormRelay\Core\Service\RegisterableInterface;
+use FormRelay\Core\Plugin\PluginInterface;
 
-interface RouteInterface extends RegisterableInterface
+interface RouteInterface extends PluginInterface
 {
     public function getPassCount(SubmissionInterface $submission): int;
 
