@@ -81,13 +81,12 @@ class Registry implements RegistryInterface
         return new QueueProcessor($queue, $worker);
     }
 
-    protected function get(string $keyword, string $interface, array $arguments = [])
+    protected function getPlugin(string $keyword, string $interface, array $arguments = [])
     {
         $class = $this->pluginClasses[$interface][$keyword] ?? null;
         $additionalArguments = $this->pluginAdditionalArguments[$interface][$keyword] ?? [];
 
-        if (!$class || !class_exists($class)) {
-            $class = null;
+        if (!$class) {
             if ($this->checkKeywordAsClass($keyword, $interface)) {
                 $class = $keyword;
                 $keyword = GeneralUtility::getPluginKeyword($keyword, $interface) ?: $keyword;
@@ -95,28 +94,27 @@ class Registry implements RegistryInterface
             }
         }
 
-        if ($class) {
-            array_unshift($arguments, $this->getLogger($class));
-            array_unshift($arguments, $this);
-            array_unshift($arguments, $keyword);
-            array_push($arguments, ...$additionalArguments);
-            return new $class(...$arguments);
+        if ($class && class_exists($class)) {
+            $constructorArguments = [$keyword, $this, $this->getLogger($class)];
+            array_push($constructorArguments, ...$arguments);
+            array_push($constructorArguments, ...$additionalArguments);
+            return new $class(...$constructorArguments);
         }
 
         return null;
     }
 
-    protected function getAll(string $interface, array $arguments = [])
+    protected function getAllPlugins(string $interface, array $arguments = [])
     {
         $result = [];
         foreach (array_keys($this->pluginClasses[$interface] ?? []) as $keyword) {
-            $result[$keyword] = $this->get($keyword, $interface, $arguments);
+            $result[$keyword] = $this->getPlugin($keyword, $interface, $arguments);
         }
         $this->sortPlugins($result);
         return $result;
     }
 
-    protected function register(string $interface, string $class, array $additionalArguments = [], string $keyword = '')
+    protected function registerPlugin(string $interface, string $class, array $additionalArguments = [], string $keyword = '')
     {
         if (!$keyword || is_numeric($keyword)) {
             $keyword = GeneralUtility::getPluginKeyword($class, $interface) ?: $keyword;
@@ -182,7 +180,7 @@ class Registry implements RegistryInterface
     {
         $this->interfaceValidation($interface, ConfigurationResolverInterface::class);
         $this->classValidation($class, $interface);
-        $this->register($interface, $class, $additionalArguments, $keyword);
+        $this->registerPlugin($interface, $class, $additionalArguments, $keyword);
     }
 
     public function registerEvaluation(string $class, array $additionalArguments = [], string $keyword = '')
@@ -203,7 +201,7 @@ class Registry implements RegistryInterface
     public function getConfigurationResolver(string $keyword, string $interface, $config, ConfigurationResolverContextInterface $context)
     {
         $this->interfaceValidation($interface, ConfigurationResolverInterface::class);
-        return $this->get($keyword, $interface, [$config, $context]);
+        return $this->getPlugin($keyword, $interface, [$config, $context]);
     }
 
     public function getEvaluation(string $keyword, $config, ConfigurationResolverContextInterface $context)
@@ -223,17 +221,17 @@ class Registry implements RegistryInterface
 
     public function getRoutes(): array
     {
-        return $this->getAll(RouteInterface::class);
+        return $this->getAllPlugins(RouteInterface::class);
     }
 
     public function getRoute(string $keyword)
     {
-        return $this->get($keyword, RouteInterface::class);
+        return $this->getPlugin($keyword, RouteInterface::class);
     }
 
     public function registerRoute(string $class, array $additionalArguments = [], string $keyword = '')
     {
-        $this->register(RouteInterface::class, $class, $additionalArguments, $keyword);
+        $this->registerPlugin(RouteInterface::class, $class, $additionalArguments, $keyword);
     }
 
     public function deleteRoute(string $keyword)
@@ -252,12 +250,12 @@ class Registry implements RegistryInterface
 
     public function getDataProviders(): array
     {
-        return $this->getAll(DataProviderInterface::class);
+        return $this->getAllPlugins(DataProviderInterface::class);
     }
 
     public function registerDataProvider(string $class, array $additionalArguments = [], string $keyword = '')
     {
-        $this->register(DataProviderInterface::class, $class, $additionalArguments, $keyword);
+        $this->registerPlugin(DataProviderInterface::class, $class, $additionalArguments, $keyword);
     }
 
     public function deleteDataProvider(string $keyword)
@@ -276,7 +274,7 @@ class Registry implements RegistryInterface
 
     public function registerDataDispatcher(string $class, array $additionalArguments = [], string $keyword = '')
     {
-        $this->register(DataDispatcherInterface::class, $class, $additionalArguments, $keyword);
+        $this->registerPlugin(DataDispatcherInterface::class, $class, $additionalArguments, $keyword);
     }
 
     /**
@@ -285,7 +283,7 @@ class Registry implements RegistryInterface
      */
     public function getDataDispatcher(string $keyword)
     {
-        return $this->get($keyword, DataDispatcherInterface::class);
+        return $this->getPlugin($keyword, DataDispatcherInterface::class);
     }
 
     public function deleteDataDispatcher(string $keyword)
