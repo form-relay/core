@@ -125,7 +125,7 @@ class Registry implements RegistryInterface
         $this->pluginAdditionalArguments[$interface][$keyword] = $additionalArguments;
     }
 
-    protected function delete(string $keyword, string $interface)
+    protected function deletePlugin(string $keyword, string $interface)
     {
         if (isset($this->pluginClasses[$interface][$keyword])) {
             unset($this->pluginClasses[$interface][$keyword]);
@@ -236,7 +236,7 @@ class Registry implements RegistryInterface
 
     public function deleteRoute(string $keyword)
     {
-        $this->delete($keyword, RouteInterface::class);
+        $this->deletePlugin($keyword, RouteInterface::class);
     }
 
     public function getRouteDefaultConfigurations(): array
@@ -260,7 +260,7 @@ class Registry implements RegistryInterface
 
     public function deleteDataProvider(string $keyword)
     {
-        $this->delete($keyword, DataProviderInterface::class);
+        $this->deletePlugin($keyword, DataProviderInterface::class);
     }
 
     public function getDataProviderDefaultConfigurations(): array
@@ -277,10 +277,6 @@ class Registry implements RegistryInterface
         $this->registerPlugin(DataDispatcherInterface::class, $class, $additionalArguments, $keyword);
     }
 
-    /**
-     * @param string $keyword
-     * @return DataDispatcherInterface|null
-     */
     public function getDataDispatcher(string $keyword)
     {
         return $this->getPlugin($keyword, DataDispatcherInterface::class);
@@ -288,7 +284,7 @@ class Registry implements RegistryInterface
 
     public function deleteDataDispatcher(string $keyword)
     {
-        $this->delete($keyword, DataDispatcherInterface::class);
+        $this->deletePlugin($keyword, DataDispatcherInterface::class);
     }
 
     public function getGlobalDefaultConfiguration(): array
