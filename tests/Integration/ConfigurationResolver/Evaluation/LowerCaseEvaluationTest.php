@@ -2,7 +2,6 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\LowerCaseContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\LowerCaseEvaluation;
 
 /**
@@ -11,13 +10,6 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\LowerCaseEvaluation;
 class LowerCaseEvaluationTest extends AbstractModifierEvaluationTest
 {
     const KEYWORD = 'lowerCase';
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(LowerCaseEvaluation::class);
-        $this->registry->registerContentResolver(LowerCaseContentResolver::class);
-    }
 
     public function modifyProvider(): array
     {

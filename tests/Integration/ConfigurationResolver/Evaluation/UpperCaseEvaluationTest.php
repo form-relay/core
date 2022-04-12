@@ -2,7 +2,6 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\UpperCaseContentResolver;
 use FormRelay\Core\ConfigurationResolver\Evaluation\UpperCaseEvaluation;
 
 /**
@@ -11,13 +10,6 @@ use FormRelay\Core\ConfigurationResolver\Evaluation\UpperCaseEvaluation;
 class UpperCaseEvaluationTest extends AbstractModifierEvaluationTest
 {
     const KEYWORD = 'upperCase';
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(UpperCaseEvaluation::class);
-        $this->registry->registerContentResolver(UpperCaseContentResolver::class);
-    }
 
     public function modifyProvider(): array
     {

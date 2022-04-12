@@ -2,22 +2,13 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\FieldContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\FirstOfContentResolver;
-use FormRelay\Core\ConfigurationResolver\ContentResolver\IfContentResolver;
 
 /**
  * @covers FirstOfContentResolver
  */
 class FirstOfContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(FirstOfContentResolver::class);
-        $this->registry->registerContentResolver(FieldContentResolver::class);
-    }
-
     /** @test */
     public function multipleFieldExistAndAreNotEmptyReturnsFirstField()
     {
@@ -136,8 +127,6 @@ class FirstOfContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function fieldConditionFailsElseDoesNotExistReturnsSecondField()
     {
-        $this->registry->registerContentResolver(IfContentResolver::class);
-        $this->registerBasicEvaluations();
         $this->submissionData['field1'] = 'value1';
         $this->submissionData['field2'] = 'value2';
         $config = [
@@ -158,8 +147,6 @@ class FirstOfContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function fieldConditionFailsElseDoesExistReturnsElsePart()
     {
-        $this->registry->registerContentResolver(IfContentResolver::class);
-        $this->registerBasicEvaluations();
         $this->submissionData['field1'] = 'value1';
         $this->submissionData['field2'] = 'value2';
         $config = [
@@ -180,8 +167,6 @@ class FirstOfContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function fieldConditionSucceedsThenDoesNotExistReturnsSecondField()
     {
-        $this->registry->registerContentResolver(IfContentResolver::class);
-        $this->registerBasicEvaluations();
         $this->submissionData['field1'] = 'value1';
         $this->submissionData['field2'] = 'value2';
         $config = [
@@ -202,8 +187,6 @@ class FirstOfContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function fieldConditionSucceedsThenDoesExistReturnsSecondField()
     {
-        $this->registry->registerContentResolver(IfContentResolver::class);
-        $this->registerBasicEvaluations();
         $this->submissionData['field1'] = 'value1';
         $this->submissionData['field2'] = 'value2';
         $config = [

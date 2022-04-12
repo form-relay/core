@@ -11,12 +11,6 @@ class UpperCaseContentResolverTest extends AbstractModifierContentResolverTest
 {
     const KEYWORD = 'upperCase';
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(UpperCaseContentResolver::class);
-    }
-
     public function modifyProvider(): array
     {
         return [

@@ -2,7 +2,6 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ContentResolver;
 
-use FormRelay\Core\ConfigurationResolver\ContentResolver\DiscreteMultiValueContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\NegateContentResolver;
 use FormRelay\Core\Model\Form\DiscreteMultiValueField;
 use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
@@ -12,12 +11,6 @@ use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
  */
 class NegateContentResolverTest extends AbstractContentResolverTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(NegateContentResolver::class);
-    }
-
     public function provider()
     {
         return [
@@ -217,7 +210,6 @@ class NegateContentResolverTest extends AbstractContentResolverTest
     /** @test */
     public function negateDiscreteMultiValue()
     {
-        $this->registry->registerContentResolver(DiscreteMultiValueContentResolver::class);
         $config = [
             'discreteMultiValue' => ['0', '1', '0'],
             'negate' => true,

@@ -2,25 +2,13 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ValueMapper;
 
-use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\IfValueMapper;
-use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
-use FormRelay\Core\Tests\Integration\ConfigurationResolver\AbstractConfigurationResolverTest;
 
 /**
  * @covers IfValueMapper
  */
 class IfValueMapperTest extends AbstractValueMapperTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registerBasicEvaluations();
-        $this->registerBasicContentResolvers();
-        $this->registry->registerValueMapper(IfValueMapper::class);
-    }
-
     /** @test */
     public function valueIfThenExists()
     {

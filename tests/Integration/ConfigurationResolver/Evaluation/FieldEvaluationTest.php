@@ -3,19 +3,12 @@
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\Evaluation\FieldEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\NotEvaluation;
 
 /**
  * @covers FieldEvaluation
  */
 class FieldEvaluationTest extends AbstractEvaluationTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(FieldEvaluation::class);
-    }
-
     /** @test */
     public function fieldEqualsEvalTrue()
     {
@@ -58,7 +51,6 @@ class FieldEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function fieldEqualsNotEvalFalse()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = 'value1';
         $config = [
             'field' => [
@@ -74,7 +66,6 @@ class FieldEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function fieldEqualsNotEvalTrue()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = 'value1';
         $config = [
             'field' => [
@@ -90,7 +81,6 @@ class FieldEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function fieldNotEqualsEvalFalse()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = 'value1';
         $config = [
             'not' => [
@@ -106,7 +96,6 @@ class FieldEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function fieldNotEqualsEvalTrue()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = 'value1';
         $config = [
             'not' => [
@@ -122,7 +111,6 @@ class FieldEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function fieldKeywordEqualsEvalTrue()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['not'] = 'value1';
         $config = [
             'field' => [
@@ -136,7 +124,6 @@ class FieldEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function fieldKeywordEqualsEvalFalse()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['not'] = 'value1';
         $config = [
             'field' => [
@@ -150,7 +137,6 @@ class FieldEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function fieldKeywordDoesNotExistEqualsEvalFalse()
     {
-        $this->registry->registerEvaluation(NotEvaluation::class);
         $this->submissionData['field1'] = 'value1';
         $config = [
             'field' => [

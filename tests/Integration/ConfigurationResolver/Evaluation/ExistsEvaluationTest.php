@@ -12,7 +12,6 @@ class ExistsEvaluationTest extends AbstractEvaluationTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->registry->registerEvaluation(ExistsEvaluation::class);
         $this->setupDummyData();
     }
 

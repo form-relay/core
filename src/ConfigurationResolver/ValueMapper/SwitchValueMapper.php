@@ -21,7 +21,7 @@ class SwitchValueMapper extends ValueMapper
         foreach ($this->configuration as $case) {
             $caseValue = $case[static::KEY_CASE] ?? ($case[SubmissionConfigurationInterface::KEY_SELF] ?? '');
             $caseResult = $case[static::KEY_VALUE] ?? '';
-            if ($caseValue === $fieldValue) {
+            if ((string)$caseValue === (string)$fieldValue) {
                 /** @var GeneralValueMapper $valueMapper */
                 $valueMapper = $this->resolveKeyword('general', $caseResult);
                 break;

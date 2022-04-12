@@ -11,12 +11,6 @@ class LowerCaseContentResolverTest extends AbstractModifierContentResolverTest
 {
     const KEYWORD = 'lowerCase';
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerContentResolver(LowerCaseContentResolver::class);
-    }
-
     public function modifyProvider(): array
     {
         return [

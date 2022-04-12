@@ -10,13 +10,6 @@ use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
  */
 class GeneralEvaluationTest extends AbstractEvaluationTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->registry->registerEvaluation(GeneralEvaluation::class);
-    }
-
-
     public function provider()
     {
         $scalar1 = 'value1';

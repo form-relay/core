@@ -2,12 +2,7 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\ValueMapper;
 
-use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\GeneralValueMapper;
-use FormRelay\Core\ConfigurationResolver\ValueMapper\IfValueMapper;
 use FormRelay\Core\ConfigurationResolver\ValueMapper\OriginalValueMapper;
-use FormRelay\Core\Model\Submission\SubmissionConfigurationInterface;
-use FormRelay\Core\Tests\Integration\ConfigurationResolver\AbstractConfigurationResolverTest;
 
 /**
  * @covers OriginalValueMapper
@@ -17,7 +12,6 @@ class OriginalValueMapperTest extends AbstractValueMapperTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->registry->registerValueMapper(OriginalValueMapper::class);
         $this->setupDummyData();
     }
 
@@ -35,9 +29,6 @@ class OriginalValueMapperTest extends AbstractValueMapperTest
     /** @test */
     public function ifOriginal()
     {
-        $this->registerBasicEvaluations();
-        $this->registerBasicContentResolvers();
-        $this->registry->registerValueMapper(IfValueMapper::class);
         $this->fieldValue = 'value1';
         $config = [
             'if' => [

@@ -2,8 +2,6 @@
 
 namespace FormRelay\Core\Tests\Integration\ConfigurationResolver\Evaluation;
 
-use FormRelay\Core\ConfigurationResolver\Evaluation\EmptyEvaluation;
-use FormRelay\Core\ConfigurationResolver\Evaluation\InEvaluation;
 use FormRelay\Core\Model\Form\MultiValueField;
 
 abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
@@ -54,7 +52,6 @@ abstract class AbstractModifierEvaluationTest extends AbstractEvaluationTest
     /** @test */
     public function modifyEmptyMultiValue()
     {
-        $this->registry->registerEvaluation(EmptyEvaluation::class);
         $this->submissionData['field1'] = new MultiValueField();
         $config = [
             'field1' => [
