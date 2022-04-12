@@ -125,4 +125,20 @@ class SwitchValueMapperTest extends AbstractValueMapperTest
         $result = $this->runResolverProcess($config);
         $this->assertEquals('value1b', $result);
     }
+
+    /** @test */
+    public function switchCaseIsNumberAndWillBeCastToString()
+    {
+        $this->fieldValue = '12';
+        $config = [
+            'switch' => [
+                1 => [
+                    'case' => 12,
+                    'value' => 'twelve',
+                ],
+            ],
+        ];
+        $result = $this->runResolverProcess($config);
+        $this->assertEquals('twelve', $result);
+    }
 }
