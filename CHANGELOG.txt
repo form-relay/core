@@ -1,4 +1,8 @@
 
+2.3.0
+
+[FEATURE] new content resolver sprintf
+
 2.2.1
 
 [BUGFIX] switch-value-mapper compares strings (MEDO22-51) (#11)
