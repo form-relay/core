@@ -22,6 +22,7 @@ use FormRelay\Core\ConfigurationResolver\ContentResolver\MultiValueContentResolv
 use FormRelay\Core\ConfigurationResolver\ContentResolver\NegateContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SelfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\SplitContentResolver;
+use FormRelay\Core\ConfigurationResolver\ContentResolver\SprintfContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\TrimContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\UpperCaseContentResolver;
 use FormRelay\Core\ConfigurationResolver\ContentResolver\ValueContentResolver;
@@ -115,6 +116,7 @@ class CoreInitialization extends Initialization
         MultiValueContentResolver::class,
         NegateContentResolver::class,
         SplitContentResolver::class,
+        SprintfContentResolver::class,
         TrimContentResolver::class,
         UpperCaseContentResolver::class,
         ValueContentResolver::class,
