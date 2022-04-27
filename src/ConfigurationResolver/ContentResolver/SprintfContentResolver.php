@@ -11,9 +11,12 @@ class SprintfContentResolver extends AbstractModifierContentResolver
     {
         if ($result instanceof MultiValueField) {
             $values = $result->toArray();
+        } elseif (is_array($result)) {
+            $values = $result;
         } else {
             $values = [$result];
         }
-        $result = sprintf($this->configuration, ...$values);
+        $format = (string)$this->resolveContent($this->configuration);
+        $result = sprintf($format, ...$values);
     }
 }
