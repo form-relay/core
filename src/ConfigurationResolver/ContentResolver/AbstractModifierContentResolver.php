@@ -21,9 +21,18 @@ abstract class AbstractModifierContentResolver extends ContentResolver
         }
     }
 
+    protected function enabled(): bool
+    {
+        $result = $this->resolveContent($this->configuration);
+        if ($result instanceof MultiValueField) {
+            $result = $result->toArray();
+        }
+        return (bool)$result;
+    }
+
     public function finish(&$result): bool
     {
-        if ($this->configuration && $result !== null) {
+        if ($this->enabled() && $result !== null) {
             $this->modify($result);
         }
         return false;
