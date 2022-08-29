@@ -66,7 +66,10 @@ class Relay implements RelayInterface, WorkerInterface
         /** @var RouteInterface $route */
         foreach ($routes as $route) {
             try {
-                $route->addContext($submission, $request);
+                $passCount = $route->getPassCount($submission);
+                for ($pass = 0; $pass < $passCount; $pass++) {
+                    $route->addContext($submission, $request, $pass);
+                }
             } catch (FormRelayException $e) {
                 $this->logger->error($e->getMessage());
             }
