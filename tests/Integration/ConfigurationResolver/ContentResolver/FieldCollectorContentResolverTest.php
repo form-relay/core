@@ -111,10 +111,12 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
     {
         $this->submissionData['field2'] = $value2;
         $config = $useDefaultConfig ? ['fieldCollector' => true] : $this->getNeutralConfig();
-        if ($ignoreIfEmpty === null) {
-            unset($config['fieldCollector']['ignoreIfEmpty']);
-        } else {
-            $config['fieldCollector']['ignoreIfEmpty'] = $ignoreIfEmpty;
+        if (!$useDefaultConfig) {
+            if ($ignoreIfEmpty === null) {
+                unset($config['fieldCollector']['ignoreIfEmpty']);
+            } else {
+                $config['fieldCollector']['ignoreIfEmpty'] = $ignoreIfEmpty;
+            }
         }
         $result = $this->runResolverProcess($config);
         $this->assertEquals($expected, $result);
