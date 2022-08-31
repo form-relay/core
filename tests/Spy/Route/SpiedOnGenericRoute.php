@@ -23,9 +23,9 @@ class SpiedOnGenericRoute extends Route
         return 'generic';
     }
 
-    public function addContext(SubmissionInterface $submission, RequestInterface $request)
+    public function addContext(SubmissionInterface $submission, RequestInterface $request, int $pass)
     {
-        $this->routeSpy->addContext($submission, $request);
+        $this->routeSpy->addContext($submission, $request, $pass);
     }
 
     protected function getDispatcher()

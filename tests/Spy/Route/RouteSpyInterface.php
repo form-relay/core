@@ -8,5 +8,5 @@ use FormRelay\Core\Request\RequestInterface;
 
 interface RouteSpyInterface extends DataDispatcherInterface
 {
-    public function addContext(SubmissionInterface $submission, RequestInterface $request);
+    public function addContext(SubmissionInterface $submission, RequestInterface $request, int $pass);
 }

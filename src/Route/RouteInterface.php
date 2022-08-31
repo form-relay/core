@@ -19,7 +19,7 @@ interface RouteInterface extends RegisterableInterface
      */
     public function processPass(SubmissionInterface $submission, int $pass): bool;
 
-    public function addContext(SubmissionInterface $submission, RequestInterface $request);
+    public function addContext(SubmissionInterface $submission, RequestInterface $request, int $pass);
 
     public static function getDefaultConfiguration(): array;
 }
