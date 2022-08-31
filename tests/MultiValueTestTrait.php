@@ -8,6 +8,7 @@ trait MultiValueTestTrait // extends \PHPUnit\Framework\TestCase
 {
     public static function assertMultiValue($actual, string $class = MultiValueField::class)
     {
+        static::assertIsObject($actual);
         if ($class !== MultiValueField::class) {
             static::assertInstanceOf(MultiValueField::class, $actual);
         }

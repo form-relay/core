@@ -153,8 +153,11 @@ abstract class Route implements RouteInterface
         return $submission->getConfiguration()->getRoutePassCount(static::getKeyword());
     }
 
-    public function addContext(SubmissionInterface $submission, RequestInterface $request)
+    public function addContext(SubmissionInterface $submission, RequestInterface $request, int $pass)
     {
+        $this->submission = $submission;
+        $this->pass = $pass;
+        $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration(static::getKeyword(), $pass);
     }
 
     /**
