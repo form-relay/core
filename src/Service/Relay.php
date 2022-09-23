@@ -129,6 +129,10 @@ class Relay implements RelayInterface, WorkerInterface
         foreach ($routes as $routeName => $route) {
             $passCount = $route->getPassCount($submission);
             for ($pass = 0; $pass < $passCount; $pass++) {
+                if (!$route->passEnabled($submission, $pass)) {
+                    continue;
+                }
+
                 $async = $submission->getConfiguration()->getWithRoutePassOverride(static::KEY_ASYNC, $routeName, $pass, static::DEFAULT_ASYNC);
                 $disableStorage = $submission->getConfiguration()->getWithRoutePassOverride(static::KEY_DISABLE_STORAGE, $routeName, $pass, static::DEFAULT_DISABLE_STORAGE);
 
