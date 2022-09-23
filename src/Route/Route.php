@@ -110,6 +110,25 @@ abstract class Route implements RouteInterface
         return $fields;
     }
 
+    public function passEnabled(SubmissionInterface $submission, int $pass): bool
+    {
+        $this->submission = $submission;
+        $this->pass = $pass;
+        $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration(static::getKeyword(), $pass);
+        return (bool)$this->getConfig(static::KEY_ENABLED);
+    }
+
+    public function enabled(SubmissionInterface $submission): bool
+    {
+        $passCount = $this->getPassCount($submission);
+        for ($pass = 0; $pass < $passCount; $pass++) {
+            if ($this->passEnabled($submission, $pass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected function processGate(): bool
     {
         $context = new ConfigurationResolverContext($this->submission);

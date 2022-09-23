@@ -48,16 +48,15 @@ abstract class DataProvider implements DataProviderInterface
     abstract protected function processContext(SubmissionInterface $submission, RequestInterface $request);
     abstract protected function process(SubmissionInterface $submission);
 
+    public function enabled(SubmissionInterface $submission): bool
+    {
+        $this->configuration = $submission->getConfiguration()->getDataProviderConfiguration(static::getKeyword());
+        return (bool)$this->getConfig(static::KEY_ENABLED);
+    }
+
     protected function proceed(SubmissionInterface $submission): bool
     {
-        $context = new ConfigurationResolverContext($submission);
-        /** @var GeneralEvaluation $evaluation */
-        $evaluation = $this->registry->getEvaluation(
-            'general',
-            $this->getConfig(static::KEY_ENABLED),
-            $context
-        );
-        return $evaluation->eval();
+        return (bool)$this->getConfig(static::KEY_ENABLED);
     }
 
     protected function addRequestVariableToContext(SubmissionInterface $submission, RequestInterface $request, string $variableName): bool

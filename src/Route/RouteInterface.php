@@ -10,6 +10,9 @@ use FormRelay\Core\Service\RegisterableInterface;
 interface RouteInterface extends RegisterableInterface
 {
     public function getPassCount(SubmissionInterface $submission): int;
+    
+    public function passEnabled(SubmissionInterface $submission, int $pass): bool;
+    public function enabled(SubmissionInterface $submission): bool;
 
     /**
      * @param SubmissionInterface $submission

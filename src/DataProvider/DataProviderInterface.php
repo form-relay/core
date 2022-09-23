@@ -8,6 +8,7 @@ use FormRelay\Core\Service\RegisterableInterface;
 
 interface DataProviderInterface extends RegisterableInterface
 {
+    public function enabled(SubmissionInterface $submission): bool;
     public function addContext(SubmissionInterface $submission, RequestInterface $request);
     public function addData(SubmissionInterface $submission);
 
