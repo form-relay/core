@@ -1,4 +1,16 @@
 
+2.3.1
+
+[TASK] Allow Configuration in Route Context Building (LMSM22-105) (#12)
+
+2.3.0
+
+[FEATURE] new content resolver sprintf
+
+2.2.1
+
+[BUGFIX] switch-value-mapper compares strings (MEDO22-51) (#11)
+
 2.2.0
 
 [TASK] removed deprecated configuration resolvers "raw" content resolver and "negate" value mapper

@@ -10,15 +10,15 @@ use FormRelay\Core\Queue\QueueInterface;
 use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Service\Registry;
 use FormRelay\Core\Service\RegistryInterface;
+use FormRelay\Core\Tests\Spy\DataDispatcher\DataDispatcherSpyInterface;
+use FormRelay\Core\Tests\Spy\DataDispatcher\SpiedOnGenericDataDispatcher;
 use FormRelay\Core\Tests\Spy\DataProvider\DataProviderSpyInterface;
 use FormRelay\Core\Tests\Spy\DataProvider\SpiedOnGenericDataProvider;
 use FormRelay\Core\Tests\Spy\Route\RouteSpyInterface;
 use FormRelay\Core\Tests\Spy\Route\SpiedOnGenericRoute;
 
-trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
+trait RegistryTestTrait // extends \PHPUnit\Framework\TestCase
 {
-
-
     /** @var RequestInterface */
     protected $request;
 
@@ -64,5 +64,12 @@ trait RegistryTestTrait //  extends \PHPUnit\Framework\TestCase
         $this->dataProviderSpy = $this->createMock(DataProviderSpyInterface::class);
         $this->registry->registerDataProvider(SpiedOnGenericDataProvider::class, [$this->dataProviderSpy], 'generic');
         return $this->dataProviderSpy;
+    }
+
+    protected function registerDataDispatcherSpy()
+    {
+        $spy = $this->createMock(DataDispatcherSpyInterface::class);
+        $this->registry->registerDataDispatcher(SpiedOnGenericDataDispatcher::class, [$spy]);
+        return $spy;
     }
 }

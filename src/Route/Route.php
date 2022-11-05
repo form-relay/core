@@ -133,8 +133,11 @@ abstract class Route extends Plugin implements RouteInterface
         return $submission->getConfiguration()->getRoutePassCount($this->getKeyword());
     }
 
-    public function addContext(SubmissionInterface $submission, RequestInterface $request)
+    public function addContext(SubmissionInterface $submission, RequestInterface $request, int $pass)
     {
+        $this->submission = $submission;
+        $this->pass = $pass;
+        $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration(static::getKeyword(), $pass);
     }
 
     /**
