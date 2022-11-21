@@ -137,7 +137,7 @@ abstract class Route extends Plugin implements RouteInterface
     {
         $this->submission = $submission;
         $this->pass = $pass;
-        $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration(static::getKeyword(), $pass);
+        $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration($this->getKeyword(), $pass);
     }
 
     /**
