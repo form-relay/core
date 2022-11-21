@@ -2,9 +2,8 @@
 
 namespace FormRelay\Core\ConfigurationResolver;
 
-use FormRelay\Core\Service\RegisterableInterface;
+use FormRelay\Core\Plugin\PluginInterface;
 
-interface ConfigurationResolverInterface extends RegisterableInterface
+interface ConfigurationResolverInterface extends PluginInterface
 {
-    public static function getKeyword(): string;
 }

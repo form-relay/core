@@ -7,16 +7,13 @@ use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\DataDispatcher\DataDispatcherInterface;
 use FormRelay\Core\Exception\FormRelayException;
 use FormRelay\Core\Helper\ConfigurationTrait;
-use FormRelay\Core\Helper\RegisterableTrait;
-use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
 use FormRelay\Core\Request\RequestInterface;
-use FormRelay\Core\Service\ClassRegistryInterface;
+use FormRelay\Core\Plugin\Plugin;
 use FormRelay\Core\Utility\GeneralUtility;
 
-abstract class Route implements RouteInterface
+abstract class Route extends Plugin implements RouteInterface
 {
-    use RegisterableTrait;
     use ConfigurationTrait;
 
     const KEY_ENABLED = 'enabled';
@@ -37,12 +34,6 @@ abstract class Route implements RouteInterface
     const KEY_FIELDS = 'fields';
     const DEFAULT_FIELDS = [];
 
-    /** @var ClassRegistryInterface */
-    protected $registry;
-
-    /** @var LoggerInterface */
-    protected $logger;
-
     /** @var SubmissionInterface */
     protected $submission;
 
@@ -51,17 +42,6 @@ abstract class Route implements RouteInterface
 
     /** @var array */
     protected $configuration;
-
-    public function __construct(ClassRegistryInterface $registry, LoggerInterface $logger)
-    {
-        $this->registry = $registry;
-        $this->logger = $logger;
-    }
-
-    public static function getClassType(): string
-    {
-        return 'Route';
-    }
 
     protected function resolveContent($config, $context = null)
     {
@@ -116,7 +96,7 @@ abstract class Route implements RouteInterface
         $evaluation = $this->registry->getEvaluation(
             'gate',
             [
-                'key' => static::getKeyword(),
+                'key' => $this->getKeyword(),
                 'pass' => $this->pass
             ],
             $context
@@ -128,20 +108,20 @@ abstract class Route implements RouteInterface
     {
         $this->submission = $submission;
         $this->pass = $pass;
-        $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration(static::getKeyword(), $pass);
+        $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration($this->getKeyword(), $pass);
 
         if (!$this->processGate()) {
-            $this->logger->debug('gate not passed for route "' . static::getKeyword() . '" in pass ' . $pass . '.');
+            $this->logger->debug('gate not passed for route "' . $this->getKeyword() . '" in pass ' . $pass . '.');
             return false;
         }
         $data = $this->buildRouteData();
         if (!$data) {
-            throw new FormRelayException('no data generated for route "' . static::getKeyword() . '" in pass ' . $pass . '.');
+            throw new FormRelayException('no data generated for route "' . $this->getKeyword() . '" in pass ' . $pass . '.');
         }
 
         $dataDispatcher = $this->getDispatcher();
         if (!$dataDispatcher) {
-            throw new FormRelayException('no dispatcher found for route "' . static::getKeyword() . '" in pass ' . $pass . '.');
+            throw new FormRelayException('no dispatcher found for route "' . $this->getKeyword() . '" in pass ' . $pass . '.');
         }
 
         $dataDispatcher->send($data);
@@ -150,14 +130,14 @@ abstract class Route implements RouteInterface
 
     public function getPassCount(SubmissionInterface $submission): int
     {
-        return $submission->getConfiguration()->getRoutePassCount(static::getKeyword());
+        return $submission->getConfiguration()->getRoutePassCount($this->getKeyword());
     }
 
     public function addContext(SubmissionInterface $submission, RequestInterface $request, int $pass)
     {
         $this->submission = $submission;
         $this->pass = $pass;
-        $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration(static::getKeyword(), $pass);
+        $this->configuration = $submission->getConfiguration()->getRoutePassConfiguration($this->getKeyword(), $pass);
     }
 
     /**

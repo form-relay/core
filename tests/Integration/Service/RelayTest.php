@@ -57,7 +57,8 @@ class RelayTest extends TestCase
     }
 
     /** @test */
-    public function processSyncOneRouteOnePassWithoutStorage() {
+    public function processSyncOneRouteOnePassWithoutStorage()
+    {
         $this->setSubmissionAsync(false);
         $this->setStorageDisabled(true);
         $this->addRouteSpy([
@@ -88,7 +89,8 @@ class RelayTest extends TestCase
     }
 
     /** @test */
-    public function processAsyncOneRouteOnePassWithStorage() {
+    public function processAsyncOneRouteOnePassWithStorage()
+    {
         $this->setSubmissionAsync(true);
         $this->setStorageDisabled(false);
         $this->addRouteSpy([

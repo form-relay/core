@@ -54,16 +54,16 @@ trait RegistryTestTrait // extends \PHPUnit\Framework\TestCase
 
     protected function registerRouteSpy()
     {
-        $spy = $this->createMock(RouteSpyInterface::class);
-        $this->registry->registerRoute(SpiedOnGenericRoute::class, [$spy]);
-        return $spy;
+        $this->routeSpy = $this->createMock(RouteSpyInterface::class);
+        $this->registry->registerRoute(SpiedOnGenericRoute::class, [$this->routeSpy], 'generic');
+        return $this->routeSpy;
     }
 
     protected function registerDataProviderSpy()
     {
-        $spy = $this->createMock(DataProviderSpyInterface::class);
-        $this->registry->registerDataProvider(SpiedOnGenericDataProvider::class, [$spy]);
-        return $spy;
+        $this->dataProviderSpy = $this->createMock(DataProviderSpyInterface::class);
+        $this->registry->registerDataProvider(SpiedOnGenericDataProvider::class, [$this->dataProviderSpy], 'generic');
+        return $this->dataProviderSpy;
     }
 
     protected function registerDataDispatcherSpy()

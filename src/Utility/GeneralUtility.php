@@ -128,4 +128,19 @@ final class GeneralUtility
     {
         return in_array($fieldValue, $list);
     }
+
+    public static function getPluginKeyword(string $class, string $interface): string
+    {
+        $keyword = '';
+        $interfaceNamespaceParts = explode('\\', $interface);
+        $interfaceName = array_pop($interfaceNamespaceParts);
+
+        $classNamespaceParts = explode('\\', $class);
+        $className = array_pop($classNamespaceParts);
+
+        if (substr($className . 'Interface', -strlen($interfaceName)) === $interfaceName) {
+            $keyword = lcfirst(substr($className . 'Interface', 0, -strlen($interfaceName)));
+        }
+        return $keyword;
+    }
 }

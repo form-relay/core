@@ -20,24 +20,22 @@ use FormRelay\Core\Queue\QueueInterface;
 use FormRelay\Core\Queue\QueueProcessor;
 use FormRelay\Core\Queue\QueueProcessorInterface;
 use FormRelay\Core\Queue\WorkerInterface;
+use FormRelay\Core\Plugin\PluginInterface;
 use FormRelay\Core\Request\DefaultRequest;
 use FormRelay\Core\Request\RequestInterface;
 use FormRelay\Core\Route\RouteInterface;
+use FormRelay\Core\Utility\GeneralUtility;
 
 class Registry implements RegistryInterface
 {
-    protected $configurationResolverClasses = [];
-    protected $routeClasses = [];
-    protected $dataProviderClasses = [];
-    protected $dataDispatcherClasses = [];
-
-    protected $additionalArgumentsPerClass = [];
-
     protected $request;
     protected $loggerFactory;
     protected $queue;
     protected $temporaryQueue;
     protected $queueDataFactory;
+
+    protected $pluginClasses = [];
+    protected $pluginAdditionalArguments = [];
 
     public function __construct(
         RequestInterface $request = null,
@@ -83,20 +81,77 @@ class Registry implements RegistryInterface
         return new QueueProcessor($queue, $worker);
     }
 
-    protected function get(string $class, array $arguments = [])
+    protected function getPlugin(string $keyword, string $interface, array $arguments = [])
     {
-        if (isset($this->additionalArgumentsPerClass[$class])) {
-            foreach ($this->additionalArgumentsPerClass[$class] as $argument) {
-                $arguments[] = $argument;
+        $class = $this->pluginClasses[$interface][$keyword] ?? null;
+        $additionalArguments = $this->pluginAdditionalArguments[$interface][$keyword] ?? [];
+
+        if (!$class) {
+            if ($this->checkKeywordAsClass($keyword, $interface)) {
+                $class = $keyword;
+                $keyword = GeneralUtility::getPluginKeyword($keyword, $interface) ?: $keyword;
+                $additionalArguments = [];
             }
         }
-        return new $class(...$arguments);
+
+        if ($class && class_exists($class)) {
+            $constructorArguments = [$keyword, $this, $this->getLogger($class)];
+            array_push($constructorArguments, ...$arguments);
+            array_push($constructorArguments, ...$additionalArguments);
+            return new $class(...$constructorArguments);
+        }
+
+        return null;
     }
 
-    protected function classValidation($class, $interface)
+    protected function getAllPlugins(string $interface, array $arguments = [])
     {
+        $result = [];
+        foreach (array_keys($this->pluginClasses[$interface] ?? []) as $keyword) {
+            $result[$keyword] = $this->getPlugin($keyword, $interface, $arguments);
+        }
+        $this->sortPlugins($result);
+        return $result;
+    }
+
+    protected function registerPlugin(string $interface, string $class, array $additionalArguments = [], string $keyword = '')
+    {
+        if (!$keyword || is_numeric($keyword)) {
+            $keyword = GeneralUtility::getPluginKeyword($class, $interface) ?: $keyword;
+        }
+        $this->interfaceValidation($interface, PluginInterface::class);
+        $this->classValidation($class, $interface);
+        $this->pluginClasses[$interface][$keyword] = $class;
+        $this->pluginAdditionalArguments[$interface][$keyword] = $additionalArguments;
+    }
+
+    protected function deletePlugin(string $keyword, string $interface)
+    {
+        if (isset($this->pluginClasses[$interface][$keyword])) {
+            unset($this->pluginClasses[$interface][$keyword]);
+        }
+        if (isset($this->pluginAdditionalArguments[$interface][$keyword])) {
+            unset($this->pluginAdditionalArguments[$interface][$keyword]);
+        }
+    }
+
+    protected function classValidation(string $class, string $interface)
+    {
+        if (!class_exists($class)) {
+            throw new RegistryException('class "' . $class . '" does not exist.');
+        }
         if (!in_array($interface, class_implements($class))) {
             throw new RegistryException('class "' . $class . '" has to implement interface "' . $interface . '".');
+        }
+    }
+
+    protected function interfaceValidation(string $interface, string $parentInterface)
+    {
+        if (!interface_exists($interface)) {
+            throw new RegistryException('interface "' . $interface . '" does not exist.');
+        }
+        if (!is_subclass_of($interface, $parentInterface, true)) {
+            throw new RegistryException('interface "' . $interface . '" has to extend "' . $parentInterface . '".');
         }
     }
 
@@ -114,113 +169,80 @@ class Registry implements RegistryInterface
         return $result;
     }
 
-    protected function sortRegisterables(array &$registerables)
+    protected function sortPlugins(array &$plugins)
     {
-        uasort($registerables, function (RegisterableInterface $a, RegisterableInterface $b) {
-            if ($a->getWeight() === $b->getWeight()) {
-                return 0;
-            }
-            return $a->getWeight() < $b->getWeight() ? -1 : 1;
+        uasort($plugins, function (PluginInterface $a, PluginInterface $b) {
+            return $a->getWeight() <=> $b->getWeight();
         });
     }
 
-    public function registerConfigurationResolver(string $class, string $interface = '', array $additionalArguments = [])
+    public function registerConfigurationResolver(string $interface, string $class, array $additionalArguments = [], string $keyword = '')
     {
-        $this->classValidation($class, $interface ?: ConfigurationResolverInterface::class);
-        $this->configurationResolverClasses[$class::getClassType()][$class::getKeyword()] = $class;
-        if (!empty($additionalArguments)) {
-            $this->additionalArgumentsPerClass[$class] = $additionalArguments;
-        } else {
-            unset($this->additionalArgumentsPerClass[$class]);
-        }
+        $this->interfaceValidation($interface, ConfigurationResolverInterface::class);
+        $this->classValidation($class, $interface);
+        $this->registerPlugin($interface, $class, $additionalArguments, $keyword);
     }
 
-    public function registerEvaluation(string $class, array $additionalArguments = [])
+    public function registerEvaluation(string $class, array $additionalArguments = [], string $keyword = '')
     {
-        $this->registerConfigurationResolver($class, EvaluationInterface::class, $additionalArguments);
+        $this->registerConfigurationResolver(EvaluationInterface::class, $class, $additionalArguments, $keyword);
     }
 
-    public function registerContentResolver(string $class, array $additionalArguments = [])
+    public function registerContentResolver(string $class, array $additionalArguments = [], string $keyword = '')
     {
-        $this->registerConfigurationResolver($class, ContentResolverInterface::class, $additionalArguments);
+        $this->registerConfigurationResolver(ContentResolverInterface::class, $class, $additionalArguments, $keyword);
     }
 
-    public function registerValueMapper(string $class, array $additionalArguments = [])
+    public function registerValueMapper(string $class, array $additionalArguments = [], string $keyword = '')
     {
-        $this->registerConfigurationResolver($class, ValueMapperInterface::class, $additionalArguments);
+        $this->registerConfigurationResolver(ValueMapperInterface::class, $class, $additionalArguments, $keyword);
     }
 
-    public function getConfigurationResolver(string $resolverInterface, string $keyword, $config, ConfigurationResolverContextInterface $context)
+    public function getConfigurationResolver(string $keyword, string $interface, $config, ConfigurationResolverContextInterface $context)
     {
-        $this->classValidation($resolverInterface, ConfigurationResolverInterface::class);
-        $resolverType = $resolverInterface::RESOLVER_TYPE;
-        if (isset($this->configurationResolverClasses[$resolverType][$keyword])) {
-            return $this->get($this->configurationResolverClasses[$resolverType][$keyword], [$this, $config, $context]);
-        }
-        if ($this->checkKeywordAsClass($keyword, $resolverInterface)) {
-            return $this->get($keyword, [$this, $config, $context]);
-        }
-        return null;
+        $this->interfaceValidation($interface, ConfigurationResolverInterface::class);
+        return $this->getPlugin($keyword, $interface, [$config, $context]);
     }
 
     public function getEvaluation(string $keyword, $config, ConfigurationResolverContextInterface $context)
     {
-        return $this->getConfigurationResolver(EvaluationInterface::class, $keyword, $config, $context);
+        return $this->getConfigurationResolver($keyword, EvaluationInterface::class, $config, $context);
     }
 
     public function getContentResolver(string $keyword, $config, ConfigurationResolverContextInterface $context)
     {
-        return $this->getConfigurationResolver(ContentResolverInterface::class, $keyword, $config, $context);
+        return $this->getConfigurationResolver($keyword, ContentResolverInterface::class, $config, $context);
     }
 
     public function getValueMapper(string $keyword, $config, ConfigurationResolverContextInterface $context)
     {
-        return $this->getConfigurationResolver(ValueMapperInterface::class, $keyword, $config, $context);
+        return $this->getConfigurationResolver($keyword, ValueMapperInterface::class, $config, $context);
     }
 
     public function getRoutes(): array
     {
-        $routes = [];
-        foreach ($this->routeClasses as $routeClass) {
-            $routes[$routeClass::getKeyword()] = $this->get($routeClass, [$this, $this->getLogger($routeClass)]);
-        }
-        $this->sortRegisterables($routes);
-        return $routes;
+        return $this->getAllPlugins(RouteInterface::class);
     }
 
-    public function getRoute(string $routeName)
+    public function getRoute(string $keyword)
     {
-        $route = null;
-        foreach ($this->routeClasses as $routeClass) {
-            if ($routeClass::getKeyword() === $routeName) {
-                $route = $this->get($routeClass, [$this, $this->getLogger($routeClass)]);
-                break;
-            }
-        }
-        return $route;
+        return $this->getPlugin($keyword, RouteInterface::class);
     }
 
-    public function registerRoute(string $class, array $additionalArguments = [])
+    public function registerRoute(string $class, array $additionalArguments = [], string $keyword = '')
     {
-        $this->classValidation($class, RouteInterface::class);
-        $this->routeClasses[$class::getKeyword()] = $class;
-        if (!empty($additionalArguments)) {
-            $this->additionalArgumentsPerClass[$class] = $additionalArguments;
-        } else {
-            unset($this->additionalArgumentsPerClass[$class]);
-        }
+        $this->registerPlugin(RouteInterface::class, $class, $additionalArguments, $keyword);
     }
 
-    public function deleteRoute(string $class)
+    public function deleteRoute(string $keyword)
     {
-        $this->classValidation($class, RouteInterface::class);
-        unset($this->routeClasses[$class::getKeyword()]);
+        $this->deletePlugin($keyword, RouteInterface::class);
     }
 
     public function getRouteDefaultConfigurations(): array
     {
         $result = [];
-        foreach ($this->routeClasses as $key => $class) {
+        foreach ($this->pluginClasses[RouteInterface::class] as $key => $class) {
             $result[$key] = $class::getDefaultConfiguration();
         }
         return $result;
@@ -228,71 +250,41 @@ class Registry implements RegistryInterface
 
     public function getDataProviders(): array
     {
-        $dataProviders = [];
-        foreach ($this->dataProviderClasses as $dataProviderClass) {
-            $dataProviders[$dataProviderClass::getKeyword()] = $this->get($dataProviderClass, [$this, $this->getLogger($dataProviderClass)]);
-        }
-        $this->sortRegisterables($dataProviders);
-        return $dataProviders;
+        return $this->getAllPlugins(DataProviderInterface::class);
     }
 
-    public function registerDataProvider(string $class, array $additionalArguments = [])
+    public function registerDataProvider(string $class, array $additionalArguments = [], string $keyword = '')
     {
-        $this->classValidation($class, DataProviderInterface::class);
-        $this->dataProviderClasses[$class::getKeyword()] = $class;
-        if (!empty($additionalArguments)) {
-            $this->additionalArgumentsPerClass[$class] = $additionalArguments;
-        } else {
-            unset($this->additionalArgumentsPerClass[$class]);
-        }
+        $this->registerPlugin(DataProviderInterface::class, $class, $additionalArguments, $keyword);
     }
 
-    public function deleteDataProvider(string $class)
+    public function deleteDataProvider(string $keyword)
     {
-        $this->classValidation($class, DataProviderInterface::class);
-        unset($this->dataProviderClasses[$class::getKeyword()]);
+        $this->deletePlugin($keyword, DataProviderInterface::class);
     }
 
     public function getDataProviderDefaultConfigurations(): array
     {
         $result = [];
-        foreach ($this->dataProviderClasses as $key => $class) {
+        foreach ($this->pluginClasses[DataProviderInterface::class] ?? [] as $key => $class) {
             $result[$key] = $class::getDefaultConfiguration();
         }
         return $result;
     }
 
-    public function registerDataDispatcher(string $class, array $additionalArguments = [])
+    public function registerDataDispatcher(string $class, array $additionalArguments = [], string $keyword = '')
     {
-        $this->classValidation($class, DataDispatcherInterface::class);
-        $this->dataDispatcherClasses[$class::getKeyword()] = $class;
-        if (!empty($additionalArguments)) {
-            $this->additionalArgumentsPerClass[$class] = $additionalArguments;
-        } else {
-            unset($this->additionalArgumentsPerClass[$class]);
-        }
+        $this->registerPlugin(DataDispatcherInterface::class, $class, $additionalArguments, $keyword);
     }
 
-    /**
-     * @param string $keyword
-     * @return DataDispatcherInterface|null
-     */
     public function getDataDispatcher(string $keyword)
     {
-        $class = null;
-        if (isset($this->dataDispatcherClasses[$keyword])) {
-            $class = $this->dataDispatcherClasses[$keyword];
-        }
-        if ($class !== null) {
-            return $this->get($class, [$this->getLogger($class)]);
-        }
-        return null;
+        return $this->getPlugin($keyword, DataDispatcherInterface::class);
     }
 
-    public function deleteDataDispatcher(string $class)
+    public function deleteDataDispatcher(string $keyword)
     {
-        $this->classValidation($class, DataDispatcherInterface::class);
-        unset($this->dataDispatcherClasses[$class::getKeyword()]);
+        $this->deletePlugin($keyword, DataDispatcherInterface::class);
     }
 
     public function getGlobalDefaultConfiguration(): array

@@ -4,16 +4,17 @@ namespace FormRelay\Core\ConfigurationResolver\Evaluation;
 
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContextInterface;
 use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
-use FormRelay\Core\Service\ClassRegistryInterface;
+use FormRelay\Core\Log\LoggerInterface;
+use FormRelay\Core\Service\PluginRegistryInterface;
 
 class GeneralEvaluation extends Evaluation implements GeneralConfigurationResolverInterface
 {
     protected $then;
     protected $else;
 
-    public function __construct(ClassRegistryInterface $registry, $config, ConfigurationResolverContextInterface $context)
+    public function __construct(string $keyword, PluginRegistryInterface $registry, LoggerInterface $logger, $config, ConfigurationResolverContextInterface $context)
     {
-        parent::__construct($registry, $config, $context);
+        parent::__construct($keyword, $registry, $logger, $config, $context);
         $this->initThenElseParts();
     }
 

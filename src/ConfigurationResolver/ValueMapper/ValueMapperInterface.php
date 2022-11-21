@@ -7,8 +7,6 @@ use FormRelay\Core\Model\Form\FieldInterface;
 
 interface ValueMapperInterface extends ConfigurationResolverInterface
 {
-    const RESOLVER_TYPE = 'ValueMapper';
-
     /**
      * @param string|FieldInterface|null $fieldValue
      * @return string|FieldInterface|null

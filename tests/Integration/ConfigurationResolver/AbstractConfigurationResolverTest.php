@@ -5,6 +5,7 @@ namespace FormRelay\Core\Tests\Integration\ConfigurationResolver;
 use FormRelay\Core\ConfigurationResolver\Context\ConfigurationResolverContext;
 use FormRelay\Core\ConfigurationResolver\FieldTracker;
 use FormRelay\Core\ConfigurationResolver\GeneralConfigurationResolverInterface;
+use FormRelay\Core\Log\LoggerInterface;
 use FormRelay\Core\Tests\Integration\RegistryTestTrait;
 use FormRelay\Core\Tests\Integration\SubmissionTestTrait;
 use FormRelay\Core\Tests\MultiValueTestTrait;
@@ -52,11 +53,13 @@ abstract class AbstractConfigurationResolverTest extends TestCase
      */
     protected function runResolverProcess($config)
     {
+        $this->loggerFactory->method('getLogger')->willReturn($this->createMock(LoggerInterface::class));
+
         $submission = $this->getSubmission();
         $context = new ConfigurationResolverContext($submission, $this->configurationResolverContext, $this->fieldTracker);
 
         $resolverClass = $this->getGeneralResolverClass();
-        $resolver = new $resolverClass($this->registry, $config, $context);
+        $resolver = new $resolverClass('general', $this->registry, $this->registry->getLogger($resolverClass), $config, $context);
 
         return $this->executeResolver($resolver);
     }
