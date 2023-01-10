@@ -100,7 +100,7 @@ abstract class Route implements RouteInterface
 
         // exclude specific fields directly
         $excludeFields = $this->getConfig(static::KEY_EXCLUDE_FIELDS);
-        GeneralUtility::castValueToArray($excludeFields);
+        $excludeFields = GeneralUtility::castValueToArray($excludeFields);
         foreach ($excludeFields as $excludeField) {
             if (array_key_exists($excludeField, $fields)) {
                 unset($fields[$excludeField]);

@@ -236,6 +236,32 @@ class RelayTest extends TestCase
         $this->assertTrue($result);
     }
 
+    /** @test */
+    public function processJobThatSucceedsWithExcludeFields()
+    {
+        $this->routeSpy = $this->registerRouteSpy();
+        $job = $this->createJob(
+            [
+                'field1' => [ 'type' => 'string', 'value' => 'value1' ],
+                'field2' => [ 'type' => 'string', 'value' => 'value2' ],
+                'field3' => [ 'type' => 'string', 'value' => 'value3' ],
+            ],
+            [
+                'enabled' => true,
+                'fields' => [
+                    'field1ext' => [ 'field' => 'field1' ],
+                    'field2ext' => [ 'field' => 'field2' ],
+                ],
+                'excludeFields' => 'field2ext'
+            ]
+        );
+        $this->routeSpy->expects($this->once())->method('send')->with([
+            'field1ext' => 'value1',
+        ]);
+        $result = $this->subject->processJob($job);
+        $this->assertTrue($result);
+    }
+
     public function processJobFromSubmissionWithTwoPassesThatBothSucceedsProvider(): array
     {
         return [
