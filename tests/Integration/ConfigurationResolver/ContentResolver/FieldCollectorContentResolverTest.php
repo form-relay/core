@@ -188,4 +188,26 @@ class FieldCollectorContentResolverTest extends AbstractContentResolverTest
         $result = $this->runResolverProcess($config);
         $this->assertEquals($expected, $result);
     }
+
+    /** @test */
+    public function includeDespiteUnprocessedOnly(): void
+    {
+        $this->fieldTracker->markAsProcessed('field1');
+        $config = $this->getNeutralConfig();
+        $config['fieldCollector']['unprocessedOnly'] = true;
+        $config['fieldCollector']['include'] = 'field1';
+        $result = $this->runResolverProcess($config);
+        $this->assertEquals("field1 = value1\nfield2 = value2\nfield3 = value3\n", $result);
+    }
+
+    /** @test */
+    public function includeDespiteIgnoreEmpty(): void
+    {
+        $this->submissionData['field1'] = '';
+        $config = $this->getNeutralConfig();
+        $config['fieldCollector']['ignoreIfEmpty'] = true;
+        $config['fieldCollector']['include'] = 'field1';
+        $result = $this->runResolverProcess($config);
+        $this->assertEquals("field1 = \nfield2 = value2\nfield3 = value3\n", $result);
+    }
 }
