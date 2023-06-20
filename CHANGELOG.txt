@@ -1,4 +1,8 @@
 
+2.4.0
+
+[FEATURE] field collector - include option (#15)
+
 2.3.2
 
 [BUGFIX] exclude fields cast to array not applied (#14)
