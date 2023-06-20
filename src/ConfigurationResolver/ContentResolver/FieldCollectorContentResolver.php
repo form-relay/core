@@ -35,7 +35,7 @@ class FieldCollectorContentResolver extends ContentResolver
         $template = $this->resolveContent($this->getConfig(static::KEY_TEMPLATE));
 
         $excludedFields = GeneralUtility::castValueToArray($exclude);
-        $includeFields = GeneralUtility::castValueToArray($include);
+        $includedFields = GeneralUtility::castValueToArray($include);
         $template = GeneralUtility::parseSeparatorString($template);
 
         $result = '';
